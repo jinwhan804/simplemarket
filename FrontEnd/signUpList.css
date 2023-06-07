@@ -1,0 +1,61 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+header{
+    width: 100%;
+    height: 64px;
+    position: fixed;
+    background-color: beige;
+    top: 0;
+}
+
+.center_area{
+    margin: 0 auto;
+    margin-top: 80px;
+    width: 100%;
+    max-width: 1000px;
+    height: 170vh;
+}
+
+p {
+    margin: 0;
+    text-align: center;
+    font-size: 30px;
+}
+
+.list{
+    margin-top: 20px;
+}
+
+.list_title,
+.list_user {
+    display: flex;
+    justify-content: space-around;
+    height: 40px;
+}
+
+.list_title div,
+.list_user div{
+    border: 1px solid;
+    line-height: 2.4;
+    text-align: center;
+}
+
+.num{
+    width: 5%;
+}
+
+.id, .name, .gender, .pass {
+    width: 10%;
+}
+
+.nickName {
+    width: 15%;
+}
+
+.address {
+    width: 40%;
+}

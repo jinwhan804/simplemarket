@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <h1>게시판</h1>
+    <a href="">글 등록하기</a>
+    <table id="post_list">
+        
+    </table>
+</body>
+<script>
+    window.onload = async()=>{
+        try {
+            axios.defaults.withCredentials = true;
+            const {data} = await axios.get('http://127.0.0.1:8080/post',{
+                
+            });
+
+            post_list.innerHTML = "";
+            let _tr1 = document.createElement('tr');
+            let _th1 = document.createElement('th');
+            let _th2 = document.createElement('th');
+            let _th3 = document.createElement('th');
+            let _th4 = document.createElement('th');
+            let _th5 = document.createElement('th');
+            _th1.innerHTML = "No.";
+            _th2.innerHTML = '제목';
+            _th3.innerHTML = '작성자';
+            _th4.innerHTML = '작성일';
+            _th5.innerHTML = '조회수';
+            _tr1.append(_th1,_th2,_th3,_th4,_th5);
+            post_list.append(_tr1);
+
+            if(data = null){
+                return;
+            }else{
+                data.forEach((el,index) => {
+                    let _tr = document.createElement('tr');
+                    let _td1 = document.createElement('td');
+                    let _td2 = document.createElement('td');
+                    let _td3 = document.createElement('td');
+                    let _td4 = document.createElement('td');
+                    let _td5 = document.createElement('td');
+                    _t1.innerHTML = index;
+                    _t2.innerHTML = el.title;
+                    _t3.innerHTML = el.nickname;
+                    _t4.innerHTML = el.createdAt;
+                    _t5.innerHTML = el.postViews;
+                    _tr.append(_td1,_td2,_td3,_td4,_td5);
+                    post_list.append(_tr);
+                });
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+</script>
+</html>
