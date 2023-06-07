@@ -17,9 +17,9 @@ class Join extends Sequelize.Model {
             },
             user_pw: {
                 type: Sequelize.STRING,
-                allowNull: null
+                allowNull: false
             },
-            nickName: {
+            nickname: {
                 type: Sequelize.STRING,
                 allowNull: false
             },
@@ -37,7 +37,7 @@ class Join extends Sequelize.Model {
             timestamps: true,
             underscored: false,
             modelName: 'Join',
-            tableName: 'join',
+            tableName: 'joins',
             paranoid: false,
             charset: 'utf8',
             collate: 'utf8_general_ci'
