@@ -7,39 +7,42 @@
     <title>Document</title>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
-    <style>
-        img {
-            display: flex;
+<style>
+  img {
+            display: block;
+            margin: 20px auto;
             width: 100px;
             height: 100px;
+            border-radius: 50%;
+            box-shadow: 0px 3px 15px rgba(0,0,0,0.1);
         }
-    </style>
+</style>
 <body>
     <div>
-        <div>
-            <span>이름 : </span>
-            <span id="user_name"></span>
-        </div>
-        <div>
-            <span>나이 :</span>
-            <span id="user_age"></span>
-        </div>
-        <div>
-            <span>닉네임 :</span>
-            <span id="nickname"></span>
-        </div>
-        <div>
-            <span>성별 :</span>
-            <span id="gender"></span>
-        </div>
-        <div>
-            <span>주소 :</span>
-            <span id="address"></span>
-        </div>
         <img src="http://localhost:8080/img/defaultprofile.png" alt="">
         <input type="text" id="imgs">
         <input type="file" id="file">
-        <button id="uploadBtn">수정</button>
+        <button id="uploadBtn">사진 수정</button>
+        <div>
+            <span>이름</span>
+            <span id="user_name"></span>
+        </div>
+        <div>
+            <span>나이</span>
+            <span id="user_age"></span>
+        </div>
+        <div>
+            <span>별명</span>
+            <span id="nickname"></span>
+        </div>
+        <div>
+            <span>성별</span>
+            <span id="gender"></span>
+        </div>
+        <div>
+            <span>주소</span>
+            <span id="address"></span>
+        </div>
     </div>
 </body>
 <script>
@@ -72,8 +75,14 @@
             user_name.innerHTML = data.name;
             user_age.innerHTML = data.age;
             nickname.innerHTML = data.nickname;
-            gender.innerHTML = data.gender;
+            // gender.innerHTML = data.gender;
             address.innerHTML = data.address;
+
+            if(data.gender === "male") {
+                document.getElementById('gender').innerText = "남자";
+            }else {
+                document.getElementById('gender').innerText = "여자";
+            }
 
             if (data.profile_img) {
                 document.querySelector("img").src = "http://localhost:8080/img/" + data.profile_img;
