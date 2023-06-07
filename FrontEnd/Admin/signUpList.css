@@ -17,7 +17,7 @@ header{
     margin-top: 80px;
     width: 100%;
     max-width: 1000px;
-    height: 170vh;
+    height: 100vh;
 }
 
 p {
@@ -31,15 +31,30 @@ p {
 }
 
 .list_title,
-.list_user {
+.user {
     display: flex;
     justify-content: space-around;
     height: 40px;
 }
 
-.list_title div,
-.list_user div{
+.list_user {
     border: 1px solid;
+    border-top: none;
+    height: 500px;
+}
+
+.user {
+    height: 40px;
+}
+
+.list_title div{
+    border: 1px solid;
+    line-height: 2.4;
+    text-align: center;
+}
+
+.user div{
+    border-bottom: 1px solid rgb(193, 193, 193);
     line-height: 2.4;
     text-align: center;
 }
