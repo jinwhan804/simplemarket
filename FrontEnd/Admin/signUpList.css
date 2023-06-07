@@ -16,7 +16,7 @@ header{
     margin: 0 auto;
     margin-top: 80px;
     width: 100%;
-    max-width: 1000px;
+    max-width: 1200px;
     height: 100vh;
 }
 
@@ -30,8 +30,7 @@ p {
     margin-top: 20px;
 }
 
-.list_title,
-.user {
+.list_title, .user{
     display: flex;
     justify-content: space-around;
     height: 40px;
@@ -41,10 +40,6 @@ p {
     border: 1px solid;
     border-top: none;
     height: 500px;
-}
-
-.user {
-    height: 40px;
 }
 
 .list_title div{
@@ -63,14 +58,17 @@ p {
     width: 5%;
 }
 
-.id, .name, .gender, .pass {
+.id, .name, .nickName, .gender,
+.reqDate, .resDate, .pass {
     width: 10%;
 }
 
-.nickName {
-    width: 15%;
+.address{
+    width: 25%;
 }
 
-.address {
-    width: 40%;
+.user .reqDate,
+.user .resDate {
+    font-size: 15px;
+    line-height: 1.2;
 }

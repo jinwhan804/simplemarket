@@ -23,3 +23,15 @@ exports.approveUser = async (req, res) => {
         console.log(error);
     }
 }
+
+exports.rejectUser = async (req, res) => {
+    const { user_id } = req.body;
+    const transaction = await sequelize.transaction();
+    try {
+        await transaction.commit();
+        res.send('거절되었습니다.');
+    } catch (error) {
+        await transaction.rollback();
+        console.log(error);
+    }
+}
