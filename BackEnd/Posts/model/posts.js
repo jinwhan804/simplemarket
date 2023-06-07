@@ -10,9 +10,6 @@ class Posts extends Sequelize.Model{
             content : {
                 type : Sequelize.STRING(256),
             },
-            image : {
-                type : Sequelize.STRING(100),
-            },
             userId : {
                 type : Sequelize.INTEGER,
                 allowNull : false
