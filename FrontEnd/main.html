@@ -22,17 +22,17 @@
             background-color: #007bff;
             top: 0;
             display: flex;
-            justify-content: center;
+            justify-content: flex-start;
             align-items: center;
             color: #ffffff;
             font-size: 1.5em;
         }
 
-        span.title {
-            display: block;
-            color: #007bff;
+        .logo {
             font-weight: bold;
-            margin-bottom: 10px;
+            font-size: 1.5em;
+            color: white;
+            text-decoration: none;
         }
 
         img {
@@ -72,7 +72,9 @@
     </style>
 </head>
 <body>
-    <header>당근마켓</header>
+    <header>
+        <a href="http://127.0.0.1:5500/frontEnd/main.html" class="logo">Simple Market</a>
+    </header>
     <div class="profile-info">
         <img src="http://localhost:8080/img/defaultprofile.png" alt="">
         <div>
@@ -84,7 +86,7 @@
             <span id="user_age"></span>
         </div>
         <div>
-            <span>닉네임 :</span>
+            <span>별명 :</span>
             <span id="nickname"></span>
         </div>
         <div>
