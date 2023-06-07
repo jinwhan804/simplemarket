@@ -24,7 +24,7 @@ exports.Login = async (req, res) => {
                 expiresIn : "20m"
             });
             req.session.access_token = token;
-            return res.redirect("http://127.0.0.1:5504/frontEnd/main.html")
+            return res.redirect("http://127.0.0.1:5500/frontEnd/main.html")
         }else{
             return res.send("비번 틀림");
         }

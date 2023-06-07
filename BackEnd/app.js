@@ -34,14 +34,13 @@ app.use("/img", express.static(path.join(__dirname, "uploads")));
 app.use(express.json());
 
 app.use(cors({
-    origin : "http://127.0.0.1:5504",
+    origin : "http://127.0.0.1:5500",
     credentials : true
 }));
 
 app.use('/signUp', SignUpRouter);
 app.use('/login', LoginRouter);
 app.use('/upload', uploadRouter);
-
 
 app.listen(8080, () => {
     console.log("8080 Server Open");
