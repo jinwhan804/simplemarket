@@ -12,8 +12,8 @@ const LoginRouter = require("./routers/login");
 const uploadRouter = require("./routers/upload");
 const nicknameUpdateRouter = require("./routers/mypage");
 const postRouter = require('./routers/post');
-const adminRouter = require('./router/adminRouter');
-const boardRouter = require('./router/boardRouter');
+const adminRouter = require('./routers/adminRouter');
+const boardRouter = require('./routers/boardRouter');
 
 const app = express();
 
@@ -47,7 +47,7 @@ app.use('/login', LoginRouter);
 app.use('/upload', uploadRouter);
 app.use('/mypage', nicknameUpdateRouter);
 app.use('/post',postRouter);
-app.use('/', adminRouter);
+app.use('/admin', adminRouter);
 app.use('/signUpList', boardRouter);
 
 app.listen(8080, () => {

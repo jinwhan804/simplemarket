@@ -30,7 +30,7 @@ exports.AdminLogIn = async (req, res) => {
                     expiresIn: '60m'
                 })
                 req.session.access_token = token;
-                return res.redirect('http://127.0.0.1:5500/FrontEnd/Admin/main.html');
+                return res.redirect('http://127.0.0.1:5500/FrontEnd/main.html');
             } else {
                 res.send('비밀번호 틀림');
             }
