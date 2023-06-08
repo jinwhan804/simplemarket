@@ -38,8 +38,8 @@
         img {
             display: block;
             margin: 20px auto;
-            width: 100px;
-            height: 100px;
+            width: 200px;
+            height: 200px;
             border-radius: 50%;
             box-shadow: 0px 3px 15px rgba(0,0,0,0.1);
         }
@@ -79,16 +79,36 @@
             background-color: #007bff;
             border-radius: 5px;
         }
+        
+        .header_div {
+            width: 60%;
+
+        }
+        .header_div ul {
+            display: flex;
+        }
+        .header_div ul li{
+            list-style-type: none;
+            margin: 90px;
+        }
     </style>
 </head>
 <body>
     <header>
         <a href="http://127.0.0.1:5500/frontEnd/main.html" class="logo">Simple Market</a>
+        <div class="header_div">
+            <ul>
+                <li>중고장터</li>
+                <li>동네장터</li>
+                <li>신고장터</li>
+            </ul>
+        </div>
+        실시간 채팅
     </header>
     <div class="profile-info">
         <img src="http://localhost:8080/img/defaultprofile.png" alt="">
         <input type="file" id="file">
-        <input type="text" id="imgs" placeholder="선택한 파일이 삽입됩니다.">
+        <input type="text" id="imgs" placeholder="선택한 파일이 삽입됩니다." style="display: none;">
         <button id="uploadBtn">사진 수정</button>
         <div>
             <span>이름</span>

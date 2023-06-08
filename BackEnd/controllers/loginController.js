@@ -8,12 +8,12 @@ const bcrypt = require("bcrypt");
 
 exports.Login = async (req, res) => {
     try {
-        const {user_id, user_pw} = req.body;
+        const {user_id, user_pw } = req.body;
         const user = await User.findOne({where: {user_id}})
         if(user == null) {
             return res.send("가입 안한 아이디 입니다.");
-        }
-
+        } 
+ 
         const same = bcrypt.compareSync(user_pw, user.user_pw)
         const { name, age } = user;
         if(same) {
@@ -24,10 +24,13 @@ exports.Login = async (req, res) => {
             },process.env.ACCESS_TOKEN_KEY,{
                 expiresIn : "20m"
             });
+            if(user.grade == "1"){
+                return res.send("가입 승인 대기중입니다.");
+            }
             req.session.access_token = token;
             return res.redirect("http://127.0.0.1:5500/frontEnd/main.html")
-        }else{
-            return res.send("비번 틀림");
+        }else if(!same) {
+            return res.send("비밀번호가 맞지 않습니다.");
         }
     } catch (error) {
         console.log(error);
