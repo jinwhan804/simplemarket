@@ -9,7 +9,7 @@
 </head>
 <body>
     <h1>게시판</h1>
-    <a href="">글 등록하기</a>
+    <a href="./insert.html">글 등록하기</a>
     <table id="post_list">
         
     </table>
@@ -37,7 +37,7 @@
             _tr1.append(_th1,_th2,_th3,_th4,_th5);
             post_list.append(_tr1);
 
-            if(data = null){
+            if(data == null){
                 return;
             }else{
                 data.forEach((el,index) => {

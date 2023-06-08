@@ -23,18 +23,32 @@
     <label for="">제목</label>
     <input type="text" id="title">
     <label for="">작성자</label>
-    <input type="text" id="nickname"><br>
+    <input type="text" id="nickname" disabled><br>
     <label for="">본문</label>
     <div id="contentArea" contenteditable="true"></div>
     <button id="insertBtn">추가 하기</button>
     <a href="./post.html">게시판 돌아가기</a>
 </body>
 <script>
+    window.onload = async()=>{
+        axios.defaults.withCredentials = true;
+        const {data} = await axios.get('http://127.0.0.1:8080/post/insert',{
+            headers : {
+                "Content-Type" : "application/json"
+            }
+        })
+
+        console.log(data.nickname);
+        
+        nickname.value = data.nickname;
+    }
+
+
     insertBtn.onclick = async()=>{
         try {
             axios.defaults.withCredentials = true;
             await axios.post('http://127.0.0.1:8080/post/insert',{
-                header : {
+                headers : {
                     "Content-Type" : "application/json"
                 }
             })
