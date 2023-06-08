@@ -5,14 +5,80 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f0f0f0;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            width: 350px;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0px 3px 15px rgba(0,0,0,0.1);
+            background-color: #ffffff;
+        }
+
+        label {
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        input {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px;
+            color: #ffffff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .links {
+            display: flex;
+            justify-content: space-around;
+            font-size: 0.8em;
+            margin-top: 12px;
+        }
+
+        a {
+            text-decoration: none;
+            color: #007bff;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
     <form action="http://127.0.0.1:8080/login" method="post">
-        <label for="">아이디</label>
-        <input type="text" name="admin_id">
-        <label for="">비밀번호</label>
-        <input type="text" name="admin_pw">
-        <button>로그인</button>
+        <label for="">ID</label>
+        <input type="text" name="user_id">
+        <label for="">Password</label>
+        <input type="password" name="user_pw">
+        <button>Login</button>
+        <div class="links">
+            <a href="http://127.0.0.1:5500/FrontEnd/signUp.html">SignUp</a>
+        </div>
     </form>
 </body>
 </html>

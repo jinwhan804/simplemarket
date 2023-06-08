@@ -32,6 +32,12 @@ class User extends Sequelize.Model {
                 type : Sequelize.STRING(100),
                 allowNull : true
             },
+            grade : {
+                type : Sequelize.STRING(10),
+                allowNull : false,
+                defaultValue : '1'
+            },
+
             profile_img : {
                 type : Sequelize.STRING,
                 allowNull: true
