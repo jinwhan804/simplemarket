@@ -60,7 +60,7 @@
     a, button {
         display: inline-block;
         margin: 10px;
-        padding: 10px 20px;
+        /* padding: 10px 20px; */
         text-decoration: none;
         color: #ffffff;
         background-color: #007bff;
@@ -91,6 +91,7 @@
         <div>
             <span>별명</span>
             <span id="nickname"></span>
+            <button id="nickname-update-button">수정</button>
         </div>
         <div>
             <span>성별</span>
@@ -99,6 +100,9 @@
         <div>
             <span>주소</span>
             <span id="address"></span>
+        </div>
+        <div>
+            <button>실시간 상담 요청</button>
         </div>
     </div>
 </body>
@@ -122,6 +126,22 @@
             console.log(err);
         })
     }
+    // 닉네임 변경 이벤트 리스너
+    document.getElementById("nickname-update-button").addEventListener("click", async () => {
+        const newNickname = prompt("새로운 별명을 입력해주세요.");
+        if (newNickname) {
+            try {
+                const response = await axios.post("http://127.0.0.1:8080/mypage", {
+                    nickname: newNickname
+                }, {
+                    withCredentials: true
+                });
+                document.getElementById("nickname").innerText = newNickname;
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    });
 
     async function getAPI() {
         try {
@@ -137,8 +157,10 @@
 
             if(data.gender === "male") {
                 document.getElementById('gender').innerText = "남자";
-            }else {
+            }else if(data.gender === "female") {
                 document.getElementById('gender').innerText = "여자";
+            }else {
+                document.getElementById('gender').innerText = "undefined"
             }
 
             if (data.profile_img) {

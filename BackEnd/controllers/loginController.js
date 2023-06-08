@@ -18,6 +18,7 @@ exports.Login = async (req, res) => {
         const { name, age } = user;
         if(same) {
             let token = jwt.sign({
+                user_id,
                 name,
                 age
             },process.env.ACCESS_TOKEN_KEY,{

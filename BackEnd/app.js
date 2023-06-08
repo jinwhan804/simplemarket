@@ -10,6 +10,7 @@ const path = require("path");
 const SignUpRouter = require("./routers/signUp");
 const LoginRouter = require("./routers/login");
 const uploadRouter = require("./routers/upload");
+const nicknameUpdateRouter = require("./routers/mypage");
 
 const app = express();
 
@@ -41,6 +42,7 @@ app.use(cors({
 app.use('/signUp', SignUpRouter);
 app.use('/login', LoginRouter);
 app.use('/upload', uploadRouter);
+app.use('/mypage', nicknameUpdateRouter);
 
 app.listen(8080, () => {
     console.log("8080 Server Open");

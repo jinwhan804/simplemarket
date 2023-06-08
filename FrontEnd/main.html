@@ -116,8 +116,10 @@
 
             if(data.gender === "male") {
                 document.getElementById('gender').innerText = '남자';
-            }else{
+            }else if(data.gender === "female") {
                 document.getElementById('gender').innerText = '여자';
+            }else {
+                document.getElementById('gender').innerText = "undefined"
             }
 
             if (data.profile_img) {
