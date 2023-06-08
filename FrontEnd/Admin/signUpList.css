@@ -16,8 +16,8 @@ header{
     margin: 0 auto;
     margin-top: 80px;
     width: 100%;
-    max-width: 1000px;
-    height: 170vh;
+    max-width: 1200px;
+    height: 100vh;
 }
 
 p {
@@ -30,16 +30,26 @@ p {
     margin-top: 20px;
 }
 
-.list_title,
-.list_user {
+.list_title, .user{
     display: flex;
     justify-content: space-around;
     height: 40px;
 }
 
-.list_title div,
-.list_user div{
+.list_user {
     border: 1px solid;
+    border-top: none;
+    height: 500px;
+}
+
+.list_title div{
+    border: 1px solid;
+    line-height: 2.4;
+    text-align: center;
+}
+
+.user div{
+    border-bottom: 1px solid rgb(193, 193, 193);
     line-height: 2.4;
     text-align: center;
 }
@@ -48,14 +58,20 @@ p {
     width: 5%;
 }
 
-.id, .name, .gender, .pass {
+.id, .name, .gender,
+.pass {
     width: 10%;
 }
 
-.nickName {
+.reqDate, .nickName {
     width: 15%;
 }
 
-.address {
-    width: 40%;
+.address{
+    width: 25%;
+}
+
+.user .reqDate{
+    font-size: 15px;
+    line-height: 1.2;
 }
