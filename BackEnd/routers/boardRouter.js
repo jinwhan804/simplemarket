@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { boardMain, approveUser, rejectUser } = require('../controller/boardController');
+const { boardMain, approveUser, rejectUser } = require('../controllers/boardController');
 
 router.get('/', boardMain);
 

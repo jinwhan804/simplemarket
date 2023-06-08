@@ -1,4 +1,4 @@
-const {Post} = require('../model');
+const {Post} = require('../models');
 
 exports.PostViewAll = async(req,res)=>{
     try {

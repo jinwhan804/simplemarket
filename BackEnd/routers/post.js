@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const {PostViewAll,PostInsert} = require('../controllers/postController');
 const {isLogin} = require('../middleware/loginmiddleware');
-const {User} = require('../model');
+const {User} = require('../models');
 
 router.get('/',(req,res,next)=>{
     User.create({

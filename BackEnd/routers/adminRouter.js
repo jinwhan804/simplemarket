@@ -1,6 +1,6 @@
 const router = require('express').Router();
-const { AdminLogIn, SignUp, Login } = require('../controller/adminController');
-const { boardMain } = require('../controller/boardController');
+const { AdminLogIn, SignUp, Login } = require('../controllers/adminController');
+const { boardMain } = require('../controllers/boardController');
 
 router.post('/login', AdminLogIn);
 
