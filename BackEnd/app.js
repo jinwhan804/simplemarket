@@ -17,36 +17,36 @@ const boardRouter = require('./routers/boardRouter');
 
 const app = express();
 
-sequelize.sync({force:false})
-.then(() => {
-    console.log("연결 성공")
-})
-.catch((err)=>{
-    console.log(err);
-});
+sequelize.sync({ force: false })
+    .then(() => {
+        console.log("연결 성공")
+    })
+    .catch((err) => {
+        console.log(err);
+    });
 
 app.use(session({
-    secret : process.env.SESSION_KEY,
-    resave : false,
-    saveUninitialized : false
+    secret: process.env.SESSION_KEY,
+    resave: false,
+    saveUninitialized: false
 }));
 
-app.use(express.urlencoded({extended:false}));
+app.use(express.urlencoded({ extended: true }));
 
 app.use("/img", express.static(path.join(__dirname, "uploads")));
 
 app.use(express.json());
 
 app.use(cors({
-    origin : "http://127.0.0.1:5500",
-    credentials : true
+    origin: "http://127.0.0.1:5500",
+    credentials: true
 }));
 
 app.use('/signUp', SignUpRouter);
 app.use('/login', LoginRouter);
 app.use('/upload', uploadRouter);
 app.use('/mypage', nicknameUpdateRouter);
-app.use('/post',postRouter);
+app.use('/post', postRouter);
 app.use('/admin', adminRouter);
 app.use('/signUpList', boardRouter);
 

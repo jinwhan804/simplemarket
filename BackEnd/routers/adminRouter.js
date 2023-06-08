@@ -8,6 +8,4 @@ router.get('/signUp', boardMain);
 
 router.post('/signUp', SignUp);
 
-router.post("/login", Login);
-
 module.exports = router;

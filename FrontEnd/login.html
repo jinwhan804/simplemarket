@@ -68,17 +68,39 @@
             text-decoration: underline;
         }
     </style>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
 <body>
-    <form action="http://127.0.0.1:8080/login" method="post">
+    <form>
         <label for="">ID</label>
-        <input type="text" name="user_id">
+        <input type="text" id="user_id">
         <label for="">Password</label>
-        <input type="password" name="user_pw">
-        <button>Login</button>
+        <input type="password" id="user_pw">
+        <button type="button" id="loginBtn">Login</button>
         <div class="links">
             <a href="http://127.0.0.1:5500/FrontEnd/signUp.html">SignUp</a>
         </div>
     </form>
 </body>
+<script>
+    async function Login(user_id, user_pw) {
+        try {
+            const { data } = await axios.post('http://127.0.0.1:8080/login', { user_id, user_pw }, {
+                withCredentials: true
+            });
+            console.log(data);
+            if(data == "로그인 성공") {
+                alert(data);
+                window.location.href = "http://127.0.0.1:5500/FrontEnd/main.html";
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    loginBtn.onclick = function () {
+        Login(user_id.value, user_pw.value);
+    }
+</script>
 </html>
