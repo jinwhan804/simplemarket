@@ -58,17 +58,20 @@ p {
     width: 5%;
 }
 
-.id, .name, .nickName, .gender,
-.reqDate, .resDate, .pass {
+.id, .name, .gender,
+.pass {
     width: 10%;
+}
+
+.reqDate, .nickName {
+    width: 15%;
 }
 
 .address{
     width: 25%;
 }
 
-.user .reqDate,
-.user .resDate {
+.user .reqDate{
     font-size: 15px;
     line-height: 1.2;
 }

@@ -6,20 +6,22 @@ async function getUserInfo() {
         });
         console.log(data);
         userInfo.innerHTML = "";
-        data.forEach((el, index) => {
-            let date = new Date(data[index].createdAt);
-            let formattedDate = date.toLocaleDateString() + '<br>' + date.toLocaleTimeString();
+        data.forEach((user, index) => {
+            let date = new Date(user.createdAt);
+            let requestedDate = date.toLocaleDateString() + '<br>' + date.toLocaleTimeString();
             userInfo.innerHTML += `
             <div class="user">
                 <div class="num">${index + 1}</div>
-                <div class="id">${data[index].user_id}</div>
-                <div class="name">${data[index].name}</div>
-                <div class="nickName">${data[index].nickname}</div>
-                <div class="gender">${data[index].gender}</div>
-                <div class="address">${data[index].address}</div>
-                <div class="pass"><button class="accept" onclick="approveUser('${data[index].user_id}')">승인</button> <button class="reject">거절</button></div>
-                <div class="reqDate">${formattedDate}</div>
-                <div class="resDate"></div>
+                <div class="id">${user.user_id}</div>
+                <div class="name">${user.name}</div>
+                <div class="nickName">${user.nickname}</div>
+                <div class="gender">${user.gender}</div>
+                <div class="address">${user.address}</div>
+                <div class="reqDate">${requestedDate}</div>
+                <div class="pass">
+                    <button class="accept" onclick="approveUser('${user.user_id}')">승인</button>
+                    <button class="reject" onclick="rejectUser('${user.user_id}')">거절</button>
+                </div>
             </div>
             `
         });
@@ -45,29 +47,12 @@ async function approveUser(user_id) {
 // 회원가입 요청에 대한 거절 코드
 async function rejectUser(user_id, e) {
     try {
-        const response = await axios.post('http://127.0.0.1:8080/signUpList/reject_user', { user_id }, {
+        await axios.post('http://127.0.0.1:8080/signUpList/reject_user', { user_id }, {
             withCredentials: true
         });
-        const rejectDate = new Date(response.data.rejectDate);
-        const formattedDate = rejectDate.toLocaleDateString() + '<br>' + rejectDate.toLocaleTimeString();
-        e.target.closest('.user').querySelector('.resDate').innerHTML = formattedDate;
         getUserInfo();
     } catch (error) {
         console.log(error);
     }
 }
 
-// 승인과 거절했을 시 실행되는 함수
-document.querySelector('.list_user').addEventListener('click', (e) => {
-    const userId = e.target.closest('.user').querySelector('.id').innerText;
-    if (e.target.className === 'accept') {
-        approveUser(userId);
-    } else if (e.target.className === 'reject') {
-        const reason = prompt('거절 사유를 입력해주세요');
-        console.log(reason);
-        if (reason != null) {
-            rejectUser(userId);
-            e.target.closest('.user').querySelector('.pass').innerHTML = "<span style='color:red;'>거절됨</span>"
-        }
-    }
-});

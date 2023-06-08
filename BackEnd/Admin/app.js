@@ -5,7 +5,6 @@ const dotenv = require('dotenv').config();
 const { sequelize } = require('./model');
 const cors = require('cors');
 const adminRouter = require('./router/adminRouter');
-const userRouter = require('./router/userRouter');
 const boardRouter = require('./router/boardRouter');
 
 const app = express();
@@ -25,14 +24,13 @@ sequelize.sync({ force: false }).then(() => {
 })
 
 
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: false }));
 app.use(cors({
     origin: 'http://127.0.0.1:5500',
     credentials: true
 }))
 
 app.use('/', adminRouter);
-app.use('/', userRouter);
 app.use('/signUpList', boardRouter);
 
 app.listen(8080, () => {

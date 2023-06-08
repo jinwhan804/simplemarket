@@ -35,6 +35,11 @@ class User extends Sequelize.Model {
             profile_img: {
                 type: Sequelize.STRING,
                 allowNull: true
+            },
+            grade: {
+                type: Sequelize.STRING,
+                allowNull: false,
+                defaultValue: '1'  // 0 : 승인거절, 1 : 승인대기, 2 : 승인, 3 : 관리자
             }
         }, {
             sequelize: seq,
