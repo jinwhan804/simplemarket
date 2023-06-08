@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 
-class Posts extends Sequelize.Model{
+class Post extends Sequelize.Model{
     static init(sequelize){
         return super.init({
             title : {
@@ -9,18 +9,6 @@ class Posts extends Sequelize.Model{
             },
             content : {
                 type : Sequelize.STRING(256),
-            },
-            userId : {
-                type : Sequelize.INTEGER,
-                allowNull : false
-            },
-            nickname : {
-                type : Sequelize.STRING(30),
-                allowNull : false
-            },
-            userImg : {
-                type : Sequelize.STRING(100),
-                allowNull : false
             },
             postLikes: {
                 type : Sequelize.STRING(256),
@@ -41,6 +29,10 @@ class Posts extends Sequelize.Model{
             collate : 'utf8_general_ci'
         })
     }
+
+    static associationsUser(db){
+        db.Post.belongsTo(db.User,{foreignKey : "userId", TargetKey : "id"});
+    }
 }
 
-module.exports = Posts;
+module.exports = Post;

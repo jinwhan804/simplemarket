@@ -6,6 +6,9 @@ const path = require('path');
 
 const {sequelize} = require('./model');
 const postRouter = require('./routers/post');
+const SignUpRouter = require("./routers/signUp");
+const LoginRouter = require("./routers/login");
+const uploadRouter = require("./routers/upload");
 
 const app = express();
 
@@ -15,7 +18,7 @@ app.use(cors({
 }))
 
 app.use(express.urlencoded({extended : false}));
-app.use('/img',express.static(path.join(__dirname,'images')));
+app.use('/img',express.static(path.join(__dirname,'uploads')));
 
 app.use(express.json());
 
@@ -32,6 +35,9 @@ sequelize.sync({force : false}).then(()=>{
 })
 
 app.use('/post',postRouter);
+app.use('/signUp', SignUpRouter);
+app.use('/login', LoginRouter);
+app.use('/upload', uploadRouter);
 
 app.listen(8080,()=>{
     console.log('server open');

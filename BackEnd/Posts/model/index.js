@@ -1,6 +1,7 @@
 const config = require('../config');
 const Sequelize = require('sequelize');
-const Posts = require('./posts');
+const Post = require('./posts');
+const User = require('./users');
 
 const sequelize = new Sequelize(
     config.dev.database,
@@ -11,8 +12,13 @@ const sequelize = new Sequelize(
 
 const db = {};
 db.sequelize = sequelize;
-db.Posts = Posts;
+db.Post = Post;
+db.User = User;
 
-Posts.init(sequelize);
+Post.init(sequelize);
+User.init(sequelize);
+
+Post.associationsUser(db);
+User.associate(db);
 
 module.exports = db;

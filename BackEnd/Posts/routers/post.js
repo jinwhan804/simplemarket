@@ -1,14 +1,34 @@
 const router = require('express').Router();
-const {PostViewAll} = require('../controllers/postController');
-const {isLogin} = require('../../middleware/loginmiddleware');
+const {PostViewAll,PostInsert} = require('../controllers/postController');
+const {isLogin} = require('../middleware/loginmiddleware');
+const {User} = require('../model');
 
-router.get('/',PostViewAll);
+router.get('/',(req,res,next)=>{
+    User.create({
+        name : "123",
+        age : '35',
+        user_id : "123",
+    })
+    next();
+},PostViewAll);
 
-router.get('/insert',async(req,res)=>{
+// router.get('/insert',isLogin,async(req,res)=>{
+//     const {access_decoded} = req;
+//     res.json(access_decoded);
+// })
+
+router.get('/insert',(req,res)=>{
     const data = {
-        nickname : "test"
-    };    
+        userId : "1"
+    }
+
     res.json(data);
 })
+
+router.post('/insert',PostInsert);
+
+router.post('/detail')
+
+router.get('/detail')
 
 module.exports = router;
