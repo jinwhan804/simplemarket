@@ -1,4 +1,4 @@
-const {Post} = require('../models');
+const {Post,User} = require('../models');
 
 exports.PostViewAll = async(req,res)=>{
     try {
@@ -7,6 +7,30 @@ exports.PostViewAll = async(req,res)=>{
     } catch (error) {
         console.log('포스트 컨트롤러에서 전체 글 보여주다 에러남');
         console.log(error);
+    }
+}
+
+exports.PostViewOne = async(req,res)=>{
+    try {
+        const {access_decoded} = req;        
+        res.json(access_decoded);
+    } catch (error) {
+        console.log('포스트 컨트롤러에서 글 하나 보여주다 에러남');
+        console.log(error);
+    }
+}
+
+exports.PostInsertView = async(req,res)=>{
+    try {        
+        const {access_decoded} = req;
+        const user = await User.findOne({
+            where : {user_id : access_decoded.user_id}
+        })
+        const data = user.dataValues;
+        console.log(data)
+        res.send(data);        
+    } catch (error) {
+        
     }
 }
 

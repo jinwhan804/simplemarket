@@ -15,12 +15,13 @@ exports.Login = async (req, res) => {
         } 
  
         const same = bcrypt.compareSync(user_pw, user.user_pw)
-        const { name, age } = user;
+        const { name, age, nickname } = user;
         if(same) {
             let token = jwt.sign({
                 user_id,
                 name,
-                age
+                age,
+                nickname
             },process.env.ACCESS_TOKEN_KEY,{
                 expiresIn : "20m"
             });
@@ -28,7 +29,7 @@ exports.Login = async (req, res) => {
                 return res.send("가입 승인 대기중입니다.");
             }
             req.session.access_token = token;
-            return res.redirect("http://127.0.0.1:5500/frontEnd/main.html")
+            return res.redirect("http://127.0.0.1:5500/FrontEnd/main.html")
         }else if(!same) {
             return res.send("비밀번호가 맞지 않습니다.");
         }
