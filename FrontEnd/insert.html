@@ -31,6 +31,7 @@
 </body>
 <script>
     let user_data = {};
+    
     window.onload = async()=>{
         axios.defaults.withCredentials = true;
         const {data} = await axios.get('http://127.0.0.1:8080/post/insert',{
@@ -40,16 +41,28 @@
         })
         
         nickname.value = data.nickname;
+        user_data = data;
     }
-
 
     insertBtn.onclick = async()=>{
         try {
+            const form = new FormData();
+
+            form.append('title',title.value);
+            form.append('content',contentArea.innerHTML);
+            form.append('userId',user_data.id)
+
             axios.defaults.withCredentials = true;
-            await axios.post('http://127.0.0.1:8080/post/insert',{
+            await axios.post('http://127.0.0.1:8080/post/insert',form,{
                 headers : {
                     "Content-Type" : "application/json"
                 }
+            }).then((e)=>{
+                console.log(e.data);
+                location.href = e.data;
+            }).catch((err)=>{
+                console.log('프론트 글 추가하다 에러남');
+                console.log(err);
             })
         } catch (error) {
             console.log(error)

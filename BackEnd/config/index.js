@@ -4,7 +4,12 @@ const config = {
         password : process.env.DATABASE_PASSWORD,
         database : process.env.DATABASE_NAME,
         host : process.env.HOST,
-        dialect : "mysql"
+        dialect : "mysql",
+        timezone : '+09:00',
+        dialectOptions : {
+            dateStrings : true,
+            typeCast : true
+        }
     }
 }
 

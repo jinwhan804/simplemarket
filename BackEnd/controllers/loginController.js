@@ -15,10 +15,10 @@ exports.Login = async (req, res) => {
         } 
  
         const same = bcrypt.compareSync(user_pw, user.user_pw)
-        const { name, age, nickname } = user;
+        const { id, name, age, nickname } = user;
         if(same) {
             let token = jwt.sign({
-                user_id,
+                id,
                 name,
                 age,
                 nickname

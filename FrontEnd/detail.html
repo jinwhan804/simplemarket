@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <style>
+        #contentArea{
+            width: 500px;
+            min-height: 500px;
+            border: 1px solid;
+        }
+        img{
+            width: 300px;
+            height: auto;
+        }
+        .unaccess{
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>글 보기</h1>    
+    <label for="">제목</label>
+    <input type="text" id="title" disabled>
+    <label for="">작성자</label>
+    <input type="text" id="nickname" disabled><br>
+    <label for="">본문</label>
+    <div id="contentArea"></div>
+    <div id="updateBtn">
+        <button id="toUpdate">수정</button><button id="toDelete">삭제</button>
+    </div>
+</body>
+<script>
+    axios.defaults.withCredentials = true;
+    async function GetAPI(){
+        try {
+            const {data} = await axios.get('http://127.0.0.1:8080/post/detail',{
+                headers : {
+                    "Content-Type" : "application/json"
+                }
+            })
+            console.log(data);
+
+            title.value = data.posts.title;
+            nickname.value = data.posts.User.nickname;
+            contentArea.innerHTML = data.posts.content;
+
+            if(data.users.id != data.posts.userId){
+                updateBtn.classList.add('unaccess');
+            }else{
+                updateBtn.classList.remove('unaccess');
+            }
+
+            toUpdate.onclick = async()=>{
+                try {
+                    const {data} = await axios.post('http://127.0.0.1:8080/post/updateview',{
+                        headers : {
+                            "Content-Type" : "application/json"
+                        }
+                    })
+                    location.href = data;            
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    GetAPI();    
+</script>
+</html>

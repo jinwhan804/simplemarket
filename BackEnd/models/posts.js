@@ -11,7 +11,7 @@ class Post extends Sequelize.Model{
                 type : Sequelize.STRING(256),
             },
             postLikes: {
-                type : Sequelize.STRING(256),
+                type : Sequelize.INTEGER,
                 defaultValue : 0
             },
             postViews :{
