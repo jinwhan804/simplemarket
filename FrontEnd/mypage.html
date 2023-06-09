@@ -14,7 +14,7 @@
             background-color: #f0f0f0;
             color: #333;
         }
-    
+
         header {
             width: 100%;
             height: 64px;
@@ -27,36 +27,12 @@
             color: #ffffff;
             font-size: 1.5em;
         }
-    
+
         .logo {
             font-weight: bold;
             font-size: 1.5em;
             color: white;
             text-decoration: none;
-        }
-    
-        img {
-            display: block;
-            margin: 20px auto;
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            box-shadow: 0px 3px 15px rgba(0,0,0,0.1);
-        }
-    
-        div.profile-info {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            margin-top: 80px;
-        }
-    
-        div.profile-info div {
-            margin: 10px 0;
-        }
-    
-        a{
             display: inline-block;
             margin: 10px;
             padding: 10px 20px;
@@ -65,24 +41,35 @@
             background-color: #007bff;
             border-radius: 5px;
         }
-    
-        a:hover, button:hover {
+
+        img {
+            display: block;
+            margin: 20px auto;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            box-shadow: 0px 3px 15px rgba(0,0,0,0.1);
+        }
+
+        div.profile-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-top: 80px;
+        }
+
+        div.profile-info div {
+            margin: 10px 0;
+        }
+        
+        .logo:hover {
             background-color: #0056b3;
         }
-
-        button {
-            display: inline-block;
-            margin: 10px;
-            /* padding: 10px 20px; */
-            text-decoration: none;
-            color: #ffffff;
-            background-color: #007bff;
-            border-radius: 5px;
-        }
-        /* 헤더 */
+        /*  헤더  */
         .header_div {
-            width: 60%;
-
+            width: 100%;
+            max-width: 1000px;
         }
         .header_div ul {
             display: flex;
@@ -90,6 +77,11 @@
         .header_div ul li{
             list-style-type: none;
             margin: 90px;
+        }
+        #admin-hide {
+            position: relative;
+            top: -3.5px;
+            margin-right: 20px;
         }
     </style>
 </head>
@@ -103,8 +95,10 @@
                 <li>신고장터</li>
             </ul>
         </div>
-        <button>채팅하기</button>
-        <button id="logout">로그아웃</button>
+        <div id="admin-hide">
+            <button onclick="window.location.href='http://127.0.0.1:5500/FrontEnd/signUpList.html'">Admin</button>
+        </div>
+        <button id="logout">Logout</button>
     </header>
     <div class="profile-info">
         <img src="http://localhost:8080/img/defaultprofile.png" alt="">
@@ -132,21 +126,18 @@
             <span>주소</span>
             <span id="address"></span>
         </div>
-        <div id="admin-hide">
-            <a href="http://127.0.0.1:5500/FrontEnd/signUpList.html">관리자 게시판 이동</a>
-        </div>
     </div>
 </body>
 <script>
-    // 관리자 게시판
+    // 관리자 게시판 기능 (유저만 안보이게)
     async function checkAdmin() {
-    const adminHide = document.getElementById('admin-hide');
-    const {data} = await axios.get("http://127.0.0.1:8080/login/view", {
+        const adminHide = document.getElementById('admin-hide');
+        const {data} = await axios.get("http://127.0.0.1:8080/login/view", {
         withCredentials : true
-    });
-    if(data.grade == "2"){
+        });
+        if(data.grade == "2"){
         adminHide.style.display = "none";
-    }
+        }
     }
     // 로그아웃 기능 
     const Logout = document.getElementById('logout');
@@ -157,32 +148,37 @@
                 withCredentials : true,
             });
             if(data == "로그인 페이지"){
-            window.location.href = "/frontEnd/login.html";
+                window.location.href = "/frontEnd/login.html";
             }
         } catch (error) {
             console.log(error);
         }
     })
+    // 사진 수정 기능
+    document.getElementById('uploadBtn').addEventListener('click', async () => {
+        // 파일 삽입하지 않으면
+        if (!file.files[0]) {
+            alert('사진을 삽입해주세요');
+            return;
+        }
+        try {
+            const form = new FormData();
+            form.append("imgs", imgs.value);
+            form.append("upload", file.files[0]);
+            form.append("userId", "user_id");
+            const { data } = await axios.post('http://127.0.0.1:8080/upload', form, {
+                headers : {"content-Type" : "multipart/form-data"},
+                withCredentials : true
+            });
+            if(data === "디폴트 프로필"){
+                window.location.href = "/frontEnd/mypage.html";
+            }
 
-    uploadBtn.onclick = () => {
-        const form = new FormData();
-        form.append("imgs", imgs.value);
-        console.log(file.files[0]);
+        } catch (error) {
+            console.log(error);
+        }
+    })
 
-        form.append("upload", file.files[0]);
-        form.append("userId", "user_id");
-        console.log(form);
-
-        axios.post("http://127.0.0.1:8080/upload", form, {
-            headers : {"content-Type" : "multipart/form-data"},
-            withCredentials : true
-        }).then((e)=>{
-            console.log("잘 전달 됐습니다");
-            console.log(e.data);
-        }).catch((err)=>{
-            console.log(err);
-        })
-    }
     // 닉네임 변경 이벤트 리스너
     document.getElementById("nickname-update-button").addEventListener("click", async () => {
         const newNickname = prompt("새로운 별명을 입력해주세요.");
