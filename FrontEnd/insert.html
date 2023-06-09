@@ -30,6 +30,7 @@
     <a href="./post.html">게시판 돌아가기</a>
 </body>
 <script>
+    let user_data = {};
     window.onload = async()=>{
         axios.defaults.withCredentials = true;
         const {data} = await axios.get('http://127.0.0.1:8080/post/insert',{
@@ -37,8 +38,6 @@
                 "Content-Type" : "application/json"
             }
         })
-
-        console.log(data.nickname);
         
         nickname.value = data.nickname;
     }
