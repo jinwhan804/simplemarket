@@ -5,84 +5,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <script src="http://localhost:8080/socket.io/socket.io.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f0f0f0;
-            color: #333;
-        }
-
-        header {
-            width: 100%;
-            height: 64px;
-            position: fixed;
-            background-color: #007bff;
-            top: 0;
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
-            color: #ffffff;
-            font-size: 1.5em;
-        }
-
-        .logo {
-            font-weight: bold;
-            font-size: 1.5em;
-            color: white;
-            text-decoration: none;
-        }
-
-        img {
-            display: block;
-            margin: 20px auto;
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            box-shadow: 0px 3px 15px rgba(0,0,0,0.1);
-        }
-
-        div.profile-info {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            margin-top: 80px;
-        }
-
-        div.profile-info div {
-            margin: 10px 0;
-        }
-
-        a {
-            display: inline-block;
-            margin: 10px;
-            padding: 10px 20px;
-            text-decoration: none;
-            color: #ffffff;
-            background-color: #007bff;
-            border-radius: 5px;
-        }
-
-        a:hover {
-            background-color: #0056b3;
-        }
-        /*  헤더  */
-        .header_div {
-            width: 60%;
-
-        }
-        .header_div ul {
-            display: flex;
-        }
-        .header_div ul li{
-            list-style-type: none;
-            margin: 90px;
-        }
-
-    </style>
+    <link rel="stylesheet" href="./main.css">
 </head>
 <body>
     <header>
@@ -94,7 +19,6 @@
                 <li>신고장터</li>
             </ul>
         </div>
-        실시간 채팅
     </header>
     <div class="profile-info">
         <img src="http://localhost:8080/img/defaultprofile.png" alt="">
@@ -121,36 +45,21 @@
         <a href="http://127.0.0.1:5500/frontEnd/mypage.html">내 정보 보기</a>
         <a href="http://127.0.0.1:5500/frontEnd/post.html">게시판 이동</a>
     </div>
+
+    <!-- --------------------------------------실시간 채팅----------------------------------------------------- -->
+    <img class="chatImg" onclick="popup()" src="http://localhost:8080/img/bunny-1299162_1280.png">
+    <div class="chatBox">
+        <div class="chat_title">
+            <p class="title">심플마켓 상담채팅</p>
+            <button class="close_chatBox">X</button>
+        </div>
+        <div class="line"></div>
+        <div class="chat_content"></div>
+        <div class="message_box">
+            <input type="text" id="message">
+            <button id="btn">send</button>
+        </div>
+    </div>
 </body>
-<script>
-    async function getAPI() {
-        try {
-            const {data} = await axios.get("http://127.0.0.1:8080/login/view",{
-                withCredentials : true,
-            });
-            // console.log(data);
-            user_name.innerHTML = data.name;
-            user_age.innerHTML = data.age;
-            nickname.innerHTML = data.nickname;
-            // gender.innerHTML = data.gender;
-            address.innerHTML = data.address;
-
-            if(data.gender === "male") {
-                document.getElementById('gender').innerText = '남자';
-            }else if(data.gender === "female") {
-                document.getElementById('gender').innerText = '여자';
-            }else {
-                document.getElementById('gender').innerText = "undefined"
-            }
-
-            if (data.profile_img) {
-                document.querySelector("img").src = "http://localhost:8080/img/" + data.profile_img;
-            }
-
-        } catch (error) {
-            console.log(error)
-        }
-    }
-    getAPI();
-</script>
+<script src="./main.js"></script>
 </html>

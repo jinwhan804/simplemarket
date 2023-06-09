@@ -6,6 +6,7 @@ const dot = require("dotenv").config();
 const session = require("express-session");
 const { sequelize } = require("./models");
 const path = require("path");
+const socketIo = require("socket.io");
 
 const SignUpRouter = require("./routers/signUp");
 const LoginRouter = require("./routers/login");
@@ -50,6 +51,21 @@ app.use('/post', postRouter);
 app.use('/admin', adminRouter);
 app.use('/signUpList', boardRouter);
 
-app.listen(8080, () => {
+const server = app.listen(8080, () => {
     console.log("8080 Server Open");
 });
+
+const io = socketIo(server, {
+    cors: {
+        origin: "*",
+        credentials: true
+    }
+});
+
+io.sockets.on('connection', (socket) => {
+    console.log(socket.id);
+    socket.on('message', (data) => {
+        io.sockets.emit('message', data);
+        console.log(data);
+    })
+})

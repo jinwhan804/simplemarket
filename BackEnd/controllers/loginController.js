@@ -26,7 +26,9 @@ exports.Login = async (req, res) => {
             });
 
             if (user.grade === '0') {
-                return res.send('승인이 거절되었습니다.');
+                return res.send(`승인이 거절되었습니다.\n회원가입을 다시 진행해주세요.`);
+            } else if (user.grade === '1') {
+                return res.send('가입 승인 대기중입니다.');
             }
 
             req.session.access_token = token;

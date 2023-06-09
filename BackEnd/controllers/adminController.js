@@ -27,7 +27,7 @@ exports.AdminLogIn = async (req, res) => {
                     nickname,
                     grade
                 }, process.env.ACCESS_TOKEN_KEY, {
-                    expiresIn: '60m'
+                    // expiresIn: '60m'
                 })
                 req.session.access_token = token;
                 return res.redirect('http://127.0.0.1:5500/FrontEnd/main.html');
