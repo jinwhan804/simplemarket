@@ -1,7 +1,7 @@
 async function getUserInfo() {
     try {
         let userInfo = document.querySelector('.list_user');
-        const { data } = await axios.get('http://127.0.0.1:8080/signUp', {
+        const { data } = await axios.get('http://127.0.0.1:8080/admin/signUp', {
             withCredentials: true,
         });
         console.log(data);

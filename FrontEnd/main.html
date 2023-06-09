@@ -71,8 +71,8 @@
         }
         /*  헤더  */
         .header_div {
-            width: 60%;
-
+            width: 100%;
+            max-width: 1000px;
         }
         .header_div ul {
             display: flex;
@@ -94,7 +94,8 @@
                 <li>신고장터</li>
             </ul>
         </div>
-        실시간 채팅
+        <button>채팅하기</button>
+        <button id="logout">로그아웃</button>
     </header>
     <div class="profile-info">
         <img src="http://localhost:8080/img/defaultprofile.png" alt="">
@@ -123,6 +124,21 @@
     </div>
 </body>
 <script>
+    const Logout = document.getElementById('logout');
+
+    Logout.addEventListener('click', async ()=> {
+        try {
+            const {data} = await axios.get("http://127.0.0.1:8080/logout",{
+                withCredentials : true,
+            });
+            if(data == "로그인 페이지"){
+            window.location.href = "/frontEnd/login.html";
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    })
+
     async function getAPI() {
         try {
             const {data} = await axios.get("http://127.0.0.1:8080/login/view",{
