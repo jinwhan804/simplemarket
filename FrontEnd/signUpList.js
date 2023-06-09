@@ -45,7 +45,7 @@ async function approveUser(user_id) {
 }
 
 // 회원가입 요청에 대한 거절 코드
-async function rejectUser(user_id, e) {
+async function rejectUser(user_id) {
     try {
         await axios.post('http://127.0.0.1:8080/signUpList/reject_user', { user_id }, {
             withCredentials: true
