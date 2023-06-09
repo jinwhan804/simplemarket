@@ -132,12 +132,22 @@
             <span>주소</span>
             <span id="address"></span>
         </div>
-        <div>
-            <button>실시간 상담 요청</button>
+        <div id="admin-hide">
+            <a href="http://127.0.0.1:5500/FrontEnd/signUpList.html">관리자 게시판 이동</a>
         </div>
     </div>
 </body>
 <script>
+    // 관리자 게시판
+    async function checkAdmin() {
+    const adminHide = document.getElementById('admin-hide');
+    const {data} = await axios.get("http://127.0.0.1:8080/login/view", {
+        withCredentials : true
+    });
+    if(data.grade == "2"){
+        adminHide.style.display = "none";
+    }
+    }
     // 로그아웃 기능 
     const Logout = document.getElementById('logout');
 
@@ -219,5 +229,6 @@
         }
     }
     getAPI();
+    checkAdmin();
 </script>
 </html>
