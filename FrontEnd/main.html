@@ -33,6 +33,13 @@
             font-size: 1.5em;
             color: white;
             text-decoration: none;
+            display: inline-block;
+            margin: 10px;
+            padding: 10px 20px;
+            text-decoration: none;
+            color: #ffffff;
+            background-color: #007bff;
+            border-radius: 5px;
         }
 
         img {
@@ -56,23 +63,13 @@
             margin: 10px 0;
         }
 
-        a {
-            display: inline-block;
-            margin: 10px;
-            padding: 10px 20px;
-            text-decoration: none;
-            color: #ffffff;
-            background-color: #007bff;
-            border-radius: 5px;
-        }
-
-        a:hover {
+        .logo:hover {
             background-color: #0056b3;
         }
         /*  헤더  */
         .header_div {
-            width: 60%;
-
+            width: 100%;
+            max-width: 1000px;
         }
         .header_div ul {
             display: flex;
@@ -81,7 +78,9 @@
             list-style-type: none;
             margin: 90px;
         }
-
+        #mypage-btn {
+            margin-right: 20px;
+        }
     </style>
 </head>
 <body>
@@ -94,7 +93,8 @@
                 <li>신고장터</li>
             </ul>
         </div>
-        실시간 채팅
+        <button onclick="window.location.href='http://127.0.0.1:5500/frontEnd/mypage.html'" id="mypage-btn">Mypage</button>
+        <button id="logout">Logout</button>
     </header>
     <div class="profile-info">
         <img src="http://localhost:8080/img/defaultprofile.png" alt="">
@@ -123,6 +123,32 @@
     </div>
 </body>
 <script>
+    // 관리자 게시판 기능 (유저만 안보이게)
+    async function checkAdmin() {
+        const adminHide = document.getElementById('admin-hide');
+        const {data} = await axios.get("http://127.0.0.1:8080/login/view", {
+            withCredentials : true
+        });
+        if(data.grade !== "3"){
+            adminHide.style.display = "none";
+        }
+    }
+    // 로그아웃 기능
+    const Logout = document.getElementById('logout');
+
+    Logout.addEventListener('click', async ()=> {
+        try {
+            const {data} = await axios.get("http://127.0.0.1:8080/logout",{
+                withCredentials : true,
+            });
+            if(data == "로그인 페이지"){
+            window.location.href = "/frontEnd/login.html";
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    })
+
     async function getAPI() {
         try {
             const {data} = await axios.get("http://127.0.0.1:8080/login/view",{
@@ -152,5 +178,6 @@
         }
     }
     getAPI();
+    checkAdmin();
 </script>
 </html>

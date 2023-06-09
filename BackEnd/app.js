@@ -6,9 +6,11 @@ const dot = require("dotenv").config();
 const session = require("express-session");
 const { sequelize } = require("./models");
 const path = require("path");
+const cookieParser = require('cookie-parser');
 
 const SignUpRouter = require("./routers/signUp");
 const LoginRouter = require("./routers/login");
+const LogoutRouter = require("./routers/logout");
 const uploadRouter = require("./routers/upload");
 const nicknameUpdateRouter = require("./routers/mypage");
 const postRouter = require('./routers/post');
@@ -24,6 +26,7 @@ sequelize.sync({force:false})
 .catch((err)=>{
     console.log(err);
 });
+app.use(cookieParser());
 
 app.use(session({
     secret : process.env.SESSION_KEY,
@@ -44,6 +47,7 @@ app.use(cors({
 
 app.use('/signUp', SignUpRouter);
 app.use('/login', LoginRouter);
+app.use('/logout', LogoutRouter);
 app.use('/upload', uploadRouter);
 app.use('/mypage', nicknameUpdateRouter);
 app.use('/post',postRouter);
