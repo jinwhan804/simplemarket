@@ -1,23 +1,23 @@
- // 관리자 게시판 기능 (유저만 안보이게)
- async function checkAdmin() {
+// 관리자 게시판 기능 (유저만 안보이게)
+async function checkAdmin() {
     const adminHide = document.getElementById('admin-hide');
-    const {data} = await axios.get("http://127.0.0.1:8080/login/view", {
-        withCredentials : true
+    const { data } = await axios.get("http://127.0.0.1:8080/login/view", {
+        withCredentials: true
     });
-    if(data.grade !== "3"){
+    if (data.grade != "3") {
         adminHide.style.display = "none";
     }
 }
 // 로그아웃 기능
 const Logout = document.getElementById('logout');
 
-Logout.addEventListener('click', async ()=> {
+Logout.addEventListener('click', async () => {
     try {
-        const {data} = await axios.get("http://127.0.0.1:8080/logout",{
-            withCredentials : true,
+        const { data } = await axios.get("http://127.0.0.1:8080/logout", {
+            withCredentials: true,
         });
-        if(data == "로그인 페이지"){
-        window.location.href = "/frontEnd/login.html";
+        if (data == "로그인 페이지") {
+            window.location.href = "/frontEnd/login.html";
         }
     } catch (error) {
         console.log(error);
@@ -26,8 +26,8 @@ Logout.addEventListener('click', async ()=> {
 
 async function getAPI() {
     try {
-        const {data} = await axios.get("http://127.0.0.1:8080/login/view",{
-            withCredentials : true,
+        const { data } = await axios.get("http://127.0.0.1:8080/login/view", {
+            withCredentials: true,
         });
         // console.log(data);
         user_name.innerHTML = data.name;
@@ -36,16 +36,16 @@ async function getAPI() {
         // gender.innerHTML = data.gender;
         address.innerHTML = data.address;
 
-        if(data.gender === "male") {
+        if (data.gender === "male") {
             document.getElementById('gender').innerText = '남자';
-        }else if(data.gender === "female") {
+        } else if (data.gender === "female") {
             document.getElementById('gender').innerText = '여자';
-        }else {
+        } else {
             document.getElementById('gender').innerText = "undefined"
         }
 
         if (data.profile_img) {
-            document.querySelector("img").src = "http://localhost:8080/img/" + data.profile_img;
+            document.querySelector("img").src = "" + data.profile_img;
         }
 
     } catch (error) {
@@ -61,6 +61,10 @@ checkAdmin();
 const chatBox = document.querySelector('.chatBox');
 const chatBoxClose = document.querySelector('.close_chatBox');
 const chatContent = document.querySelector('.chat_content');
+const now = new Date();
+const hours = now.getHours();
+const minutes = now.getMinutes();
+const timeString = `${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
 
 function popup() {
     document.body.classList.toggle('active');
@@ -74,23 +78,50 @@ chatBoxClose.addEventListener('click', () => {
 
 
 // 채팅 소켓
-window.onload = () => {
+async function userInfo() {
+    const response = await axios.get('http://127.0.0.1:8080/login/view', {
+        withCredentials: true
+    });
+    console.log(response);
+    return {
+        nickname: response.data.nickname,
+        profileImg: response.data.profile_img
+    };
+}
+
+
+window.onload = async () => {
     const socket = io.connect("http://localhost:8080");
+    const { nickname, profileImg } = await userInfo();
     socket.on('message', (data) => {
-        let el = `
-        <div>
-            <p>${data.nickname}</p>
-            <p>${data.message}</p>
-            <p>${data.date}</p>
-        </div>
-        `;
+        let el;
+        if (data.nickname === nickname) {
+            el = `
+            <div class="content my-message">
+                <p class="message ballon">${data.message}</p>
+                <p class="date">${data.date}</p>
+            </div>
+            `;
+        } else {
+            el = `
+            <div class="content other-message">
+                <img src="${data.profileImg}">
+                <div class="message-display">
+                    <p class="nickname">${data.nickname}</p>
+                    <p class="message ballon">${data.message}</p>
+                    <p class="date">${data.date}</p>
+                </div>
+            </div>
+            `;
+        }
         chatContent.innerHTML += el;
     })
     btn.onclick = () => {
         socket.emit('message', {
-            name: nickname.value,
+            nickname: nickname,
             message: message.value,
-            date: new Date().toString()
+            date: timeString,
+            profileImg: profileImg
         })
     }
 }

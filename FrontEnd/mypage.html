@@ -49,6 +49,7 @@
             height: 200px;
             border-radius: 50%;
             box-shadow: 0px 3px 15px rgba(0,0,0,0.1);
+            object-fit: contain;
         }
 
         div.profile-info {
@@ -158,6 +159,7 @@
     document.getElementById('uploadBtn').addEventListener('click', async () => {
         // 파일 삽입하지 않으면
         if (!file.files[0]) {
+            console.log(file);
             alert('사진을 삽입해주세요');
             return;
         }
@@ -167,7 +169,7 @@
             form.append("upload", file.files[0]);
             form.append("userId", "user_id");
             const { data } = await axios.post('http://127.0.0.1:8080/upload', form, {
-                headers : {"content-Type" : "multipart/form-data"},
+                headers : {"Content-Type" : "multipart/form-data"},
                 withCredentials : true
             });
             if(data === "디폴트 프로필"){
@@ -217,7 +219,7 @@
             }
 
             if (data.profile_img) {
-                document.querySelector("img").src = "http://localhost:8080/img/" + data.profile_img;
+                document.querySelector("img").src = "" + data.profile_img;
             }
 
         } catch (error) {
