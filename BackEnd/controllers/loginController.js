@@ -13,7 +13,7 @@ exports.Login = async (req, res) => {
         if (user == null) {
             return res.send("가입 안한 아이디 입니다.");
         }
-
+        
         const same = bcrypt.compareSync(user_pw, user.user_pw)
         const { id, name, age, grade, nickname } = user;
         if (same) {

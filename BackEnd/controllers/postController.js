@@ -1,15 +1,15 @@
-const {Post,User} = require('../models');
+const { Post, User } = require('../models');
 
-exports.PostViewAll = async(req,res)=>{
+exports.PostViewAll = async (req, res) => {
     try {
         await Post.findAll({
             include : {
                 model : User
             },
-            order : [['createdAt', 'DESC']]
-        }).then((e)=>{
+            order: [['createdAt', 'DESC']]
+        }).then((e) => {
             res.send(e);
-        }).catch((err)=>{
+        }).catch((err) => {
             console.log(err);
         })
     } catch (error) {
@@ -18,7 +18,7 @@ exports.PostViewAll = async(req,res)=>{
     }
 }
 
-exports.PostViewSelect = (req,res)=>{
+exports.PostViewSelect = (req, res) => {
     try {
         const id = req.body.data;
         req.session.pageId = id;
@@ -29,7 +29,7 @@ exports.PostViewSelect = (req,res)=>{
     }
 }
 
-exports.PostViewOne = async(req,res)=>{
+exports.PostViewOne = async (req, res) => {
     try {
         const id = req.session.pageId;
         const {access_decoded} = req;
@@ -55,20 +55,20 @@ exports.PostViewOne = async(req,res)=>{
     }
 }
 
-exports.PostInsertView = async(req,res)=>{
-    try {        
-        const {access_decoded} = req;
+exports.PostInsertView = async (req, res) => {
+    try {
+        const { access_decoded } = req;
         const user = await User.findOne({
             where : {id : access_decoded.id}
         })
         const data = user.dataValues;
-        res.send(data);        
+        res.send(data);
     } catch (error) {
-        
+
     }
 }
 
-exports.PostInsert = async(req,res)=>{
+exports.PostInsert = async (req, res) => {
     try {
         const {title, content, userId} = req.body;
         await Post.create({
