@@ -16,7 +16,7 @@
             width: 300px;
             height: auto;
         }
-        .unaccess{
+        .unable{
             display: none;
         }
     </style>
@@ -32,40 +32,43 @@
     <div id="updateBtn">
         <button id="toUpdate">수정</button><button id="toDelete">삭제</button>
     </div>
+    <button id="likeBtn">좋아요</button> <input type="text" id="postLikes" disabled>
+    <a href="./post.html"><button id="toPost">글 목록</button></a>
 </body>
 <script>
     axios.defaults.withCredentials = true;
+    let posts = {};
+    let users = {};
+    let likeNum = [];
     async function GetAPI(){
         try {
             const {data} = await axios.get('http://127.0.0.1:8080/post/detail',{
                 headers : {
                     "Content-Type" : "application/json"
                 }
-            })
-            console.log(data);
-
+            }) 
             title.value = data.posts.title;
             nickname.value = data.posts.User.nickname;
             contentArea.innerHTML = data.posts.content;
+            
+            if(data.posts.postLikes != null && data.posts.postLikes != 'null'){
+                likeNum = data.posts.postLikes.split(',');
+                postLikes.value = likeNum.length;
+            }else{
+                postLikes.value = 0;
+            }            
+            
+            posts = data.posts;
+            users = data.users;
+
+            console.log(posts);
 
             if(data.users.id != data.posts.userId){
-                updateBtn.classList.add('unaccess');
+                updateBtn.classList.add('unable');
             }else{
-                updateBtn.classList.remove('unaccess');
+                updateBtn.classList.remove('unable');
             }
-
-            toUpdate.onclick = async()=>{
-                try {
-                    const {data} = await axios.post('http://127.0.0.1:8080/post/updateview',{
-                        headers : {
-                            "Content-Type" : "application/json"
-                        }
-                    })
-                    location.href = data;            
-                } catch (error) {
-                    console.log(error);
-                }
-            }
+            
 
         } catch (error) {
             console.log(error);
@@ -73,5 +76,81 @@
     }
 
     GetAPI();    
+
+    toUpdate.onclick = async()=>{
+        try {
+            await axios.post('http://127.0.0.1:8080/post/updateview',{
+                headers : {
+                    "Content-Type" : "application/json"
+                },
+                data : posts.id
+            }).then((e)=>{
+                location.href = e.data;
+            }).catch((err)=>{
+                console.log(err);
+            })
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    toDelete.onclick = async()=>{
+        try {
+            await axios.post('http://127.0.0.1:8080/post/delete',{
+                headers : {
+                    "Content-Type" : "application/json"
+                },
+                data : posts.id
+            }).then((e)=>{
+                location.href = e.data;
+            }).catch((err)=>{
+                console.log(err);
+            })
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    likeBtn.onclick = async()=>{
+        try {
+            if(posts.userId != users.id){                
+                let likeUser = [];
+    
+                if(posts.postLikes == null || posts.postLikes == 'null'){
+                    posts.postLikes = users.id.toString();
+                    likeUser.push(posts.postLikes);
+                }else{
+                    likeUser = posts.postLikes.split(",");
+    
+                    if(!likeUser.includes(users.id.toString())){
+                        likeUser.push(users.id.toString());
+                        posts.postLikes = likeUser.join(',');                    
+                    }else{
+                        likeUser.splice(likeUser.indexOf(users.id.toString()),1);
+                        if(likeUser.length == 0){
+                            posts.postLikes = null;
+                        }else{
+                            posts.postLikes = likeUser.join(',');
+                        }
+                    }
+                }
+    
+                postLikes.value = likeUser.length;
+    
+                const form = new FormData();
+    
+                form.append('id',posts.id);
+                form.append('postLikes',posts.postLikes);
+                
+                await axios.post('http://127.0.0.1:8080/post/likes',form,{
+                    headers : {
+                        "Content-Type" : "application/json"
+                    }
+                })
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
 </script>
 </html>
