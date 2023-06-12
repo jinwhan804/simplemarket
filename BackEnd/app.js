@@ -17,6 +17,7 @@ const nicknameUpdateRouter = require("./routers/mypage");
 const postRouter = require('./routers/post');
 const adminRouter = require('./routers/adminRouter');
 const boardRouter = require('./routers/boardRouter');
+const chatRouter = require('./routers/chatRouter');
 
 const app = express();
 
@@ -35,7 +36,7 @@ app.use(session({
     saveUninitialized: false
 }));
 
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: false }));
 
 app.use("/img", express.static(path.join(__dirname, "uploads")));
 
@@ -54,6 +55,7 @@ app.use('/mypage', nicknameUpdateRouter);
 app.use('/post', postRouter);
 app.use('/admin', adminRouter);
 app.use('/signUpList', boardRouter);
+app.use('/chat', chatRouter);
 
 const server = app.listen(8080, () => {
     console.log("8080 Server Open");

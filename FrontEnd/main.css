@@ -84,7 +84,20 @@ div.profile-info div {
     cursor: pointer;
 }
 
-.chatBox {
+/* 유저 채팅 리스트 */
+
+.chat_message img {
+    width: 40px;
+    height: 40px;
+    margin: 0;
+}
+
+
+
+
+
+
+.chatBox  {
     position: absolute;
     background-color: rgb(142, 239, 205);
     width: 18.75vw;
@@ -93,6 +106,17 @@ div.profile-info div {
     bottom: 15%;
     border-radius: 1.042vw;
     display: none;
+}
+
+.chatList {
+    position: absolute;
+    background-color: rgb(142, 239, 205);
+    width: 18.75vw;
+    height: 34.375vw;
+    right: 26%;
+    bottom: 15%;
+    border-radius: 1.042vw;
+    /* display: none; */
 }
 
 .chatBox.active{

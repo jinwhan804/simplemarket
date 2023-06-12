@@ -76,6 +76,11 @@ chatBoxClose.addEventListener('click', () => {
     chatBox.classList.remove('active');
 })
 
+// message.addEventListener('input', (e) => {
+//     const message = e.target.value;
+//     console.log(message);
+//     chatContent.textContent = message;
+// })
 
 // 채팅 소켓
 async function userInfo() {
@@ -85,43 +90,90 @@ async function userInfo() {
     console.log(response);
     return {
         nickname: response.data.nickname,
-        profileImg: response.data.profile_img
+        profileImg: response.data.profile_img,
+        userId: response.data.user_id,
+        user_info: response.data.id
     };
 }
 
-
 window.onload = async () => {
-    const socket = io.connect("http://localhost:8080");
-    const { nickname, profileImg } = await userInfo();
-    socket.on('message', (data) => {
-        let el;
-        if (data.nickname === nickname) {
-            el = `
-            <div class="content my-message">
-                <p class="message ballon">${data.message}</p>
-                <p class="date">${data.date}</p>
-            </div>
-            `;
-        } else {
-            el = `
-            <div class="content other-message">
-                <img src="${data.profileImg}">
-                <div class="message-display">
-                    <p class="nickname">${data.nickname}</p>
+    try {
+        const { nickname, profileImg, userId, user_info } = await userInfo();
+        // 유저의 채팅 리스트
+        const getChatData = await axios.get('http://localhost:8080/chat/all_chats', {
+            withCredentials: true
+        });
+        console.log(getChatData);
+        const chatData = getChatData.data;
+        const userChatList = document.querySelector('.user_chat_list');
+
+
+
+        // userChatList.innerHTML = chatDataHTML;
+
+        const socket = io.connect("http://localhost:8080");
+        socket.on('message', (data) => {
+            console.log(data);
+            let el;
+            if (data.nickname === nickname) {
+                el = `
+                <div class="content my-message">
                     <p class="message ballon">${data.message}</p>
                     <p class="date">${data.date}</p>
                 </div>
-            </div>
-            `;
-        }
-        chatContent.innerHTML += el;
-    })
-    btn.onclick = () => {
-        socket.emit('message', {
-            nickname: nickname,
-            message: message.value,
-            date: timeString,
-            profileImg: profileImg
+                `;
+            } else {
+                el = `
+                <div class="content other-message">
+                    <img src="${data.profile_img}">
+                    <div class="message-display">
+                        <p class="nickname">${data.nickname}</p>
+                        <p class="message ballon">${data.message}</p>
+                        <p class="date">${data.date}</p>
+                    </div>
+                </div>
+                `;
+            }
+            chatContent.innerHTML += el;
         })
+
+        chatData.forEach(data => {
+            const userInList = userChatList.querySelector(`.chat_message[data_nickname="${data.nickname}"]`);
+            if (userInList) {
+                // 채팅 목록에서 해당 유저가 있으면 목록에 추가하지 않고 메시지만 업데이트
+                userInList.querySelector('.message_content').textContent = data.message;
+            } else {
+                // 리스트에 없으면 추가
+                let createdAt = new Date(data.createdAt);
+                let hours = createdAt.getHours();
+                let minutes = createdAt.getMinutes();
+
+                let newMessageHTML = `
+                <div class="chat_message" data_nickname="${data.nickname}">
+                    <img src="${data.profile_img}">
+                    <p>${data.nickname}: <span class="message_content">${data.message}</span></p>
+                    <p>${hours}:${minutes < 10 ? '0' + minutes : minutes}</p>
+                </div>
+                `;
+                userChatList.innerHTML += newMessageHTML;
+            }
+        });
+
+        btn.onclick = () => {
+            const messageData = {
+                user_id: userId,
+                nickname: nickname,
+                message: message.value,
+                date: timeString,
+                profile_img: profileImg,
+                userInfo: user_info
+            }
+            socket.emit('message', messageData);
+            axios.post('http://127.0.0.1:8080/chat/chat_insert', messageData, {
+                withCredentials: true
+            })
+        }
+    } catch (error) {
+        console.log(error);
     }
 }
