@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <style>
+        #contentArea{
+            width: 500px;
+            min-height: 500px;
+            border: 1px solid;
+        }
+        img{
+            width: 300px;
+            height: auto;
+        }
+        .unaccess{
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>수정하기</h1>
+    <label for="">제목</label>
+    <input type="text" id="title">
+    <label for="">작성자</label>
+    <input type="text" id="nickname" disabled><br>
+    <label for="">본문</label>
+    <div id="contentArea" contenteditable="true"></div>
+</body>
+<script>
+    axios.defaults.withCredentials = true;
+    async function GetAPI(){
+        
+    }
+</script>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+    <input type="text" id="message">
+    <button id="btn">메시지 보내기</button>
+    <ul id="content"></ul>
+</body>
+<script>
+    window.onload = () => {
+        const socket = io.connect();
+        socket.on('message', (data) => {
+            let el = `
+            <li>
+                <p>유저의 이미지</p>
+                <p>${data.message}</p>
+                <p>${data.date}</p>
+            </li>
+            `;
+            content.innerHTML += el;
+        })
+        btn.onclick = () => {
+            socket.emit('message', {
+                name: userName.value,
+                message: message.value,
+                date: new Date().toString()
+            })
+        }
+    }
+</script>
+</html>

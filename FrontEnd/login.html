@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f0f0f0;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            width: 350px;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0px 3px 15px rgba(0,0,0,0.1);
+            background-color: #ffffff;
+        }
+
+        label {
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        input {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px;
+            color: #ffffff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .links {
+            display: flex;
+            justify-content: space-around;
+            font-size: 0.8em;
+            margin-top: 12px;
+        }
+
+        a {
+            text-decoration: none;
+            color: #007bff;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <form>
+        <label for="">ID</label>
+        <input type="text" id="user_id">
+        <label for="">Password</label>
+        <input type="password" id="user_pw">
+        <button type="button" id="loginBtn">Login</button>
+        <div class="links">
+            <a href="http://127.0.0.1:5500/FrontEnd/signUp.html">SignUp</a>
+        </div>
+    </form>
+</body>
+<script>
+    async function Login(user_id, user_pw) {
+        try {
+            const { data } = await axios.post('http://127.0.0.1:8080/login', { user_id, user_pw }, {
+                withCredentials: true
+            });
+            console.log(data);
+            if (data == '가입 안한 아이디 입니다.' || data == '비번 틀림' || data == `승인이 거절되었습니다.\n회원가입을 다시 진행해주세요.` || data == '가입 승인 대기중입니다.') {
+                alert(data);
+            } else {
+                window.location.href = "http://127.0.0.1:5500/FrontEnd/main.html";
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    loginBtn.onclick = function () {
+        Login(user_id.value, user_pw.value);
+    }
+</script>
+</html>

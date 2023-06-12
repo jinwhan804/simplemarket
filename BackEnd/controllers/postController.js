@@ -1,0 +1,82 @@
+const {Post,User} = require('../models');
+
+exports.PostViewAll = async(req,res)=>{
+    try {
+        await Post.findAll({
+            include : {
+                model : User,
+                attributes : ['nickname']
+            },
+            order : [['createdAt', 'DESC']]
+        }).then((e)=>{
+            res.send(e);
+        }).catch((err)=>{
+            console.log(err);
+        })
+    } catch (error) {
+        console.log('포스트 컨트롤러에서 전체 글 보여주다 에러남');
+        console.log(error);
+    }
+}
+
+exports.PostViewSelect = (req,res)=>{
+    try {
+        const id = req.body.data;
+        req.session.pageId = id;
+        res.send('http://127.0.0.1:5500/FrontEnd/detail.html')
+    } catch (error) {
+        console.log('포스트 컨트롤러에서 글 하나 보여주다 에러남 1');
+        console.log(error);
+    }
+}
+
+exports.PostViewOne = async(req,res)=>{
+    try {
+        const id = req.session.pageId;
+        const {access_decoded} = req;
+        console.log(access_decoded)
+        const post = await Post.findOne({
+            where : {id},
+            include : {
+                model : User,
+                attributes : ['nickname']
+            }
+        })
+        const data = {posts : post, users : access_decoded}
+
+        res.json(data);
+    } catch (error) {
+        console.log('포스트 컨트롤러에서 글 하나 보여주다 에러남 2');
+        console.log(error);
+    }
+}
+
+exports.PostInsertView = async(req,res)=>{
+    try {        
+        const {access_decoded} = req;
+        const user = await User.findOne({
+            where : {user_id : access_decoded.user_id}
+        })
+        const data = user.dataValues;
+        res.send(data);        
+    } catch (error) {
+        
+    }
+}
+
+exports.PostInsert = async(req,res)=>{
+    try {
+        const {title, content, userId, nickname} = req.body;
+        await Post.create({
+            title,
+            content,
+            userId,
+            nickname
+        })
+
+        res.send('http://127.0.0.1:5500/FrontEnd/post.html');
+    } catch (error) {
+        console.log('포스트 컨트롤러에서 글 추가하다가 에러남');
+        console.log(error);
+    }
+}
