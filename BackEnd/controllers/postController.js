@@ -55,7 +55,7 @@ exports.PostInsertView = async(req,res)=>{
     try {        
         const {access_decoded} = req;
         const user = await User.findOne({
-            where : {user_id : access_decoded.user_id}
+            where : {id : access_decoded.id}
         })
         const data = user.dataValues;
         res.send(data);        
