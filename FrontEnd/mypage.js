@@ -2,7 +2,7 @@
     async function checkAdmin() {
         const adminHide = document.getElementById('admin-hide');
         const {data} = await axios.get("http://127.0.0.1:8080/login/view", {
-        withCredentials : true
+            withCredentials : true
         });
         if(data.grade == "2"){
         adminHide.style.display = "none";
@@ -86,7 +86,7 @@
             }
 
             if (data.profile_img) {
-                document.querySelector("img").src = "http://localhost:8080/img/" + data.profile_img;
+                document.querySelector("img").src = "" + data.profile_img;
             }
 
         } catch (error) {
@@ -95,27 +95,32 @@
     }
 
     // right-side 에 보여지는 내가 쓴 글 타이틀
-
     async function getUserPost(){
         try {
+            // 오른쪽 사이드 글 관련
             const { data: posts } = await axios.get("http://127.0.0.1:8080/post",{
                 withCredentials : true,
             });
+            // 오른쪽 사이드 글 관련
             const { data: userInfo } = await axios.get("http://127.0.0.1:8080/login/view",{
                 withCredentials : true,
             });
+            
             const myPostList = document.getElementById('my-post-list');
-
+            
             await posts.forEach(post => {
                 const listItem = document.createElement('li');
-
+                
                 if(userInfo.id === post.userId){
                     listItem.textContent = `글 제목 : ${post.title} 작성자 : ${post.User.nickname} 작성시간 : ${post.createdAt}`;
                     myPostList.appendChild(listItem);
                 }
-                
-                listItem.addEventListener('click', () => {
-                    console.log(listItem, "클림됌?");
+                listItem.style.cursor = "pointer";
+                listItem.addEventListener('click', async () => {
+                    const { data } = await axios.post(`http://127.0.0.1:8080/mypage/detail`,{
+                        data : post.id
+                    },{withCredentials : true,})
+                    window.location.href = data;
                 })
             });
         } catch (error) {

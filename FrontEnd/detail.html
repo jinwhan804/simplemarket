@@ -45,7 +45,7 @@
             const {data} = await axios.get('http://127.0.0.1:8080/post/detail',{
                 headers : {
                     "Content-Type" : "application/json"
-                }
+                },
             }) 
             title.value = data.posts.title;
             nickname.value = data.posts.User.nickname;

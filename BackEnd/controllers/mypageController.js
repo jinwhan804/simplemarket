@@ -5,7 +5,6 @@ exports.nicknameUpdate = async (req, res) => {
         // const {user_id} = req.access_decoded;
         const newNickname = req.body.nickname;
         const { access_decoded } = req;
-        console.log(access_decoded);
 
         const user = await User.findOne({ where: { name: access_decoded.name } });
         await user.update(
