@@ -19,7 +19,7 @@ exports.SignUp = async (req, res) => {
             grade,
             address
         })
-        res.redirect("3.38.119.154/login");
+        res.redirect(`${process.env.FRONT_SERVER}/login`);
     } catch (error) {
         console.log(error);
     }

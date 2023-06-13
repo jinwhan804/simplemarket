@@ -33,7 +33,7 @@ exports.AdminLogIn = async (req, res) => {
                     // expiresIn: '60m'
                 })
                 req.session.access_token = token;
-                return res.redirect('3.38.119.154/main');
+                return res.redirect(`${process.env.FRONT_SERVER}/main`);
             } else {
                 res.send('비밀번호 틀림');
             }
@@ -64,7 +64,7 @@ exports.SignUp = async (req, res) => {
             address,
             grade
         })
-        res.redirect("3.38.119.154/Admin/login");
+        res.redirect(`${process.env.FRONT_SERVER}/Admin/login`);
     } catch (error) {
         console.log(error);
     }

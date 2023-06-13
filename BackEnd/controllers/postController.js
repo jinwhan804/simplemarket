@@ -22,7 +22,7 @@ exports.PostViewSelect = (req, res) => {
     try {
         const id = req.body.data;
         req.session.pageId = id;
-        res.send('http://127.0.0.1:5500/FrontEnd/detail.html')
+        res.send(`${process.env.FRONT_SERVER}/detail`)
     } catch (error) {
         console.log('포스트 컨트롤러에서 글 하나 보여주다 에러남 1');
         console.log(error);
@@ -77,7 +77,7 @@ exports.PostInsert = async (req, res) => {
             userId
         })
 
-        res.send('http://127.0.0.1:5500/FrontEnd/post.html');
+        res.send(`${process.env.FRONT_SERVER}/post`);
     } catch (error) {
         console.log('포스트 컨트롤러에서 글 추가하다가 에러남');
         console.log(error);
@@ -88,7 +88,7 @@ exports.PostUpdateSelect = (req,res)=>{
     try {
         const id = req.body.data;
         req.session.pageId = id;
-        res.send('http://127.0.0.1:5500/FrontEnd/update.html');
+        res.send(`${process.env.FRONT_SERVER}/update`);
     } catch (error) {
         console.log('포스트 컨트롤러에서 수정 탭에서 글 하나 보여주다 에러남 1');
         console.log(error);
@@ -108,7 +108,7 @@ exports.PostUpdate = async(req,res)=>{
 
         req.session.pageId = id;
         
-        res.send('http://127.0.0.1:5500/FrontEnd/detail.html');
+        res.send(`${process.env.FRONT_SERVER}/detail`);
     } catch (error) {
         console.log('포스트 컨트롤러에서 수정하다 에러남');
         console.log(error);
@@ -124,7 +124,7 @@ exports.PostDelete = async(req,res)=>{
             where : {id}
         })
 
-        res.send('http://127.0.0.1:5500/FrontEnd/post.html');
+        res.send(`${process.env.FRONT_SERVER}/post`);
     } catch (error) {
         console.log('포스트 컨트롤러에서 글 지우다 에러남');
         console.log(error);
@@ -141,7 +141,7 @@ exports.PostLikes = async(req,res)=>{
             where : {id}
         })
 
-        res.send('3.38.119.154/detail');
+        res.send(`${process.env.FRONT_SERVER}/detail`);
     } catch (error) {
         console.log(error);
     }

@@ -8,7 +8,7 @@ exports.uploadProfileImage = async (req, res) => {
         const user = await User.findOne({ where: { name: access_decoded.name } });
         // console.log(user);
         if (user) {
-            const profile_img_url = `3.35.211.37/img/${file.filename}`;
+            const profile_img_url = `${process.env.DATABASE_HOST}/img/${file.filename}`;
             user.profile_img = profile_img_url;
             console.log(profile_img_url);
             await user.save();

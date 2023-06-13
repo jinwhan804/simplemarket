@@ -43,7 +43,7 @@ app.use("/img", express.static(path.join(__dirname, "uploads")));
 app.use(express.json());
 
 app.use(cors({
-    origin: "3.38.119.154",
+    origin: `${process.env.FRONT_SERVER}`,
     credentials: true
 }));
 
