@@ -21,11 +21,14 @@ exports.AdminLogIn = async (req, res) => {
             res.send('관리자 계정이 생성되었습니다.');
         } else {
             const same = bcrypt.compareSync(user_pw, admin.user_pw);
-            const { nickname, grade } = admin;
+            const { id, name, age, grade, nickname } = admin;
             if (same) {
                 let token = jwt.sign({
-                    nickname,
-                    grade
+                    id,
+                    name,
+                    age,
+                    grade,
+                    nickname
                 }, process.env.ACCESS_TOKEN_KEY, {
                     // expiresIn: '60m'
                 })

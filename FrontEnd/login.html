@@ -78,7 +78,7 @@
         <input type="password" id="user_pw">
         <button type="button" id="loginBtn">Login</button>
         <div class="links">
-            <a href="3.38.119.154/signUp">SignUp</a>
+            <a href="/signUp">SignUp</a>
         </div>
     </form>
 </body>
@@ -92,7 +92,7 @@
             if (data == '가입 안한 아이디 입니다.' || data == '비번 틀림' || data == `승인이 거절되었습니다.\n회원가입을 다시 진행해주세요.` || data == '가입 승인 대기중입니다.') {
                 alert(data);
             } else {
-                window.location.href = "3.38.119.154/main";
+                window.location.href = "/main";
             }
         } catch (error) {
             console.log(error);

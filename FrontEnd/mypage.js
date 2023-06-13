@@ -17,7 +17,7 @@
                 withCredentials : true,
             });
             if(data == "로그인 페이지"){
-                window.location.href = "3.38.119.154/login";
+                window.location.href = "/login";
             }
         } catch (error) {
             console.log(error);
@@ -40,7 +40,7 @@
                 withCredentials : true
             });
             if(data === "디폴트 프로필"){
-                window.location.href = "3.38.119.154/mypage";
+                window.location.href = "/mypage";
             }
 
         } catch (error) {
