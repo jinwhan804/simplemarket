@@ -1,13 +1,13 @@
 // 관리자 게시판 기능 (유저만 안보이게)
-async function checkAdmin() {
-    const adminHide = document.getElementById('admin-hide');
-    const { data } = await axios.get("http://127.0.0.1:8080/login/view", {
-        withCredentials: true
-    });
-    if (data.grade != "3") {
-        adminHide.style.display = "none";
-    }
-}
+// async function checkAdmin() {
+//     const adminHide = document.getElementById('admin-hide');
+//     const { data } = await axios.get("http://127.0.0.1:8080/login/view", {
+//         withCredentials: true
+//     });
+//     if (data.grade != "3") {
+//         adminHide.style.display = "none";
+//     }
+// }
 // 로그아웃 기능
 const Logout = document.getElementById('logout');
 
@@ -53,7 +53,7 @@ async function getAPI() {
     }
 }
 getAPI();
-checkAdmin();
+// checkAdmin();
 
 
 // -----------------------------------------실시간 채팅------------------------------------------------------
@@ -65,6 +65,7 @@ const now = new Date();
 const hours = now.getHours();
 const minutes = now.getMinutes();
 const timeString = `${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
+const loginPopup = document.querySelector('.loginPopup');
 
 function popup() {
     document.body.classList.toggle('active');
@@ -75,6 +76,10 @@ chatBoxClose.addEventListener('click', () => {
     document.body.classList.remove('active');
     chatBox.classList.remove('active');
 })
+
+// function loginPopup() {
+    
+// }
 
 // message.addEventListener('input', (e) => {
 //     const message = e.target.value;
@@ -176,4 +181,28 @@ window.onload = async () => {
     } catch (error) {
         console.log(error);
     }
+}
+
+
+// 로그인 기능
+    const LoginForm = document.getElementById('loginForm');
+async function Login(user_id, user_pw) {
+    try {
+        const { data } = await axios.post('http://127.0.0.1:8080/login', { user_id, user_pw }, {
+            withCredentials: true
+        });
+        console.log(data);
+        if (data == '가입 안한 아이디 입니다.' || data == '비번 틀림' || data == `승인이 거절되었습니다.\n회원가입을 다시 진행해주세요.` || data == '가입 승인 대기중입니다.') {
+            alert(data);
+        } else {
+            window.location.href = "http://127.0.0.1:5500/FrontEnd/mypage.html";
+            // LoginForm.style.display = "none";
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+loginBtn.onclick = function () {
+    Login(user_id.value, user_pw.value);
 }

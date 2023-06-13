@@ -2,8 +2,11 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background-color: #f0f0f0;
-    color: #333;
 }
 
 header {
@@ -302,4 +305,57 @@ box-shadow: inset 0px 0px 0.26vw white;
 .other-message .date {
     font-size: 0.677vw;
     text-align: right;
+}
+
+/* 로그인 css */
+
+form {
+    display: flex;
+    flex-direction: column;
+    width: 350px;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0px 3px 15px rgba(0,0,0,0.1);
+    background-color: #ffffff;
+}
+
+label {
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+input {
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button {
+    padding: 10px;
+    color: #ffffff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.links {
+    display: flex;
+    justify-content: space-around;
+    font-size: 0.8em;
+    margin-top: 12px;
+}
+
+a {
+    text-decoration: none;
+    color: #007bff;
+}
+
+a:hover {
+    text-decoration: underline;
 }
