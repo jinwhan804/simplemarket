@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 exports.AdminLogIn = async (req, res) => {
     try {
         const { user_id, user_pw } = req.body;
-        const admin = await User.findOne({ where: { user_id } });
+        let admin = await User.findOne({ where: { user_id } });
 
         if (!admin) {
             const hashedPW = bcrypt.hashSync(user_pw, 10);
@@ -21,13 +21,16 @@ exports.AdminLogIn = async (req, res) => {
             res.send('관리자 계정이 생성되었습니다.');
         } else {
             const same = bcrypt.compareSync(user_pw, admin.user_pw);
-            const { nickname, grade } = admin;
+            const { nickname, grade, name, id, age } = admin;
             if (same) {
                 let token = jwt.sign({
-                    nickname,
-                    grade
+                    id,
+                    name,
+                    age,
+                    grade,
+                    nickname
                 }, process.env.ACCESS_TOKEN_KEY, {
-                    // expiresIn: '60m'
+                    expiresIn: '60m'
                 })
                 req.session.access_token = token;
                 return res.redirect('http://127.0.0.1:5500/FrontEnd/main.html');

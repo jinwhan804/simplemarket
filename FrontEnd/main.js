@@ -59,6 +59,7 @@ checkAdmin();
 // -----------------------------------------실시간 채팅------------------------------------------------------
 
 const chatBox = document.querySelector('.chatBox');
+const chatList = document.querySelector('.chatList');
 const chatBoxClose = document.querySelector('.close_chatBox');
 const chatContent = document.querySelector('.chat_content');
 const now = new Date();
@@ -66,21 +67,79 @@ const hours = now.getHours();
 const minutes = now.getMinutes();
 const timeString = `${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
 
-function popup() {
+async function popup() {
+    const { data } = await axios.get("http://127.0.0.1:8080/login/view", {
+        withCredentials: true
+    });
     document.body.classList.toggle('active');
-    chatBox.classList.add('active');
+    if (data.grade === '3') {
+        chatList.classList.add('active');
+    } else {
+        chatBox.classList.add('active');
+    }
 }
 
 chatBoxClose.addEventListener('click', () => {
     document.body.classList.remove('active');
     chatBox.classList.remove('active');
+    chatList.classList.remove('active');
 })
 
-// message.addEventListener('input', (e) => {
-//     const message = e.target.value;
-//     console.log(message);
-//     chatContent.textContent = message;
-// })
+const userChatList = document.querySelector('.user_chat_list');
+const chatMessage = document.querySelector('.chat_message');
+// const userInList = userChatList.querySelector(`.chat_message[data_nickname="${data.nickname}"]`);
+
+// function selectList(activeTab) {
+//     const {data} = axios.get('http://127.0.0.1:8080/login/view', {
+//         withCredentials: true
+//     });
+
+//     if (activeTab == data.nickname) {
+//         chatMessage.style.backgroundColor = 'rgb(241, 236, 236)';
+//     } else {
+//         chatMessage.style.backgroundColor = '';
+//     }
+// }
+
+
+
+async function handleClickEvent() {
+    let response;
+    try {
+        response = await axios.get('http://127.0.0.1:8080/login/view', {
+            withCredentials: true
+        });
+    } catch (error) {
+        console.error(error);
+    }
+
+    let data = response.data;
+    console.log(data);
+
+    userChatList.addEventListener('click', (event) => {
+        // .chat_message 요소에서 클릭 이벤트가 발생했는지 확인
+        if (!event.target.closest('.chat_message')) return;
+
+        // 클릭한 .chat_message 요소 가져오기
+        let clickedChatMessage = event.target.closest('.chat_message');
+
+        // 모든 .chat_message 요소에서 스타일 제거
+        let chatMessages = userChatList.querySelectorAll('.chat_message');
+        chatMessages.forEach((chatMessage) => {
+            chatMessage.style.backgroundColor = '';
+        });
+
+        // 클릭한 .chat_message에만 스타일 적용
+        if (clickedChatMessage.dataset.nickname === data.nickname) {
+            clickedChatMessage.style.backgroundColor = 'rgb(241, 236, 236)';
+        }
+    });
+}
+
+handleClickEvent();
+
+
+
 
 // 채팅 소켓
 async function userInfo() {
@@ -135,6 +194,7 @@ window.onload = async () => {
 
         chatData.forEach(data => {
             const userInList = userChatList.querySelector(`.chat_message[data_nickname="${data.nickname}"]`);
+            console.log(data);
             if (userInList) {
                 // 채팅 목록에서 해당 유저가 있으면 목록에 추가하지 않고 메시지만 업데이트
                 userInList.querySelector('.message_content').textContent = data.message;

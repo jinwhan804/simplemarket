@@ -13,7 +13,7 @@ exports.Login = async (req, res) => {
         if (user == null) {
             return res.send("가입 안한 아이디 입니다.");
         }
-        
+
         const same = bcrypt.compareSync(user_pw, user.user_pw)
         const { id, name, age, grade, nickname } = user;
         if (same) {
@@ -45,7 +45,8 @@ exports.Login = async (req, res) => {
 
 exports.viewUser = async (req, res) => {
     const { access_decoded } = req;
+    // console.log(access_decoded);
     const user = await User.findOne({ where: { name: access_decoded.name } });
-    console.log(user);
+    // console.log(user);
     res.json(user);
 }

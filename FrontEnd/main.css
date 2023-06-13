@@ -113,13 +113,24 @@ div.profile-info div {
     background-color: rgb(142, 239, 205);
     width: 18.75vw;
     height: 34.375vw;
-    right: 26%;
+    right: 6%;
     bottom: 15%;
     border-radius: 1.042vw;
-    /* display: none; */
+    display: none;
 }
 
 .chatBox.active{
+    position: absolute;
+    background-color: rgb(142, 239, 205);
+    width: 18.75vw;
+    height: 34.375vw;
+    right: 6%;
+    bottom: 15%;
+    border-radius: 1.042vw;
+    display: block;
+}
+
+.chatList.active {
     position: absolute;
     background-color: rgb(142, 239, 205);
     width: 18.75vw;
