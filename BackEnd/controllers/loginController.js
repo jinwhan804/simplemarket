@@ -46,6 +46,6 @@ exports.Login = async (req, res) => {
 exports.viewUser = async (req, res) => {
     const { access_decoded } = req;
     const user = await User.findOne({ where: { name: access_decoded.name } });
-
+    console.log(user);
     res.json(user);
 }

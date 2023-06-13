@@ -29,7 +29,7 @@ async function getAPI() {
         const { data } = await axios.get("http://127.0.0.1:8080/login/view", {
             withCredentials: true,
         });
-        // console.log(data);
+        console.log(data);
         user_name.innerHTML = data.name;
         user_age.innerHTML = data.age;
         nickname.innerHTML = data.nickname;
@@ -106,10 +106,6 @@ window.onload = async () => {
         console.log(getChatData);
         const chatData = getChatData.data;
         const userChatList = document.querySelector('.user_chat_list');
-
-
-
-        // userChatList.innerHTML = chatDataHTML;
 
         const socket = io.connect("http://localhost:8080");
         socket.on('message', (data) => {
