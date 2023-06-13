@@ -104,6 +104,7 @@ const Logout = document.getElementById('logout');
             const { data: userInfo } = await axios.get("3.35.211.37/login/view",{
                 withCredentials : true,
             });
+            
             const myPostList = document.getElementById('my-post-list');
 
         await posts.forEach(post => {
