@@ -1,5 +1,3 @@
-const axios = require('axios');
-
 // 로컬 주소 (확인할 것)
 const serverUrl = 'http://127.0.0.1:8080'
 
@@ -7,11 +5,9 @@ const serverUrl = 'http://127.0.0.1:8080'
 // const serverUrl = '3.35.211.37'
 
 const API = axios.create({
-    BASE_URL : serverUrl,
+    baseURL : serverUrl,
     headers : {
         'Content-Type' : 'application/json'
     },
-    wihCredentials : true
+    withCredentials : true
 })
-
-module.exports = API;

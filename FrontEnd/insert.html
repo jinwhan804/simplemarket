@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="./index.js"></script>
     <style>
         #contentArea{
             width: 500px;
@@ -27,14 +28,13 @@
     <label for="">본문</label>
     <div id="contentArea" contenteditable="true"></div>
     <button id="insertBtn">추가 하기</button>
-    <a href="/post">게시판 돌아가기</a>
+    <a href="./post.html">게시판 돌아가기</a>
 </body>
 <script>
     let user_data = {};
     
     window.onload = async()=>{
-        axios.defaults.withCredentials = true;
-        const {data} = await axios.get('3.35.211.37/post/insert',{
+        const {data} = await API.get('/post/insert',{
             headers : {
                 "Content-Type" : "application/json"
             }
@@ -53,7 +53,7 @@
             form.append('userId',user_data.id);
 
             axios.defaults.withCredentials = true;
-            await axios.post('3.35.211.37/post/insert',form,{
+            await API.post('/post/insert',form,{
                 headers : {
                     "Content-Type" : "application/json"
                 }

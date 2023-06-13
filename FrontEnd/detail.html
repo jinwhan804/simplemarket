@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="./index.js"></script>
     <style>
         #contentArea{
             width: 500px;
@@ -33,19 +34,18 @@
         <button id="toUpdate">수정</button><button id="toDelete">삭제</button>
     </div>
     <button id="likeBtn">좋아요</button> <input type="text" id="postLikes" disabled>
-    <a href="/post"><button id="toPost">글 목록</button></a>
+    <a href="./post.html"><button id="toPost">글 목록</button></a>
 </body>
 <script>
-    axios.defaults.withCredentials = true;
     let posts = {};
     let users = {};
     let likeNum = [];
     async function GetAPI(){
         try {
-            const {data} = await axios.get('3.35.211.37/post/detail',{
+            const {data} = await API.get('/post/detail',{
                 headers : {
                     "Content-Type" : "application/json"
-                },
+                }
             }) 
             title.value = data.posts.title;
             nickname.value = data.posts.User.nickname;
@@ -69,7 +69,16 @@
                 updateBtn.classList.remove('unable');
             }
             
+            await API.post('/post/reply',{
+                headers : {
+                    "Content-Type" : "application/json"
+                },
+                data : posts.id
+            }).then((e)=>{
 
+            }).catch((err)=>{
+                console.log(err);
+            })
         } catch (error) {
             console.log(error);
         }
@@ -79,7 +88,7 @@
 
     toUpdate.onclick = async()=>{
         try {
-            await axios.post('3.35.211.37/post/updateview',{
+            await API.post('/post/updateview',{
                 headers : {
                     "Content-Type" : "application/json"
                 },
@@ -96,7 +105,7 @@
 
     toDelete.onclick = async()=>{
         try {
-            await axios.post('3.35.211.37/post/delete',{
+            await API.post('/post/delete',{
                 headers : {
                     "Content-Type" : "application/json"
                 },
@@ -142,7 +151,7 @@
                 form.append('id',posts.id);
                 form.append('postLikes',posts.postLikes);
                 
-                await axios.post('3.35.211.37/post/likes',form,{
+                await API.post('/post/likes',form,{
                     headers : {
                         "Content-Type" : "application/json"
                     }

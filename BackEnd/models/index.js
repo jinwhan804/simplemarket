@@ -17,8 +17,8 @@ db.sequelize = sequelize;
 
 db.User = User;
 db.Post = Post;
-db.Reply = Reply;
 db.Chat = Chat;
+db.Reply = Reply;
 
 User.init(sequelize);
 Chat.init(sequelize);

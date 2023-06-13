@@ -22,7 +22,7 @@ exports.PostViewSelect = (req, res) => {
     try {
         const id = req.body.data;
         req.session.pageId = id;
-        res.send(`${process.env.FRONT_SERVER}/detail`)
+        res.send(`${process.env.FRONT}/detail${process.env.END}`)
     } catch (error) {
         console.log('포스트 컨트롤러에서 글 하나 보여주다 에러남 1');
         console.log(error);
@@ -45,7 +45,7 @@ exports.PostViewOne = async (req, res) => {
             let likeAdd = post.postViews + 1;
             Post.update({postViews : likeAdd},{where : {id}});
         }
-
+        
         const data = {posts : post, users : access_decoded};
 
         res.json(data);
@@ -77,7 +77,7 @@ exports.PostInsert = async (req, res) => {
             userId
         })
 
-        res.send(`${process.env.FRONT_SERVER}/post`);
+        res.send(`${process.env.FRONT}/post${process.env.END}`);
     } catch (error) {
         console.log('포스트 컨트롤러에서 글 추가하다가 에러남');
         console.log(error);
@@ -88,7 +88,7 @@ exports.PostUpdateSelect = (req,res)=>{
     try {
         const id = req.body.data;
         req.session.pageId = id;
-        res.send(`${process.env.FRONT_SERVER}/update`);
+        res.send(`${process.env.FRONT}/update${process.env.END}`);
     } catch (error) {
         console.log('포스트 컨트롤러에서 수정 탭에서 글 하나 보여주다 에러남 1');
         console.log(error);
@@ -108,7 +108,7 @@ exports.PostUpdate = async(req,res)=>{
 
         req.session.pageId = id;
         
-        res.send(`${process.env.FRONT_SERVER}/detail`);
+        res.send(`${process.env.FRONT}/detail${process.env.END}`);
     } catch (error) {
         console.log('포스트 컨트롤러에서 수정하다 에러남');
         console.log(error);
@@ -124,7 +124,7 @@ exports.PostDelete = async(req,res)=>{
             where : {id}
         })
 
-        res.send(`${process.env.FRONT_SERVER}/post`);
+        res.send(`${process.env.FRONT}/post${process.env.END}`);
     } catch (error) {
         console.log('포스트 컨트롤러에서 글 지우다 에러남');
         console.log(error);
@@ -141,7 +141,7 @@ exports.PostLikes = async(req,res)=>{
             where : {id}
         })
 
-        res.send(`${process.env.FRONT_SERVER}/detail`);
+        res.send(`${process.env.FRONT}/detail${process.env.END}`);
     } catch (error) {
         console.log(error);
     }

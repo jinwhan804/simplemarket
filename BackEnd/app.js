@@ -18,6 +18,7 @@ const postRouter = require('./routers/post');
 const adminRouter = require('./routers/adminRouter');
 const boardRouter = require('./routers/boardRouter');
 const chatRouter = require('./routers/chatRouter');
+const replyRouter = require('./routers/reply');
 
 const app = express();
 
@@ -56,6 +57,7 @@ app.use('/post', postRouter);
 app.use('/admin', adminRouter);
 app.use('/signUpList', boardRouter);
 app.use('/chat', chatRouter);
+app.use('/reply',replyRouter);
 
 const server = app.listen(8080, () => {
     console.log("8080 Server Open");

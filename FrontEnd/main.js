@@ -1,7 +1,7 @@
 // 관리자 게시판 기능 (유저만 안보이게)
 async function checkAdmin() {
     const adminHide = document.getElementById('admin-hide');
-    const { data } = await axios.get("3.35.211.37/login/view", {
+    const { data } = await API.get("/login/view", {
         withCredentials: true
     });
     if (data.grade != "3") {
@@ -13,7 +13,7 @@ const Logout = document.getElementById('logout');
 
 Logout.addEventListener('click', async () => {
     try {
-        const { data } = await axios.get("3.35.211.37/logout", {
+        const { data } = await API.get("/logout", {
             withCredentials: true,
         });
         if (data == "로그인 페이지") {
@@ -26,7 +26,7 @@ Logout.addEventListener('click', async () => {
 
 async function getAPI() {
     try {
-        const { data } = await axios.get("3.35.211.37/login/view", {
+        const { data } = await API.get("/login/view", {
             withCredentials: true,
         });
         console.log(data);
@@ -68,7 +68,7 @@ const minutes = now.getMinutes();
 const timeString = `${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
 
 async function popup() {
-    const { data } = await axios.get("http://127.0.0.1:8080/login/view", {
+    const { data } = await API.get("/login/view", {
         withCredentials: true
     });
     document.body.classList.toggle('active');
@@ -106,7 +106,7 @@ const chatMessage = document.querySelector('.chat_message');
 async function handleClickEvent() {
     let response;
     try {
-        response = await axios.get('http://127.0.0.1:8080/login/view', {
+        response = await API.get('/login/view', {
             withCredentials: true
         });
     } catch (error) {
@@ -143,7 +143,7 @@ handleClickEvent();
 
 // 채팅 소켓
 async function userInfo() {
-    const response = await axios.get('3.35.211.37/login/view', {
+    const response = await API.get('/login/view', {
         withCredentials: true
     });
     console.log(response);
@@ -159,7 +159,7 @@ window.onload = async () => {
     try {
         const { nickname, profileImg, userId, user_info } = await userInfo();
         // 유저의 채팅 리스트
-        const getChatData = await axios.get('3.35.211.37/chat/all_chats', {
+        const getChatData = await API.get('/chat/all_chats', {
             withCredentials: true
         });
         console.log(getChatData);
@@ -170,7 +170,7 @@ window.onload = async () => {
 
         // userChatList.innerHTML = chatDataHTML;
 
-        const socket = io.connect("3.35.211.37");
+        const socket = io.connect(serverUrl);
         socket.on('message', (data) => {
             console.log(data);
             let el;

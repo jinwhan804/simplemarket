@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="./index.js"></script>
     <style>
         tr{
             cursor: pointer;
@@ -14,7 +15,7 @@
 </head>
 <body>
     <h1>게시판</h1>
-    <a href="/insert">글 등록하기</a>
+    <a href="./insert.html">글 등록하기</a>
     <table id="post_list">
         
     </table>
@@ -24,8 +25,6 @@
 <script>
     async function GetAPI(currentPage){
         try {
-            axios.defaults.withCredentials = true;
-            
             post_list.innerHTML = "";
             let _tr1 = document.createElement('tr');
             let _th1 = document.createElement('th');
@@ -45,7 +44,7 @@
 
             btns.innerHTML = '';
             
-            const {data} = await axios.get('3.35.211.37/post',{
+            const {data} = await API.get('/post',{
                 headers : {
                     'Content-Type' : "application/json"
                 }
@@ -123,7 +122,7 @@
                     _td6.innerHTML = el.postViews;
 
                     _tr.onclick = async()=>{
-                        await axios.post('3.35.211.37/post/detail',{
+                        await API.post('/post/detail',{
                             headers : {
                                 'Content-Type' : "application/json"
                             },

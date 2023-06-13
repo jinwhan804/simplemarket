@@ -1,7 +1,7 @@
     // 관리자 게시판 기능 (유저만 안보이게)
     async function checkAdmin() {
         const adminHide = document.getElementById('admin-hide');
-        const {data} = await axios.get("3.35.211.37/login/view", {
+        const {data} = await API.get("/login/view", {
         withCredentials : true
         });
         if(data.grade == "2"){
@@ -13,7 +13,7 @@ const Logout = document.getElementById('logout');
 
     Logout.addEventListener('click', async ()=> {
         try {
-            const {data} = await axios.get("3.35.211.37/logout",{
+            const {data} = await API.get("/logout",{
                 withCredentials : true,
             });
             if(data == "로그인 페이지"){
@@ -35,7 +35,7 @@ const Logout = document.getElementById('logout');
             form.append("imgs", imgs.value);
             form.append("upload", file.files[0]);
             form.append("userId", "user_id");
-            const { data } = await axios.post('3.35.211.37/upload', form, {
+            const { data } = await API.post('/upload', form, {
                 headers : {"content-Type" : "multipart/form-data"},
                 withCredentials : true
             });
@@ -53,7 +53,7 @@ const Logout = document.getElementById('logout');
         const newNickname = prompt("새로운 별명을 입력해주세요.");
         if (newNickname) {
             try {
-                const response = await axios.post("3.35.211.37/mypage", {
+                const response = await API.post("/mypage", {
                     nickname: newNickname
                 }, {
                     withCredentials: true
@@ -67,7 +67,7 @@ const Logout = document.getElementById('logout');
 
     async function getAPI() {
         try {
-            const {data} = await axios.get("3.35.211.37/login/view",{
+            const {data} = await API.get("/login/view",{
                 withCredentials : true,
             });
             // console.log(data);
@@ -86,7 +86,7 @@ const Logout = document.getElementById('logout');
         }
 
             if (data.profile_img) {
-                document.querySelector("img").src = "3.35.211.37/img/" + data.profile_img;
+                document.querySelector("img").src = "/img/" + data.profile_img;
             }
 
     } catch (error) {
@@ -98,10 +98,10 @@ const Logout = document.getElementById('logout');
 
     async function getUserPost(){
         try {
-            const { data: posts } = await axios.get("3.35.211.37/post",{
+            const { data: posts } = await API.get("/post",{
                 withCredentials : true,
             });
-            const { data: userInfo } = await axios.get("3.35.211.37/login/view",{
+            const { data: userInfo } = await API.get("/login/view",{
                 withCredentials : true,
             });
             

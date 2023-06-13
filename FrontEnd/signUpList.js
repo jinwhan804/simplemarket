@@ -1,7 +1,7 @@
 async function getUserInfo() {
     try {
         let userInfo = document.querySelector('.list_user');
-        const { data } = await axios.get('3.35.211.37/admin/signUp', {
+        const { data } = await API.get('/admin/signUp', {
             withCredentials: true,
         });
         console.log(data);
@@ -35,7 +35,7 @@ getUserInfo();
 // 회원가입 요청에 대한 승인 코드
 async function approveUser(user_id) {
     try {
-        await axios.post('3.35.211.37/signUpList/approve_user', { user_id }, {
+        await API.post('/signUpList/approve_user', { user_id }, {
             withCredentials: true
         });
         getUserInfo();
@@ -47,7 +47,7 @@ async function approveUser(user_id) {
 // 회원가입 요청에 대한 거절 코드
 async function rejectUser(user_id) {
     try {
-        await axios.post('3.35.211.37/signUpList/reject_user', { user_id }, {
+        await API.post('/signUpList/reject_user', { user_id }, {
             withCredentials: true
         });
         getUserInfo();
