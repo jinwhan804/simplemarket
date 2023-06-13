@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <script src="./index.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -68,7 +69,6 @@
             text-decoration: underline;
         }
     </style>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
 <body>
     <form>
@@ -85,7 +85,7 @@
 <script>
     async function Login(user_id, user_pw) {
         try {
-            const { data } = await axios.post('3.35.211.37/login', { user_id, user_pw }, {
+            const { data } = await API.post('/login', { user_id, user_pw }, {
                 withCredentials: true
             });
             console.log(data);

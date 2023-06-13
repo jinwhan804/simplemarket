@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 exports.AdminLogIn = async (req, res) => {
     try {
         const { user_id, user_pw } = req.body;
-        const admin = await User.findOne({ where: { user_id } });
+        let admin = await User.findOne({ where: { user_id } });
 
         if (!admin) {
             const hashedPW = bcrypt.hashSync(user_pw, 10);
@@ -30,7 +30,7 @@ exports.AdminLogIn = async (req, res) => {
                     grade,
                     nickname
                 }, process.env.ACCESS_TOKEN_KEY, {
-                    // expiresIn: '60m'
+                    expiresIn: '60m'
                 })
                 req.session.access_token = token;
                 return res.redirect(`${process.env.FRONT_SERVER}/main`);
@@ -47,10 +47,9 @@ exports.AdminLogIn = async (req, res) => {
 // 유저 회원가입 및 로그인 컨트롤러
 exports.SignUp = async (req, res) => {
     try {
-        const { name, age, user_id, user_pw, nickname, gender, address, grade } = req.body;
+        const { name, age, user_id, user_pw, nickname, gender, grade, address } = req.body;
         const user = await User.findOne({ where: { user_id } });
-        const requestUser = await User.findOne({ where: { user_id } });
-        if (user != null && requestUser != null) {
+        if (user != null) {
             return res.send("중복 회원 가입 입니다.");
         }
         const hash = bcrypt.hashSync(user_pw, 10);
@@ -61,8 +60,8 @@ exports.SignUp = async (req, res) => {
             user_pw: hash,
             nickname,
             gender,
-            address,
-            grade
+            grade,
+            address
         })
         res.redirect(`${process.env.FRONT_SERVER}/Admin/login`);
     } catch (error) {

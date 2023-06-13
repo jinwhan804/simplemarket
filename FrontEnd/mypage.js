@@ -6,10 +6,10 @@
         });
         if(data.grade == "2"){
         adminHide.style.display = "none";
-        }
     }
-    // 로그아웃 기능 
-    const Logout = document.getElementById('logout');
+}
+// 로그아웃 기능 
+const Logout = document.getElementById('logout');
 
     Logout.addEventListener('click', async ()=> {
         try {
@@ -43,10 +43,10 @@
                 window.location.href = "/mypage";
             }
 
-        } catch (error) {
-            console.log(error);
-        }
-    })
+    } catch (error) {
+        console.log(error);
+    }
+})
 
     // 닉네임 변경 이벤트 리스너
     document.getElementById("nickname-update-button").addEventListener("click", async () => {
@@ -77,24 +77,24 @@
             // gender.innerHTML = data.gender;
             address.innerHTML = data.address;
 
-            if(data.gender === "male") {
-                document.getElementById('gender').innerText = "남자";
-            }else if(data.gender === "female") {
-                document.getElementById('gender').innerText = "여자";
-            }else {
-                document.getElementById('gender').innerText = "undefined"
-            }
+        if (data.gender === "male") {
+            document.getElementById('gender').innerText = "남자";
+        } else if (data.gender === "female") {
+            document.getElementById('gender').innerText = "여자";
+        } else {
+            document.getElementById('gender').innerText = "undefined"
+        }
 
             if (data.profile_img) {
                 document.querySelector("img").src = "3.35.211.37/img/" + data.profile_img;
             }
 
-        } catch (error) {
-            console.log(error)
-        }
+    } catch (error) {
+        console.log(error)
     }
+}
 
-    // right-side 에 보여지는 내가 쓴 글 타이틀
+// right-side 에 보여지는 내가 쓴 글 타이틀
 
     async function getUserPost(){
         try {
@@ -106,23 +106,23 @@
             });
             const myPostList = document.getElementById('my-post-list');
 
-            await posts.forEach(post => {
-                const listItem = document.createElement('li');
+        await posts.forEach(post => {
+            const listItem = document.createElement('li');
 
-                if(userInfo.id === post.userId){
-                    listItem.textContent = `글 제목 : ${post.title} 작성자 : ${post.User.nickname} 작성시간 : ${post.createdAt}`;
-                    myPostList.appendChild(listItem);
-                }
-                
-                listItem.addEventListener('click', () => {
-                    console.log(listItem, "클림됌?");
-                })
-            });
-        } catch (error) {
-            console.log(error);
-        }
-    };
-    
-    getAPI();
-    checkAdmin();
-    getUserPost();
+            if (userInfo.id === post.userId) {
+                listItem.textContent = `글 제목 : ${post.title} 작성자 : ${post.User.nickname} 작성시간 : ${post.createdAt}`;
+                myPostList.appendChild(listItem);
+            }
+
+            listItem.addEventListener('click', () => {
+                console.log(listItem, "클림됌?");
+            })
+        });
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+getAPI();
+checkAdmin();
+getUserPost();

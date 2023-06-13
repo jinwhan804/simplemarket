@@ -18,7 +18,7 @@ exports.ChatInsert = async (req, res) => {
 exports.ViewAllChats = async (req, res) => {
     try {
         const chats = await Chat.findAll();
-        console.log(chats);
+        // console.log(chats);
         res.json(chats);
     } catch (error) {
         console.log(error);
