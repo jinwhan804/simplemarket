@@ -1,7 +1,7 @@
     // 관리자 게시판 기능 (유저만 안보이게)
     async function checkAdmin() {
         const adminHide = document.getElementById('admin-hide');
-        const {data} = await axios.get("http://127.0.0.1:8080/login/view", {
+        const {data} = await axios.get("3.35.211.37/login/view", {
         withCredentials : true
         });
         if(data.grade == "2"){
@@ -13,11 +13,11 @@
 
     Logout.addEventListener('click', async ()=> {
         try {
-            const {data} = await axios.get("http://127.0.0.1:8080/logout",{
+            const {data} = await axios.get("3.35.211.37/logout",{
                 withCredentials : true,
             });
             if(data == "로그인 페이지"){
-                window.location.href = "/frontEnd/login.html";
+                window.location.href = "3.38.119.154/login";
             }
         } catch (error) {
             console.log(error);
@@ -35,12 +35,12 @@
             form.append("imgs", imgs.value);
             form.append("upload", file.files[0]);
             form.append("userId", "user_id");
-            const { data } = await axios.post('http://127.0.0.1:8080/upload', form, {
+            const { data } = await axios.post('3.35.211.37/upload', form, {
                 headers : {"content-Type" : "multipart/form-data"},
                 withCredentials : true
             });
             if(data === "디폴트 프로필"){
-                window.location.href = "/frontEnd/mypage.html";
+                window.location.href = "3.38.119.154/mypage";
             }
 
         } catch (error) {
@@ -53,7 +53,7 @@
         const newNickname = prompt("새로운 별명을 입력해주세요.");
         if (newNickname) {
             try {
-                const response = await axios.post("http://127.0.0.1:8080/mypage", {
+                const response = await axios.post("3.35.211.37/mypage", {
                     nickname: newNickname
                 }, {
                     withCredentials: true
@@ -67,7 +67,7 @@
 
     async function getAPI() {
         try {
-            const {data} = await axios.get("http://127.0.0.1:8080/login/view",{
+            const {data} = await axios.get("3.35.211.37/login/view",{
                 withCredentials : true,
             });
             // console.log(data);
@@ -86,7 +86,7 @@
             }
 
             if (data.profile_img) {
-                document.querySelector("img").src = "http://localhost:8080/img/" + data.profile_img;
+                document.querySelector("img").src = "3.35.211.37/img/" + data.profile_img;
             }
 
         } catch (error) {
@@ -98,10 +98,10 @@
 
     async function getUserPost(){
         try {
-            const { data: posts } = await axios.get("http://127.0.0.1:8080/post",{
+            const { data: posts } = await axios.get("3.35.211.37/post",{
                 withCredentials : true,
             });
-            const { data: userInfo } = await axios.get("http://127.0.0.1:8080/login/view",{
+            const { data: userInfo } = await axios.get("3.35.211.37/login/view",{
                 withCredentials : true,
             });
             const myPostList = document.getElementById('my-post-list');

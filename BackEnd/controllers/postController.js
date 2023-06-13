@@ -141,7 +141,7 @@ exports.PostLikes = async(req,res)=>{
             where : {id}
         })
 
-        res.send('http://127.0.0.1:5500/FrontEnd/detail.html')
+        res.send('3.38.119.154/detail');
     } catch (error) {
         console.log(error);
     }

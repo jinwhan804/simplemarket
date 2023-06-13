@@ -27,14 +27,14 @@
     <label for="">본문</label>
     <div id="contentArea" contenteditable="true"></div>
     <button id="insertBtn">추가 하기</button>
-    <a href="./post.html">게시판 돌아가기</a>
+    <a href="3.38.119.154/post">게시판 돌아가기</a>
 </body>
 <script>
     let user_data = {};
     
     window.onload = async()=>{
         axios.defaults.withCredentials = true;
-        const {data} = await axios.get('http://127.0.0.1:8080/post/insert',{
+        const {data} = await axios.get('3.35.211.37/post/insert',{
             headers : {
                 "Content-Type" : "application/json"
             }
@@ -53,7 +53,7 @@
             form.append('userId',user_data.id);
 
             axios.defaults.withCredentials = true;
-            await axios.post('http://127.0.0.1:8080/post/insert',form,{
+            await axios.post('3.35.211.37/post/insert',form,{
                 headers : {
                     "Content-Type" : "application/json"
                 }

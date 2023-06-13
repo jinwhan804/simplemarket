@@ -36,7 +36,7 @@
     let posts = {};
     async function GetAPI(){
         try {
-            const {data} = await axios.get('http://127.0.0.1:8080/post/updateview',{
+            const {data} = await axios.get('3.35.211.37/post/updateview',{
                 headers : {
                     "Content-Type" : "application/json"
                 }
@@ -65,7 +65,7 @@
             form.append('content',contentArea.innerHTML);
             form.append('id',posts.id);
 
-            await axios.post('http://127.0.0.1:8080/post/update',form,{
+            await axios.post('3.35.211.37/post/update',form,{
                 headers : {
                     'Content-Type' : "application/json"
                 }
@@ -83,7 +83,7 @@
 
     cencelBtn.onclick = async()=>{
         try {
-            await axios.post('http://127.0.0.1:8080/post/detail',{
+            await axios.post('3.35.211.37/post/detail',{
                 headers : {
                     'Content-Type' : "application/json"
                 },

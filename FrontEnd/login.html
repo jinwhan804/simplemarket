@@ -78,21 +78,21 @@
         <input type="password" id="user_pw">
         <button type="button" id="loginBtn">Login</button>
         <div class="links">
-            <a href="http://127.0.0.1:5500/FrontEnd/signUp.html">SignUp</a>
+            <a href="3.38.119.154/signUp">SignUp</a>
         </div>
     </form>
 </body>
 <script>
     async function Login(user_id, user_pw) {
         try {
-            const { data } = await axios.post('http://127.0.0.1:8080/login', { user_id, user_pw }, {
+            const { data } = await axios.post('3.35.211.37/login', { user_id, user_pw }, {
                 withCredentials: true
             });
             console.log(data);
             if (data == '가입 안한 아이디 입니다.' || data == '비번 틀림' || data == `승인이 거절되었습니다.\n회원가입을 다시 진행해주세요.` || data == '가입 승인 대기중입니다.') {
                 alert(data);
             } else {
-                window.location.href = "http://127.0.0.1:5500/FrontEnd/main.html";
+                window.location.href = "3.38.119.154/main";
             }
         } catch (error) {
             console.log(error);

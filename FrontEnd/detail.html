@@ -33,7 +33,7 @@
         <button id="toUpdate">수정</button><button id="toDelete">삭제</button>
     </div>
     <button id="likeBtn">좋아요</button> <input type="text" id="postLikes" disabled>
-    <a href="./post.html"><button id="toPost">글 목록</button></a>
+    <a href="3.38.119.154/post"><button id="toPost">글 목록</button></a>
 </body>
 <script>
     axios.defaults.withCredentials = true;
@@ -42,7 +42,7 @@
     let likeNum = [];
     async function GetAPI(){
         try {
-            const {data} = await axios.get('http://127.0.0.1:8080/post/detail',{
+            const {data} = await axios.get('3.35.211.37/post/detail',{
                 headers : {
                     "Content-Type" : "application/json"
                 }
@@ -79,7 +79,7 @@
 
     toUpdate.onclick = async()=>{
         try {
-            await axios.post('http://127.0.0.1:8080/post/updateview',{
+            await axios.post('3.35.211.37/post/updateview',{
                 headers : {
                     "Content-Type" : "application/json"
                 },
@@ -96,7 +96,7 @@
 
     toDelete.onclick = async()=>{
         try {
-            await axios.post('http://127.0.0.1:8080/post/delete',{
+            await axios.post('3.35.211.37/post/delete',{
                 headers : {
                     "Content-Type" : "application/json"
                 },
@@ -142,7 +142,7 @@
                 form.append('id',posts.id);
                 form.append('postLikes',posts.postLikes);
                 
-                await axios.post('http://127.0.0.1:8080/post/likes',form,{
+                await axios.post('3.35.211.37/post/likes',form,{
                     headers : {
                         "Content-Type" : "application/json"
                     }

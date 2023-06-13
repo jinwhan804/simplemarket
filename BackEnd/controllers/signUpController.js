@@ -19,7 +19,7 @@ exports.SignUp = async (req, res) => {
             grade,
             address
         })
-        res.redirect("http://127.0.0.1:5500/frontEnd/login.html")
+        res.redirect("3.38.119.154/login");
     } catch (error) {
         console.log(error);
     }
