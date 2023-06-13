@@ -5,9 +5,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="./update.css">
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <style>
         #contentArea{
+            display: center;
             width: 500px;
             min-height: 500px;
             border: 1px solid;
@@ -22,6 +24,7 @@
     </style>
 </head>
 <body>
+    <div class="main">
     <h1>수정하기</h1>
     <label for="">제목</label>
     <input type="text" id="title">
@@ -29,6 +32,7 @@
     <input type="text" id="nickname" disabled><br>
     <label for="">본문</label>
     <div id="contentArea" contenteditable="true"></div>
+</div>
 </body>
 <script>
     axios.defaults.withCredentials = true;
