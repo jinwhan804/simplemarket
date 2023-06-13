@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const {PostViewAll,PostInsert,PostInsertView,PostViewOne,PostViewSelect} = require('../controllers/postController');
+const {PostViewAll,PostInsert,PostInsertView,PostViewOne,PostViewSelect,PostUpdateSelect,PostUpdate,PostDelete,PostLikes} = require('../controllers/postController');
 const {isLogin} = require('../middleware/loginmiddleware');
 
 router.get('/',PostViewAll);
@@ -12,6 +12,14 @@ router.post('/detail',isLogin,PostViewSelect);
 
 router.get('/detail',isLogin,PostViewOne);
 
-router.post('/updateview',isLogin,PostViewSelect);
+router.post('/updateview',isLogin,PostUpdateSelect);
+
+router.get('/updateview',isLogin,PostViewOne);
+
+router.post('/update',PostUpdate);
+
+router.post('/delete',isLogin,PostDelete);
+
+router.post('/likes',isLogin,PostLikes);
 
 module.exports = router;

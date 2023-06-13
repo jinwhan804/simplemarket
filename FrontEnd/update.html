@@ -29,11 +29,75 @@
     <input type="text" id="nickname" disabled><br>
     <label for="">본문</label>
     <div id="contentArea" contenteditable="true"></div>
+    <button id="updateBtn">수정</button><button id="cencelBtn">취소</button>
 </body>
 <script>
     axios.defaults.withCredentials = true;
+    let posts = {};
     async function GetAPI(){
-        
+        try {
+            const {data} = await axios.get('http://127.0.0.1:8080/post/updateview',{
+                headers : {
+                    "Content-Type" : "application/json"
+                }
+            })
+
+            title.value = data.posts.title;
+            nickname.value = data.posts.User.nickname;
+            contentArea.innerHTML = data.posts.content;
+
+            posts = data.posts;
+
+            console.log(posts);
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    GetAPI();
+
+    updateBtn.onclick = async()=>{
+        try {
+            const form = new FormData();
+
+            form.append('title',title.value);
+            form.append('content',contentArea.innerHTML);
+            form.append('id',posts.id);
+
+            await axios.post('http://127.0.0.1:8080/post/update',form,{
+                headers : {
+                    'Content-Type' : "application/json"
+                }
+            }).then((e)=>{
+                location.href = e.data;
+            }).catch((err)=>{
+                console.log('업데이트 화면에서 글 수정하다 포스트 에러남');
+                console.log(err);
+            })
+        } catch (error) {
+            console.log('업데이트 화면에서 글 수정하다 에러남');
+            console.log(error);
+        }
+    }
+
+    cencelBtn.onclick = async()=>{
+        try {
+            await axios.post('http://127.0.0.1:8080/post/detail',{
+                headers : {
+                    'Content-Type' : "application/json"
+                },
+                data : posts.id
+            }).then((e)=>{
+                location.href = e.data;
+            }).catch((err)=>{
+                console.log('업데이트 화면에서 취소하고 상세보기로 넘어가다 포스트 에러남');
+                console.log(err);
+            })
+        } catch (error) {
+            console.log('업데이트 화면에서 취소하고 상세보기로 넘어가다 에러남');
+            console.log(error);
+        }
     }
 </script>
 </html>

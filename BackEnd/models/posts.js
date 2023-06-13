@@ -11,8 +11,8 @@ class Post extends Sequelize.Model {
                 type: Sequelize.STRING(256),
             },
             postLikes: {
-                type: Sequelize.INTEGER,
-                defaultValue: 0
+                type: Sequelize.STRING(256),
+                allowNull : true
             },
             postViews: {
                 type: Sequelize.INTEGER,
@@ -30,8 +30,9 @@ class Post extends Sequelize.Model {
         })
     }
 
-    static associationsUser(db) {
+    static associate(db) {
         db.Post.belongsTo(db.User, { foreignKey: "userId", TargetKey: "id" });
+        db.Post.hasMany(db.Reply,{foreignKey : "postId", TargetKey : "id"});
     }
 }
 

@@ -50,7 +50,7 @@
 
             form.append('title',title.value);
             form.append('content',contentArea.innerHTML);
-            form.append('userId',user_data.id)
+            form.append('userId',user_data.id);
 
             axios.defaults.withCredentials = true;
             await axios.post('http://127.0.0.1:8080/post/insert',form,{
