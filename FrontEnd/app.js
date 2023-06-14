@@ -1,5 +1,6 @@
 const express = require("express");
 const fs = require("fs");
+const path = require('path');
 const app = express();
 
 
@@ -47,6 +48,9 @@ app.get('/update',(req,res)=>{
    const page = fs.readFileSync("./update.html","utf-8");
    res.send(page);
 })
+
+app.use('/css',express,static(path.join(__dirname,"css")));
+app.use('/js',express,static(path.join(__dirname,"js")));
 
 app.listen(3000,()=>{
    console.log('front server on');
