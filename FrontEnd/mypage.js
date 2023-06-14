@@ -118,9 +118,12 @@
                 listItem.textContent = `글 제목 : ${post.title} 작성자 : ${post.User.nickname} 작성시간 : ${post.createdAt}`;
                 myPostList.appendChild(listItem);
             }
-
-            listItem.addEventListener('click', () => {
-                console.log(listItem, "클림됌?");
+            listItem.style.cursor = "pointer";
+            listItem.addEventListener('click', async () => {
+                const { data } = await axios.post(`http://127.0.0.1:8080/mypage/detail`,{
+                    data : post.id
+                },{withCredentials : true,})
+                window.location.href = data;
             })
         });
     } catch (error) {
