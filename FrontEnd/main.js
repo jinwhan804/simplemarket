@@ -10,6 +10,7 @@ async function mypageHide() {
     }
 }
 
+
 // 로그인 팝업
 const loginPopup = document.querySelector('.loginPopup');
 const popupLoginBtn = document.getElementById('popup-login');
@@ -20,8 +21,21 @@ popupLoginBtn.addEventListener('click', () => {
     }else{
         loginPopup.style.display = "none"
     }
-
+    
 })
+
+// 로그인 버튼 로그인 되어 있을 떄는 안보이게
+const loginBtn = document.getElementById('loginBtn');
+
+async function loginBtnHide() {
+    const { data } = await axios.get('http://127.0.0.1:8080/login/view',{
+        withCredentials : true
+    })
+    if(data.name) {
+        popupLoginBtn.style.display = "none";
+    }
+}
+
 // 로그아웃 기능
 const Logout = document.getElementById('logout');
 
@@ -57,6 +71,7 @@ async function getAPI() {
 }
 getAPI();
 mypageHide();
+loginBtnHide();
 // -----------------------------------------실시간 채팅------------------------------------------------------
 
 const chatBox = document.querySelector('.chatBox');
@@ -194,7 +209,6 @@ async function Login(user_id, user_pw) {
             alert(data);
         } else {
             window.location.href = "http://127.0.0.1:5500/FrontEnd/mypage.html";
-            // LoginForm.style.display = "none";
         }
     } catch (error) {
         console.log(error);
