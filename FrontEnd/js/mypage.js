@@ -19,7 +19,7 @@
                 withCredentials : true,
             });
             if(data == "메인 페이지"){
-                window.location.href = "/frontEnd/main.html";
+                window.location.href = "./main.html";
                 alert("로그아웃 되었습니다.")
             }
         } catch (error) {
@@ -44,7 +44,7 @@
                 withCredentials : true
             });
             if(data === "디폴트 프로필"){
-                window.location.href = "/mypage";
+                window.location.href = "./mypage.html";
             }
 
     } catch (error) {
@@ -120,7 +120,7 @@
             }
             listItem.style.cursor = "pointer";
             listItem.addEventListener('click', async () => {
-                const { data } = await axios.post(`http://127.0.0.1:8080/mypage/detail`,{
+                const { data } = await API.post(`/mypage/detail`,{
                     data : post.id
                 },{withCredentials : true,})
                 window.location.href = data;

@@ -2,7 +2,7 @@
 const mypageBtn = document.getElementById('mypage-btn');
 
 async function mypageHide() {
-    const { data } = await axios.get('http://127.0.0.1:8080/login/view', {
+    const { data } = await API.get('/login/view', {
         withCredentials : true
     })
     if(!data.name){
@@ -27,7 +27,7 @@ popupLoginBtn.addEventListener('click', () => {
 const loginBtn = document.getElementById('loginBtn');
 
 async function loginBtnHide() {
-    const { data } = await axios.get('http://127.0.0.1:8080/login/view',{
+    const { data } = await API.get('/login/view',{
         withCredentials : true
     })
     if(data.name) {
@@ -46,7 +46,7 @@ Logout.addEventListener('click', async () => {
             withCredentials: true,
         });
         if (data == "메인 페이지") {
-            window.location.href = "/frontEnd/main.html"
+            window.location.href = "./main.html"
             alert("로그아웃 되었습니다.")
         } 
     } catch (error) {
@@ -55,7 +55,7 @@ Logout.addEventListener('click', async () => {
 })
 // 로그아웃 버튼 로그인 안되어 있을 때는 안보이게
 async function logoutBtnHide() {
-    const { data } = await axios.get('http://127.0.0.1:8080/login/view', {
+    const { data } = await API.get('/login/view', {
         withCredentials : true
     })
     if(!data.name){
@@ -97,7 +97,7 @@ const timeString = `${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
 
 // 채팅 목록과 채팅 팝업창 함수
 async function popup() {
-    const { data } = await axios.get("http://127.0.0.1:8080/login/view", {
+    const { data } = await API.get("/login/view", {
         withCredentials: true
     });
     document.body.classList.toggle('active');
@@ -120,7 +120,7 @@ chatBoxClose.forEach(btn => {
 // 관리자 계정의 유저 채팅 목록 창
 async function selectUserChat() {
     try {
-        const response = await axios.get('http://127.0.0.1:8080/login/viewAll', {
+        const response = await API.get('/login/viewAll', {
             withCredentials: true
         });
         console.log(response);
@@ -148,7 +148,7 @@ function openChatBox(userNickname) {
 
 // 채팅 소켓
 async function userInfo() {
-    const response = await axios.get('http://127.0.0.1:8080/login/view', {
+    const response = await API.get('/login/view', {
         withCredentials: true
     });
     console.log(response);
@@ -236,7 +236,7 @@ window.onload = async () => {
                 userInfo: user_info
             }
             socket.emit('message', messageData);
-            axios.post('http://127.0.0.1:8080/chat/chat_insert', messageData, {
+            API.post('/chat/chat_insert', messageData, {
                 withCredentials: true
             })
         }
@@ -250,14 +250,14 @@ window.onload = async () => {
     const LoginForm = document.getElementById('loginForm');
 async function Login(user_id, user_pw) {
     try {
-        const { data } = await axios.post('http://127.0.0.1:8080/login', { user_id, user_pw }, {
+        const { data } = await API.post('/login', { user_id, user_pw }, {
             withCredentials: true
         });
         console.log(data);
         if (data == '가입 안한 아이디 입니다.' || data == '비번 틀림' || data == `승인이 거절되었습니다.\n회원가입을 다시 진행해주세요.` || data == '가입 승인 대기중입니다.') {
             alert(data);
         } else {
-            window.location.href = "http://127.0.0.1:5500/FrontEnd/mypage.html";
+            window.location.href = "./mypage.html";
         }
     } catch (error) {
         console.log(error);

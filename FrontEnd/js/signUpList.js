@@ -61,11 +61,11 @@ const Logout = document.getElementById('logout');
 
 Logout.addEventListener('click', async () => {
     try {
-        const { data } = await axios.get("http://127.0.0.1:8080/logout", {
+        const { data } = await API.get("/logout", {
             withCredentials: true,
         });
         if (data == "메인 페이지") {
-            window.location.href = "/frontEnd/main.html"
+            window.location.href = "./main.html"
             alert("로그아웃 되었습니다.")
         } 
     } catch (error) {
