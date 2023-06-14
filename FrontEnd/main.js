@@ -102,14 +102,19 @@ async function selectUserChat() {
         console.log(chatMessages);
         chatMessages.forEach((e, index) => {
             if (users[index]) {
-                e.addEventListener('click', () => {
-                    console.log(users[index].nickname);
+                e.addEventListener('dblclick', () => {
+                    const userNickname = users[index].nickname;
+                    openChatBox(userNickname);
                 });
             }
         })
     } catch (error) {
         console.error(error);
     }
+}
+
+function openChatBox(userNickname) {
+    chatBox.classList.add('active');
 }
 
 
@@ -139,7 +144,6 @@ window.onload = async () => {
         const userChatList = document.querySelector('.user_chat_list');
 
         const socket = io.connect("http://localhost:8080");
-        console.log(socket);
         socket.on('message', (data) => {
             console.log(data);
             let el;

@@ -17,7 +17,7 @@ Logout.addEventListener('click', async () => {
             withCredentials: true,
         });
         if (data == "로그인 페이지") {
-            window.location.href = "/login";
+            window.location.href = "/frontEnd/login.html";
         }
     } catch (error) {
         console.log(error);
