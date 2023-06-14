@@ -4,8 +4,10 @@
         const {data} = await axios.get("http://127.0.0.1:8080/login/view", {
             withCredentials : true
         });
-        if(data.grade == "2"){
-        adminHide.style.display = "none";
+        if(data && data.grade == "3"){
+            adminHide.style.display = "block";
+        }else{
+            adminHide.style.display = "none"
         }
     }
     // 로그아웃 기능 
@@ -16,13 +18,15 @@
             const {data} = await axios.get("http://127.0.0.1:8080/logout",{
                 withCredentials : true,
             });
-            if(data == "로그인 페이지"){
-                window.location.href = "/frontEnd/login.html";
+            if(data == "메인 페이지"){
+                window.location.href = "/frontEnd/main.html";
+                alert("로그아웃 되었습니다.")
             }
         } catch (error) {
             console.log(error);
         }
     })
+    
     // 사진 수정 기능
     document.getElementById('uploadBtn').addEventListener('click', async () => {
         // 파일 삽입하지 않으면

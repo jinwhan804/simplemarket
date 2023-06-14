@@ -1,13 +1,27 @@
-// 관리자 게시판 기능 (유저만 안보이게)
-// async function checkAdmin() {
-//     const adminHide = document.getElementById('admin-hide');
-//     const { data } = await axios.get("http://127.0.0.1:8080/login/view", {
-//         withCredentials: true
-//     });
-//     if (data.grade != "3") {
-//         adminHide.style.display = "none";
-//     }
-// }
+// 마이페이지 버튼 로그인 됐을때만 보이게
+const mypageBtn = document.getElementById('mypage-btn');
+
+async function mypageHide() {
+    const { data } = await axios.get('http://127.0.0.1:8080/login/view', {
+        withCredentials : true
+    })
+    if(!data.name){
+        mypageBtn.style.display = "none";
+    }
+}
+
+// 로그인 팝업
+const loginPopup = document.querySelector('.loginPopup');
+const popupLoginBtn = document.getElementById('popup-login');
+
+popupLoginBtn.addEventListener('click', () => {
+    if(loginPopup.style.display === "none"){
+        loginPopup.style.display = "flex"
+    }else{
+        loginPopup.style.display = "none"
+    }
+
+})
 // 로그아웃 기능
 const Logout = document.getElementById('logout');
 
@@ -16,9 +30,10 @@ Logout.addEventListener('click', async () => {
         const { data } = await axios.get("http://127.0.0.1:8080/logout", {
             withCredentials: true,
         });
-        if (data == "로그인 페이지") {
-            window.location.href = "/frontEnd/login.html";
-        }
+        if (data == "메인 페이지") {
+            window.location.href = "/frontEnd/main.html"
+            alert("로그아웃 되었습니다.")
+        } 
     } catch (error) {
         console.log(error);
     }
@@ -29,23 +44,11 @@ async function getAPI() {
         const { data } = await axios.get("http://127.0.0.1:8080/login/view", {
             withCredentials: true,
         });
-        // console.log(data);
-        user_name.innerHTML = data.name;
-        user_age.innerHTML = data.age;
-        nickname.innerHTML = data.nickname;
-        // gender.innerHTML = data.gender;
-        address.innerHTML = data.address;
 
-        if (data.gender === "male") {
-            document.getElementById('gender').innerText = '남자';
-        } else if (data.gender === "female") {
-            document.getElementById('gender').innerText = '여자';
+        if (data.name) {
+            loginPopup.style.display = "none";
         } else {
-            document.getElementById('gender').innerText = "undefined"
-        }
-
-        if (data.profile_img) {
-            document.querySelector("img").src = "" + data.profile_img;
+            loginPopup.style.display = "flex";
         }
 
     } catch (error) {
@@ -53,9 +56,7 @@ async function getAPI() {
     }
 }
 getAPI();
-// checkAdmin();
-
-
+mypageHide();
 // -----------------------------------------실시간 채팅------------------------------------------------------
 
 const chatBox = document.querySelector('.chatBox');
@@ -65,7 +66,7 @@ const now = new Date();
 const hours = now.getHours();
 const minutes = now.getMinutes();
 const timeString = `${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
-const loginPopup = document.querySelector('.loginPopup');
+
 
 function popup() {
     document.body.classList.toggle('active');
@@ -77,9 +78,6 @@ chatBoxClose.addEventListener('click', () => {
     chatBox.classList.remove('active');
 })
 
-// function loginPopup() {
-    
-// }
 
 // message.addEventListener('input', (e) => {
 //     const message = e.target.value;

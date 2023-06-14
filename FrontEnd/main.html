@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="./main.css">
 </head>
 <body>
+    <!-- 헤더 영역 -->
     <header>
         <a href="http://127.0.0.1:5500/frontEnd/main.html" class="logo">Simple Market</a>
         <div class="header_div">
@@ -19,10 +20,15 @@
                 <li>신고장터</li>
             </ul>
         </div>
-        <button onclick="window.location.href='http://127.0.0.1:5500/frontEnd/mypage.html'" id="mypage-btn">Mypage</button>
-        <button id="logout">Logout</button>
+        <!-- 헤더에 가장 오른쪽 버튼 영역 -->
+        <div class="header-btns">
+            <button id="popup-login">Login</button>
+            <button onclick="window.location.href='http://127.0.0.1:5500/frontEnd/mypage.html'" id="mypage-btn">Mypage</button>
+            <button id="logout">Logout</button>
+        </div>
     </header>
-    <!-- <div class="loginPopup"> -->
+    <!-- 메인 페이지 영역 -->
+    <div class="loginPopup">
         <form id="loginForm">
             <label for="">ID</label>
             <input type="text" id="user_id">
@@ -33,7 +39,7 @@
                 <a href="http://127.0.0.1:5500/FrontEnd/signUp.html">SignUp</a>
             </div>
         </form>
-    <!-- </div> -->
+    </div>
     <!-- --------------------------------------실시간 채팅----------------------------------------------------- -->
     <img class="chatImg" onclick="popup()" src="http://localhost:8080/img/bunny-1299162_1280.png">
     <div class="chatList">
