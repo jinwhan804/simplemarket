@@ -88,15 +88,18 @@ logoutBtnHide();
 
 const chatBox = document.querySelector('.chatBox');
 const chatList = document.querySelector('.chatList');
-const chatBoxClose = document.querySelector('.close_chatBox');
+const chatBoxClose = document.querySelectorAll('.close_chatBox');
 const chatContent = document.querySelector('.chat_content');
 const now = new Date();
 const hours = now.getHours();
 const minutes = now.getMinutes();
 const timeString = `${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
 
-
-function popup() {
+// 채팅 목록과 채팅 팝업창 함수
+async function popup() {
+    const { data } = await axios.get("http://127.0.0.1:8080/login/view", {
+        withCredentials: true
+    });
     document.body.classList.toggle('active');
     if (data.grade === '3') {
         chatList.classList.add('active');
@@ -105,22 +108,47 @@ function popup() {
     }
 }
 
-chatBoxClose.addEventListener('click', () => {
-    document.body.classList.remove('active');
-    chatBox.classList.remove('active');
-    chatList.classList.remove('active');
-})
+// 채팅 목록과 채팅 팝업창 닫는 함수
+chatBoxClose.forEach(btn => {
+    btn.addEventListener('click', () => {
+        chatBox.classList.remove('active');
+        chatList.classList.remove('active');
+    });
+});
 
 
-// message.addEventListener('input', (e) => {
-//     const message = e.target.value;
-//     console.log(message);
-//     chatContent.textContent = message;
-// })
+// 관리자 계정의 유저 채팅 목록 창
+async function selectUserChat() {
+    try {
+        const response = await axios.get('http://127.0.0.1:8080/login/viewAll', {
+            withCredentials: true
+        });
+        console.log(response);
+        const users = response.data;
+        console.log(users);
+        const chatMessages = document.querySelectorAll(`.chat_message`);
+        console.log(chatMessages);
+        chatMessages.forEach((e, index) => {
+            if (users[index]) {
+                e.addEventListener('dblclick', () => {
+                    const userNickname = users[index].nickname;
+                    openChatBox(userNickname);
+                });
+            }
+        })
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+function openChatBox(userNickname) {
+    chatBox.classList.add('active');
+}
+
 
 // 채팅 소켓
 async function userInfo() {
-    const response = await API.get('/login/view', {
+    const response = await axios.get('http://127.0.0.1:8080/login/view', {
         withCredentials: true
     });
     console.log(response);
@@ -196,6 +224,8 @@ window.onload = async () => {
             }
         });
 
+        selectUserChat();
+
         btn.onclick = () => {
             const messageData = {
                 user_id: userId,
@@ -206,7 +236,7 @@ window.onload = async () => {
                 userInfo: user_info
             }
             socket.emit('message', messageData);
-            axios.post('3.35.211.37/chat/chat_insert', messageData, {
+            axios.post('http://127.0.0.1:8080/chat/chat_insert', messageData, {
                 withCredentials: true
             })
         }

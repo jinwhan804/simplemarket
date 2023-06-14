@@ -50,3 +50,8 @@ exports.viewUser = async (req, res) => {
     // console.log(user);
     res.json(user);
 }
+
+exports.viewAll = async (req, res) => {
+    const users = await User.findAll({});
+    res.json(users);
+}
