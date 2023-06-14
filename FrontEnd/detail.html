@@ -13,12 +13,60 @@
             min-height: 500px;
             border: 1px solid;
         }
+        
         img{
             width: 300px;
             height: auto;
         }
+
         .unable{
             display: none;
+        }
+
+        #write_area{
+            width: 500px;
+            height: 100px;
+            border: 1px solid;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        #write_reply{
+            width: 400px;
+            height: 80px;
+            border: 1px solid;
+        }
+
+        #reply_list{
+            list-style: none;
+        }
+
+        #reply_list li{
+            list-style: none;
+            min-height: 50px;
+        }
+
+        #reply_list li div{
+            display: inline-block;
+            border: 1px solid;
+            min-height: 50px;
+        }
+
+        .reply1{
+            width: 40px;
+        }
+
+        .reply2{
+            width: 250px;
+        }
+
+        .reply3{
+            width: 80px;
+        }
+
+        .reply4{
+            width: 100px;
         }
     </style>
 </head>
@@ -35,10 +83,15 @@
     </div>
     <button id="likeBtn">좋아요</button> <input type="text" id="postLikes" disabled>
     <a href="./post.html"><button id="toPost">글 목록</button></a>
+    <div id="write_area">
+        <div id="write_reply" contenteditable="true"></div> <button id="reply_on">등록</button>
+    </div>
+    <ul id="reply_list"></ul>
 </body>
 <script>
     let posts = {};
     let users = {};
+    let replys = [];
     let likeNum = [];
     async function GetAPI(){
         try {
@@ -69,13 +122,160 @@
                 updateBtn.classList.remove('unable');
             }
             
-            await API.post('/post/reply',{
+            await API.post('/reply',{
                 headers : {
                     "Content-Type" : "application/json"
                 },
                 data : posts.id
             }).then((e)=>{
+                replys = e.data;
 
+                reply_list.innerHTML = "";
+
+                let _li = document.createElement('li');
+                let _div1 = document.createElement('div');
+                let _div2 = document.createElement('div');
+                let _div3 = document.createElement('div');
+                let _div4 = document.createElement('div');
+                _div1.className = 'reply1';
+                _div2.className = 'reply2';
+                _div3.className = 'reply3';
+                _div4.className = 'reply4';
+
+                _div1.innerHTML = "No.";
+                _div2.innerHTML = "내용";
+                _div3.innerHTML = "작성자";
+                _div4.innerHTML = "시간";
+                _li.append(_div1,_div2,_div3,_div4);
+                reply_list.append(_li);
+
+                if(e.data == null){
+                    return;
+                }else{
+                    let date = new Date();
+                    let year = date.getFullYear();
+                    let month = date.getMonth() + 1;
+                    let day = date.getDate();
+                    let nowdate = year.toString();
+                    
+                    if(month >= 10){
+                        nowdate += month;
+                    }else{
+                        nowdate += '0' + month;
+                    }
+
+                    if(day >= 10){
+                        nowdate += day;
+                    }else{
+                        nowdate += '0' + day;
+                    }
+
+                    nowdate = Number(nowdate);
+
+                    e.data.forEach((el,index) => {
+                        let updateDate = Number(el.updatedAt.slice(0,10).split('-').join(''));
+
+                        let _li1 = document.createElement('li');
+                        let _div5 = document.createElement('div');
+                        let _div6 = document.createElement('div');
+                        let _div7 = document.createElement('div');
+                        let _div8 = document.createElement('div');
+                        _div5.className = 'reply1';
+                        _div6.className = 'reply2';
+                        _div7.className = 'reply3';
+                        _div8.className = 'reply4';
+
+                        _div5.innerHTML = index + 1;
+                        _div6.innerHTML = el.content;
+                        _div7.innerHTML = el.User.nickname;
+                        
+                        if(nowdate > updateDate){
+                            _div8.innerHTML = el.updatedAt.slice(0,10);
+                        }else{
+                            _div8.innerHTML = el.updatedAt.slice(11,19);
+                        }
+
+                        _li1.append(_div5,_div6,_div7,_div8);
+                        
+                        if(users.id == el.User.id){
+                            let btn1 = document.createElement('button');
+                            let btn2 = document.createElement('button');
+                            let btn3 = document.createElement('button');
+                            let btn4 = document.createElement('button');
+
+                            btn1.innerHTML = '수정';
+                            btn2.innerHTML = '삭제';
+
+                            btn3.innerHTML = '수정';
+                            btn4.innerHTML = '취소';
+
+                            
+                            btn1.onclick = ()=>{
+                                _div6.contentEditable = true;
+
+                                btn1.classList.add('unable');
+                                btn2.classList.add('unable');
+                                btn3.classList.remove('unable');
+                                btn4.classList.remove('unable');
+                            }
+                            
+                            btn2.onclick = async()=>{
+                                try {
+                                    if(confirm('정말 삭제하시겠습니까?')){
+                                        await API.post('/reply/delete',{
+                                            data : el.id
+                                        }).then((e)=>{
+                                            location.href = e.data;
+                                        }).catch((err)=>{
+                                            console.log(err);
+                                        })
+                                    }
+                                } catch (error) {
+                                    console.log(error);
+                                }
+                            }
+
+                            btn3.onclick = async()=>{
+                                _div6.contentEditable = false;
+
+                                btn1.classList.remove('unable');
+                                btn2.classList.remove('unable');
+                                btn3.classList.add('unable');
+                                btn4.classList.add('unable');
+
+                                const form = new FormData();
+
+                                form.append('id', el.id);
+                                form.append('content',_div6.innerHTML);
+
+                                await API.post('/reply/update',form).then((e)=>{
+                                    location.href = e.data;
+                                }).catch((err)=>{
+                                    console.log(err);
+                                })
+                            }
+                            
+                            btn4.onclick = ()=>{
+                                _div6.contentEditable = false;
+
+                                _div6.innerHTML = el.content;
+
+                                btn1.classList.remove('unable');
+                                btn2.classList.remove('unable');
+                                btn3.classList.add('unable');
+                                btn4.classList.add('unable');
+                            }
+
+                            btn3.classList.add('unable');
+                            btn4.classList.add('unable');
+
+
+                            _li1.append(btn1,btn2,btn3,btn4);
+                        }
+
+                        reply_list.append(_li1);
+                    });
+                }
             }).catch((err)=>{
                 console.log(err);
             })
@@ -105,16 +305,18 @@
 
     toDelete.onclick = async()=>{
         try {
-            await API.post('/post/delete',{
-                headers : {
-                    "Content-Type" : "application/json"
-                },
-                data : posts.id
-            }).then((e)=>{
-                location.href = e.data;
-            }).catch((err)=>{
-                console.log(err);
-            })
+            if(confirm('정말 삭제하시겠습니까?')){
+                await API.post('/post/delete',{
+                    headers : {
+                        "Content-Type" : "application/json"
+                    },
+                    data : posts.id
+                }).then((e)=>{
+                    location.href = e.data;
+                }).catch((err)=>{
+                    console.log(err);
+                })
+            }
         } catch (error) {
             console.log(error);
         }
@@ -157,6 +359,24 @@
                     }
                 })
             }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    reply_on.onclick = async()=>{
+        try {
+            const form = new FormData();
+
+            form.append('content', write_reply.innerHTML);
+            form.append('userId', users.id);
+            form.append('postId', posts.id);
+
+            await API.post('/reply/insert',form).then((e)=>{
+                location.href = e.data;
+            }).catch((err)=>{
+                console.log(err);
+            });
         } catch (error) {
             console.log(error);
         }
