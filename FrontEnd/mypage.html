@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="./mypage.css">
 </head>
 <body>
+    <!-- 헤더 영역 -->
     <header>
         <a href="/main" class="logo">Simple Market</a>
         <div class="header_div">
@@ -19,11 +20,13 @@
                 <li>신고장터</li>
             </ul>
         </div>
-        <div id="admin-hide">
-            <button onclick="window.location.href='./signUpList'">Admin</button>
+        <!-- 헤더에 가장 오른쪽 버튼 영역 -->
+        <div class="header-btns">
+                <button onclick="window.location.href='http://127.0.0.1:5500/FrontEnd/signUpList.html'" id="admin-hide">Admin</button>
+                <button id="logout">Logout</button>
         </div>
-        <button id="logout">Logout</button>
     </header>
+    <!-- 메인 페이지 영역 -->
     <div class="profile-info">
         <div class="left-side"> 
             <div class="text-container">
@@ -56,12 +59,13 @@
                 </div>
             </div>
         </div>
-        <div class="right-side">
-            <div draggable="false">
-                <h1>나의 장터</h1>
-                <ul id="my-post-list">
+            <div class="right-side">
+                <div class="text-container">
+                    <h1>나의 장터</h1>
+                    <ul id="my-post-list">
 
-                </ul>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>

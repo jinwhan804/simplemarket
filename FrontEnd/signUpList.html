@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="./signUpList.css">
 </head>
 <body>
+    <!-- 헤더 영역 -->
     <header>
         <a href="/main" class="logo">Simple Market</a>
         <div class="header_div">
@@ -19,7 +20,11 @@
                 <li>신고장터</li>
             </ul>
         </div>
-        실시간 채팅
+        <!-- 헤더에 가장 오른쪽 버튼 영역 -->
+        <div class="header-btns">
+            <button onclick="window.location.href='http://127.0.0.1:5500/frontEnd/mypage.html'" id="mypage-btn">Mypage</button>
+            <button id="logout">Logout</button>
+        </div>
     </header>
     <div class="center_area">
         <p>회원가입 요청 리스트</p>

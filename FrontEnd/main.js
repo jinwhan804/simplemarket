@@ -1,13 +1,42 @@
-// 관리자 게시판 기능 (유저만 안보이게)
-async function checkAdmin() {
-    const adminHide = document.getElementById('admin-hide');
-    const { data } = await API.get("/login/view", {
-        withCredentials: true
-    });
-    if (data.grade != "3") {
-        adminHide.style.display = "none";
+// 마이페이지 버튼 로그인 됐을때만 보이게
+const mypageBtn = document.getElementById('mypage-btn');
+
+async function mypageHide() {
+    const { data } = await axios.get('http://127.0.0.1:8080/login/view', {
+        withCredentials : true
+    })
+    if(!data.name){
+        mypageBtn.style.display = "none";
     }
 }
+
+// 로그인 팝업
+const loginPopup = document.querySelector('.loginPopup');
+const popupLoginBtn = document.getElementById('popup-login');
+
+popupLoginBtn.addEventListener('click', () => {
+    if(loginPopup.style.display === "none"){
+        loginPopup.style.display = "flex"
+    }else{
+        loginPopup.style.display = "none"
+    }
+    
+})
+
+// 로그인 버튼 로그인 되어 있을 떄는 안보이게
+const loginBtn = document.getElementById('loginBtn');
+
+async function loginBtnHide() {
+    const { data } = await axios.get('http://127.0.0.1:8080/login/view',{
+        withCredentials : true
+    })
+    if(data.name) {
+        popupLoginBtn.style.display = "none";
+    }
+}
+
+
+
 // 로그아웃 기능
 const Logout = document.getElementById('logout');
 
@@ -16,36 +45,35 @@ Logout.addEventListener('click', async () => {
         const { data } = await API.get("/logout", {
             withCredentials: true,
         });
-        if (data == "로그인 페이지") {
-            window.location.href = "/login";
-        }
+        if (data == "메인 페이지") {
+            window.location.href = "/frontEnd/main.html"
+            alert("로그아웃 되었습니다.")
+        } 
     } catch (error) {
         console.log(error);
     }
 })
+// 로그아웃 버튼 로그인 안되어 있을 때는 안보이게
+async function logoutBtnHide() {
+    const { data } = await axios.get('http://127.0.0.1:8080/login/view', {
+        withCredentials : true
+    })
+    if(!data.name){
+        Logout.style.display = "none";
+    }
+}
+
 
 async function getAPI() {
     try {
         const { data } = await API.get("/login/view", {
             withCredentials: true,
         });
-        console.log(data);
-        user_name.innerHTML = data.name;
-        user_age.innerHTML = data.age;
-        nickname.innerHTML = data.nickname;
-        // gender.innerHTML = data.gender;
-        address.innerHTML = data.address;
 
-        if (data.gender === "male") {
-            document.getElementById('gender').innerText = '남자';
-        } else if (data.gender === "female") {
-            document.getElementById('gender').innerText = '여자';
+        if (data.name) {
+            loginPopup.style.display = "none";
         } else {
-            document.getElementById('gender').innerText = "undefined"
-        }
-
-        if (data.profile_img) {
-            document.querySelector("img").src = "" + data.profile_img;
+            loginPopup.style.display = "flex";
         }
 
     } catch (error) {
@@ -53,9 +81,9 @@ async function getAPI() {
     }
 }
 getAPI();
-checkAdmin();
-
-
+mypageHide();
+loginBtnHide();
+logoutBtnHide();
 // -----------------------------------------실시간 채팅------------------------------------------------------
 
 const chatBox = document.querySelector('.chatBox');
@@ -67,10 +95,8 @@ const hours = now.getHours();
 const minutes = now.getMinutes();
 const timeString = `${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
 
-async function popup() {
-    const { data } = await API.get("/login/view", {
-        withCredentials: true
-    });
+
+function popup() {
     document.body.classList.toggle('active');
     if (data.grade === '3') {
         chatList.classList.add('active');
@@ -85,61 +111,12 @@ chatBoxClose.addEventListener('click', () => {
     chatList.classList.remove('active');
 })
 
-const userChatList = document.querySelector('.user_chat_list');
-const chatMessage = document.querySelector('.chat_message');
-// const userInList = userChatList.querySelector(`.chat_message[data_nickname="${data.nickname}"]`);
 
-// function selectList(activeTab) {
-//     const {data} = axios.get('http://127.0.0.1:8080/login/view', {
-//         withCredentials: true
-//     });
-
-//     if (activeTab == data.nickname) {
-//         chatMessage.style.backgroundColor = 'rgb(241, 236, 236)';
-//     } else {
-//         chatMessage.style.backgroundColor = '';
-//     }
-// }
-
-
-
-async function handleClickEvent() {
-    let response;
-    try {
-        response = await API.get('/login/view', {
-            withCredentials: true
-        });
-    } catch (error) {
-        console.error(error);
-    }
-
-    let data = response.data;
-    console.log(data);
-
-    userChatList.addEventListener('click', (event) => {
-        // .chat_message 요소에서 클릭 이벤트가 발생했는지 확인
-        if (!event.target.closest('.chat_message')) return;
-
-        // 클릭한 .chat_message 요소 가져오기
-        let clickedChatMessage = event.target.closest('.chat_message');
-
-        // 모든 .chat_message 요소에서 스타일 제거
-        let chatMessages = userChatList.querySelectorAll('.chat_message');
-        chatMessages.forEach((chatMessage) => {
-            chatMessage.style.backgroundColor = '';
-        });
-
-        // 클릭한 .chat_message에만 스타일 적용
-        if (clickedChatMessage.dataset.nickname === data.nickname) {
-            clickedChatMessage.style.backgroundColor = 'rgb(241, 236, 236)';
-        }
-    });
-}
-
-handleClickEvent();
-
-
-
+// message.addEventListener('input', (e) => {
+//     const message = e.target.value;
+//     console.log(message);
+//     chatContent.textContent = message;
+// })
 
 // 채팅 소켓
 async function userInfo() {
@@ -236,4 +213,27 @@ window.onload = async () => {
     } catch (error) {
         console.log(error);
     }
+}
+
+
+// 로그인 기능
+    const LoginForm = document.getElementById('loginForm');
+async function Login(user_id, user_pw) {
+    try {
+        const { data } = await axios.post('http://127.0.0.1:8080/login', { user_id, user_pw }, {
+            withCredentials: true
+        });
+        console.log(data);
+        if (data == '가입 안한 아이디 입니다.' || data == '비번 틀림' || data == `승인이 거절되었습니다.\n회원가입을 다시 진행해주세요.` || data == '가입 승인 대기중입니다.') {
+            alert(data);
+        } else {
+            window.location.href = "http://127.0.0.1:5500/FrontEnd/mypage.html";
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+loginBtn.onclick = function () {
+    Login(user_id.value, user_pw.value);
 }

@@ -7,7 +7,7 @@ exports.logout = (req, res) => {
         }
         else {
             res.clearCookie('connect.sid');
-            res.send("로그인 페이지");
+            res.send("메인 페이지");
         }
     });
 };

@@ -4,25 +4,29 @@
         const {data} = await API.get("/login/view", {
         withCredentials : true
         });
-        if(data.grade == "2"){
-        adminHide.style.display = "none";
+        if(data && data.grade == "3"){
+            adminHide.style.display = "block";
+        }else{
+            adminHide.style.display = "none"
+        }
     }
-}
-// 로그아웃 기능 
-const Logout = document.getElementById('logout');
+    // 로그아웃 기능 
+    const Logout = document.getElementById('logout');
 
     Logout.addEventListener('click', async ()=> {
         try {
             const {data} = await API.get("/logout",{
                 withCredentials : true,
             });
-            if(data == "로그인 페이지"){
-                window.location.href = "/login";
+            if(data == "메인 페이지"){
+                window.location.href = "/frontEnd/main.html";
+                alert("로그아웃 되었습니다.")
             }
         } catch (error) {
             console.log(error);
         }
     })
+    
     // 사진 수정 기능
     document.getElementById('uploadBtn').addEventListener('click', async () => {
         // 파일 삽입하지 않으면
