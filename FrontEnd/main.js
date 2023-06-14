@@ -10,7 +10,6 @@ async function mypageHide() {
     }
 }
 
-
 // 로그인 팝업
 const loginPopup = document.querySelector('.loginPopup');
 const popupLoginBtn = document.getElementById('popup-login');
@@ -36,6 +35,8 @@ async function loginBtnHide() {
     }
 }
 
+
+
 // 로그아웃 기능
 const Logout = document.getElementById('logout');
 
@@ -52,6 +53,16 @@ Logout.addEventListener('click', async () => {
         console.log(error);
     }
 })
+// 로그아웃 버튼 로그인 안되어 있을 때는 안보이게
+async function logoutBtnHide() {
+    const { data } = await axios.get('http://127.0.0.1:8080/login/view', {
+        withCredentials : true
+    })
+    if(!data.name){
+        Logout.style.display = "none";
+    }
+}
+
 
 async function getAPI() {
     try {
@@ -72,6 +83,7 @@ async function getAPI() {
 getAPI();
 mypageHide();
 loginBtnHide();
+logoutBtnHide();
 // -----------------------------------------실시간 채팅------------------------------------------------------
 
 const chatBox = document.querySelector('.chatBox');
