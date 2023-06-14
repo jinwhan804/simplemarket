@@ -35,8 +35,6 @@ async function loginBtnHide() {
     }
 }
 
-
-
 // 로그아웃 기능
 const Logout = document.getElementById('logout');
 
