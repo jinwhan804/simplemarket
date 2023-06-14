@@ -49,8 +49,8 @@ app.get('/update',(req,res)=>{
    res.send(page);
 })
 
-app.use('/css',express,static(path.join(__dirname,"css")));
-app.use('/js',express,static(path.join(__dirname,"js")));
+app.use('/css',express.static(path.join(__dirname,"css")));
+app.use('/js',express.static(path.join(__dirname,"js")));
 
 app.listen(3000,()=>{
    console.log('front server on');
