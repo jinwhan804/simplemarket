@@ -1,17 +1,17 @@
-const axios = require('axios');
+// const axios = require('axios');
 
-// 로컬 주소 (확인할 것)
-const serverUrl = 'http://127.0.0.1:8080'
+// // 로컬 주소 (확인할 것)
+// const serverUrl = 'http://127.0.0.1:8080'
 
-// 인스턴스 탄력적 IP
-// const serverUrl = '3.35.211.37'
+// // 인스턴스 탄력적 IP
+// // const serverUrl = '3.35.211.37'
 
-const API = axios.create({
-    BASE_URL : serverUrl,
-    headers : {
-        'Content-Type' : 'application/json'
-    },
-    wihCredentials : true
-})
+// const API = axios.create({
+//     BASE_URL : serverUrl,
+//     headers : {
+//         'Content-Type' : 'application/json'
+//     },
+//     wihCredentials : true
+// })
 
-module.exports = API;
+// module.exports = API;

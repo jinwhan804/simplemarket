@@ -1,7 +1,7 @@
 // 관리자 게시판 기능 (유저만 안보이게)
 async function checkAdmin() {
     const adminHide = document.getElementById('admin-hide');
-    const { data } = await axios.get("3.35.211.37/login/view", {
+    const { data } = await axios.get("http://127.0.0.1:8080/login/view", {
         withCredentials: true
     });
     if (data.grade != "3") {
@@ -13,11 +13,11 @@ const Logout = document.getElementById('logout');
 
 Logout.addEventListener('click', async () => {
     try {
-        const { data } = await axios.get("3.35.211.37/logout", {
+        const { data } = await axios.get("http://127.0.0.1:8080/logout", {
             withCredentials: true,
         });
         if (data == "로그인 페이지") {
-            window.location.href = "/login";
+            window.location.href = "/frontEnd/login.html";
         }
     } catch (error) {
         console.log(error);
@@ -26,7 +26,7 @@ Logout.addEventListener('click', async () => {
 
 async function getAPI() {
     try {
-        const { data } = await axios.get("3.35.211.37/login/view", {
+        const { data } = await axios.get("http://127.0.0.1:8080/login/view", {
             withCredentials: true,
         });
         console.log(data);
@@ -60,13 +60,14 @@ checkAdmin();
 
 const chatBox = document.querySelector('.chatBox');
 const chatList = document.querySelector('.chatList');
-const chatBoxClose = document.querySelector('.close_chatBox');
+const chatBoxClose = document.querySelectorAll('.close_chatBox');
 const chatContent = document.querySelector('.chat_content');
 const now = new Date();
 const hours = now.getHours();
 const minutes = now.getMinutes();
 const timeString = `${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
 
+// 채팅 목록과 채팅 팝업창 함수
 async function popup() {
     const { data } = await axios.get("http://127.0.0.1:8080/login/view", {
         withCredentials: true
@@ -79,71 +80,42 @@ async function popup() {
     }
 }
 
-chatBoxClose.addEventListener('click', () => {
-    document.body.classList.remove('active');
-    chatBox.classList.remove('active');
-    chatList.classList.remove('active');
-})
-
-const userChatList = document.querySelector('.user_chat_list');
-const chatMessage = document.querySelector('.chat_message');
-// const userInList = userChatList.querySelector(`.chat_message[data_nickname="${data.nickname}"]`);
-
-// function selectList(activeTab) {
-//     const {data} = axios.get('http://127.0.0.1:8080/login/view', {
-//         withCredentials: true
-//     });
-
-//     if (activeTab == data.nickname) {
-//         chatMessage.style.backgroundColor = 'rgb(241, 236, 236)';
-//     } else {
-//         chatMessage.style.backgroundColor = '';
-//     }
-// }
+// 채팅 목록과 채팅 팝업창 닫는 함수
+chatBoxClose.forEach(btn => {
+    btn.addEventListener('click', () => {
+        chatBox.classList.remove('active');
+        chatList.classList.remove('active');
+    });
+});
 
 
-
-async function handleClickEvent() {
-    let response;
+// 관리자 계정의 유저 채팅 목록 창
+async function selectUserChat() {
     try {
-        response = await axios.get('http://127.0.0.1:8080/login/view', {
+        const response = await axios.get('http://127.0.0.1:8080/login/viewAll', {
             withCredentials: true
         });
+        console.log(response);
+        const users = response.data;
+        console.log(users);
+        const chatMessages = document.querySelectorAll(`.chat_message`);
+        console.log(chatMessages);
+        chatMessages.forEach((e, index) => {
+            if (users[index]) {
+                e.addEventListener('click', () => {
+                    console.log(users[index].nickname);
+                });
+            }
+        })
     } catch (error) {
         console.error(error);
     }
-
-    let data = response.data;
-    console.log(data);
-
-    userChatList.addEventListener('click', (event) => {
-        // .chat_message 요소에서 클릭 이벤트가 발생했는지 확인
-        if (!event.target.closest('.chat_message')) return;
-
-        // 클릭한 .chat_message 요소 가져오기
-        let clickedChatMessage = event.target.closest('.chat_message');
-
-        // 모든 .chat_message 요소에서 스타일 제거
-        let chatMessages = userChatList.querySelectorAll('.chat_message');
-        chatMessages.forEach((chatMessage) => {
-            chatMessage.style.backgroundColor = '';
-        });
-
-        // 클릭한 .chat_message에만 스타일 적용
-        if (clickedChatMessage.dataset.nickname === data.nickname) {
-            clickedChatMessage.style.backgroundColor = 'rgb(241, 236, 236)';
-        }
-    });
 }
-
-handleClickEvent();
-
-
 
 
 // 채팅 소켓
 async function userInfo() {
-    const response = await axios.get('3.35.211.37/login/view', {
+    const response = await axios.get('http://127.0.0.1:8080/login/view', {
         withCredentials: true
     });
     console.log(response);
@@ -159,18 +131,15 @@ window.onload = async () => {
     try {
         const { nickname, profileImg, userId, user_info } = await userInfo();
         // 유저의 채팅 리스트
-        const getChatData = await axios.get('3.35.211.37/chat/all_chats', {
+        const getChatData = await axios.get('http://localhost:8080/chat/all_chats', {
             withCredentials: true
         });
         console.log(getChatData);
         const chatData = getChatData.data;
         const userChatList = document.querySelector('.user_chat_list');
 
-
-
-        // userChatList.innerHTML = chatDataHTML;
-
-        const socket = io.connect("3.35.211.37");
+        const socket = io.connect("http://localhost:8080");
+        console.log(socket);
         socket.on('message', (data) => {
             console.log(data);
             let el;
@@ -219,6 +188,8 @@ window.onload = async () => {
             }
         });
 
+        selectUserChat();
+
         btn.onclick = () => {
             const messageData = {
                 user_id: userId,
@@ -229,7 +200,7 @@ window.onload = async () => {
                 userInfo: user_info
             }
             socket.emit('message', messageData);
-            axios.post('3.35.211.37/chat/chat_insert', messageData, {
+            axios.post('http://127.0.0.1:8080/chat/chat_insert', messageData, {
                 withCredentials: true
             })
         }

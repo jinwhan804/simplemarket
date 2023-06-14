@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <script src="./index.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -85,14 +85,14 @@
 <script>
     async function Login(user_id, user_pw) {
         try {
-            const { data } = await API.post('/login', { user_id, user_pw }, {
+            const { data } = await axios.post('http://127.0.0.1:8080/login', { user_id, user_pw }, {
                 withCredentials: true
             });
             console.log(data);
             if (data == '가입 안한 아이디 입니다.' || data == '비번 틀림' || data == `승인이 거절되었습니다.\n회원가입을 다시 진행해주세요.` || data == '가입 승인 대기중입니다.') {
                 alert(data);
             } else {
-                window.location.href = "/main";
+                window.location.href = "http://127.0.0.1:5500/FrontEnd/main.html";
             }
         } catch (error) {
             console.log(error);
