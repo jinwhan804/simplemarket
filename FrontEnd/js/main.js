@@ -267,7 +267,6 @@ async function Login(user_id, user_pw) {
         if (data.msg == '가입 안한 아이디 입니다.' || data.msg == '비번 틀림' || data.msg == `승인이 거절되었습니다.\n회원가입을 다시 진행해주세요.` || data.msg == '가입 승인 대기중입니다.') {
             alert(data.msg);
         } else {
-            document.cookie = `connect.sid=${data.token}; path=/`;
             window.location.href = `./mypage${urlEnd}`;
         }
     } catch (error) {
