@@ -28,7 +28,7 @@
     <label for="">본문</label>
     <div id="contentArea" contenteditable="true"></div>
     <button id="insertBtn">추가 하기</button>
-    <a href="./post.html">게시판 돌아가기</a>
+    <a id="toPost">게시판 돌아가기</a>
 </body>
 <script>
     let user_data = {};
@@ -67,6 +67,10 @@
         } catch (error) {
             console.log(error)
         }
+    }
+
+    toPost.onclick = ()=>{
+        location.href = `./post${urlEnd}`;
     }
 </script>
 </html>

@@ -44,7 +44,7 @@ Logout.addEventListener('click', async () => {
             withCredentials: true,
         });
         if (data == "메인 페이지") {
-            window.location.href = "./main.html"
+            window.location.href = `./main${urlEnd}`;
             alert("로그아웃 되었습니다.")
         } 
     } catch (error) {
@@ -243,6 +243,12 @@ window.onload = async () => {
     }
 }
 
+// 로고 클릭 시 main으로 돌아가기
+const logo = document.querySelector('.logo');
+logo.onclick = ()=>{
+    location.href = `./main${urlEnd}`
+}
+
 
 // 로그인 기능
     const LoginForm = document.getElementById('loginForm');
@@ -255,7 +261,7 @@ async function Login(user_id, user_pw) {
         if (data == '가입 안한 아이디 입니다.' || data == '비번 틀림' || data == `승인이 거절되었습니다.\n회원가입을 다시 진행해주세요.` || data == '가입 승인 대기중입니다.') {
             alert(data);
         } else {
-            window.location.href = "./mypage.html";
+            window.location.href = `./mypage${urlEnd}`;
         }
     } catch (error) {
         console.log(error);

@@ -82,7 +82,7 @@
         <button id="toUpdate">수정</button><button id="toDelete">삭제</button>
     </div>
     <button id="likeBtn">좋아요</button> <input type="text" id="postLikes" disabled>
-    <a href="./post.html"><button id="toPost">글 목록</button></a>
+    <button id="toPost">글 목록</button>
     <div id="write_area">
         <div id="write_reply" contenteditable="true"></div> <button id="reply_on">등록</button>
     </div>
@@ -380,6 +380,10 @@
         } catch (error) {
             console.log(error);
         }
+    }
+
+    toPost.onclick = ()=>{
+        location.href = `./post${urlEnd}`;
     }
 </script>
 </html>

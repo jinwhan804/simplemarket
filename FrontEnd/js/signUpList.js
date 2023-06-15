@@ -65,10 +65,16 @@ Logout.addEventListener('click', async () => {
             withCredentials: true,
         });
         if (data == "메인 페이지") {
-            window.location.href = "./main.html"
+            window.location.href = `./main${urlEnd}`;
             alert("로그아웃 되었습니다.")
         } 
     } catch (error) {
         console.log(error);
     }
 })
+
+// 로고 클릭 시 main으로 돌아가기
+const logo = document.querySelector('.logo');
+logo.onclick = ()=>{
+    location.href = `./main${urlEnd}`
+}
