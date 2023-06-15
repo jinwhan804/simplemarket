@@ -209,10 +209,22 @@ input {
     display: block;
 }
 
-.chat_title{
+.chat_list_title,
+.chat_box_title{
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.back {
+    background-image: url('../../BackEnd/uploads/back-removebg-preview.png');
+    width: 30px;
+    height: 30px;
+    background-size: cover;
+    background-position: center;
+    background-origin: content-box;
+    cursor: pointer;
+    display: none;
 }
 
 .title{

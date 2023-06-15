@@ -57,7 +57,7 @@ app.use('/post', postRouter);
 app.use('/admin', adminRouter);
 app.use('/signUpList', boardRouter);
 app.use('/chat', chatRouter);
-app.use('/reply',replyRouter);
+app.use('/reply', replyRouter);
 
 const server = app.listen(8080, () => {
     console.log("8080 Server Open");
@@ -70,10 +70,20 @@ const io = socketIo(server, {
     }
 });
 
+let userId = [];
+let userList = [];
+let userName = [];
+
 io.sockets.on('connection', (socket) => {
-    console.log(socket.id);
+    userId.push(socket.id);
+    console.log(userId);
+
     socket.on('message', (data) => {
         io.sockets.emit('message', data);
         console.log(data);
+    })
+
+    socket.on('oneUserChat', (id, nickName, msg) => {
+        io.to(id).emit('chat', nickName, msg);
     })
 })

@@ -88,6 +88,7 @@ const chatBox = document.querySelector('.chatBox');
 const chatList = document.querySelector('.chatList');
 const chatBoxClose = document.querySelectorAll('.close_chatBox');
 const chatContent = document.querySelector('.chat_content');
+const back = document.querySelector('.back');
 const now = new Date();
 const hours = now.getHours();
 const minutes = now.getMinutes();
@@ -141,7 +142,29 @@ async function selectUserChat() {
 
 function openChatBox(userNickname) {
     chatBox.classList.add('active');
+    chatList.classList.remove('active');
 }
+
+
+// 아래 코드 안되니까 나중에 다시보자
+
+// chatBox에서 chatList로 가는 함수
+// window.onload = async function () {
+//     const { data } = await axios.get("http://127.0.0.1:8080/login/view", {
+//         withCredentials: true
+//     });
+
+//     if (data.grade === '3') {
+//         back.style.display = 'block';
+//     } else {
+//         back.style.display = 'none';
+//     }
+// };
+
+// back.addEventListener('click', function () {
+//     chatList.classList.add('active');
+//     chatBox.classList.remove('active');
+// });
 
 
 // 채팅 소켓
@@ -234,7 +257,7 @@ window.onload = async () => {
                 userInfo: user_info
             }
             socket.emit('message', messageData);
-            axios.post('/chat/chat_insert', messageData, {
+            axios.post('http://127.0.0.1:8080/chat/chat_insert', messageData, {
                 withCredentials: true
             })
         }
@@ -252,7 +275,7 @@ async function Login(user_id, user_pw) {
             withCredentials: true
         });
         console.log(data);
-        if (data == '가입 안한 아이디 입니다.' || data == '비번 틀림' || data == `승인이 거절되었습니다.\n회원가입을 다시 진행해주세요.` || data == '가입 승인 대기중입니다.') {
+        if (data == '가입 안한 아이디 입니다.' || data == '비번 틀림' || data == `승인이 거절되었습니다.\n회원가입을 다시 진행해주세요.` || data == '가입 승인 대기중입니다.' || data == '관리자 계정이 생성되었습니다.') {
             alert(data);
         } else {
             window.location.href = "./mypage.html";
