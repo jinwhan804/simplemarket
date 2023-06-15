@@ -44,7 +44,7 @@ Logout.addEventListener('click', async () => {
             withCredentials: true,
         });
         if (data == "메인 페이지") {
-            window.location.href = `./main${urlEnd}`;
+            window.location.href = `./${mainUrl}`;
             alert("로그아웃 되었습니다.")
         } 
     } catch (error) {
@@ -82,6 +82,19 @@ getAPI();
 mypageHide();
 loginBtnHide();
 logoutBtnHide();
+
+// 로고 클릭 시 main으로 돌아가기
+const logo = document.querySelector('.logo');
+logo.onclick = ()=>{
+    location.href = `./${mainUrl}`
+}
+
+// 마이 페이지 버튼 기능
+const mypage_btn = document.getElementById('mypage-btn');
+mypage_btn.onclick = ()=>{
+    location.href = `./mypage${urlEnd}`;
+}
+
 // -----------------------------------------실시간 채팅------------------------------------------------------
 
 const chatBox = document.querySelector('.chatBox');
@@ -242,13 +255,6 @@ window.onload = async () => {
         console.log(error);
     }
 }
-
-// 로고 클릭 시 main으로 돌아가기
-const logo = document.querySelector('.logo');
-logo.onclick = ()=>{
-    location.href = `./main${urlEnd}`
-}
-
 
 // 로그인 기능
     const LoginForm = document.getElementById('loginForm');

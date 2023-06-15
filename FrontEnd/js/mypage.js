@@ -30,7 +30,13 @@ Logout.addEventListener('click', async ()=> {
 // 로고 클릭 시 main으로 돌아가기
 const logo = document.querySelector('.logo');
 logo.onclick = ()=>{
-    location.href = `./main${urlEnd}`
+    location.href = `./${mainUrl}`
+}
+
+// 어드민 버튼 기능
+const admin_hide = document.getElementById('admin-hide');
+admin_hide.onclick = ()=>{
+    location.href = `./signUpList${urlEnd}`;
 }
     
 // 사진 수정 기능
