@@ -3,8 +3,7 @@
 // const url = 'http://127.0.0.1:8080';
 
 // 인스턴스 탄력적 IP
-const serverUrl = '3.35.211.37';
-const url = '';
+const serverUrl = 'http://3.35.211.37';
 
 const API = axios.create({
     baseURL : serverUrl,
