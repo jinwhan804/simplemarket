@@ -16,6 +16,7 @@ exports.Login = async (req, res) => {
 
         const same = bcrypt.compareSync(user_pw, user.user_pw)
         const { id, name, age, grade, nickname } = user;
+        const data = {msg : "" , token : null};
         if (same) {
             let token = jwt.sign({
                 id,
@@ -28,15 +29,20 @@ exports.Login = async (req, res) => {
             });
 
             if (user.grade === '0') {
-                return res.send(`승인이 거절되었습니다.\n회원가입을 다시 진행해주세요.`);
+                data.msg = `승인이 거절되었습니다.\n회원가입을 다시 진행해주세요.`;
+                return res.send(data);
             } else if (user.grade === '1') {
-                return res.send('가입 승인 대기중입니다.');
+                data.msg = '가입 승인 대기중입니다.';
+                return res.send(data);
             }
-
+            
             req.session.access_token = token;
-            return res.send('로그인 성공');
+            data.msg = '로그인 성공';
+            data.token = token;
+            return res.send(data);
         } else {
-            return res.send("비번 틀림");
+            data.msg = '비번 틀림';
+            return res.send(data);
         }
     } catch (error) {
         console.log(error);
