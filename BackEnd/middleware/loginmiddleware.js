@@ -2,7 +2,10 @@ const jwt = require("jsonwebtoken");
 
 exports.isLogin = (req, res, next) => {
     const { access_token } = req.session;
-    console.log(JSON.parse(req.sessionStore.sessions));
+    for (const key in req.sessionStore.sessions) {
+        req.sessionStore.sessions[key] = JSON.parse(req.sessionStore.sessions[key]);
+    }
+    console.log(req.sessionStore.sessions);
     // console.log(access_token);
     jwt.verify(access_token, process.env.ACCESS_TOKEN_KEY, (err, acc_decoded) => {
         if (err) {
