@@ -8,6 +8,7 @@ const { sequelize } = require("./models");
 const path = require("path");
 const socketIo = require("socket.io");
 const cookieParser = require('cookie-parser');
+const AWS = require('aws-sdk'); // 이미지 파일 업로드 클라우드
 
 const SignUpRouter = require("./routers/signUp");
 const LoginRouter = require("./routers/login");

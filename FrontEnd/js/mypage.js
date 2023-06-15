@@ -1,7 +1,7 @@
     // 관리자 게시판 기능 (유저만 안보이게)
     async function checkAdmin() {
         const adminHide = document.getElementById('admin-hide');
-        const {data} = await API.get("/login/view", {
+        const {data} = await API.get("./login/view", {
         withCredentials : true
         });
         if(data && data.grade == "3"){
@@ -15,7 +15,7 @@
 
     Logout.addEventListener('click', async ()=> {
         try {
-            const {data} = await API.get("/logout",{
+            const {data} = await API.get("./logout",{
                 withCredentials : true,
             });
             if(data == "메인 페이지"){
@@ -39,13 +39,13 @@
             form.append("imgs", imgs.value);
             form.append("upload", file.files[0]);
             form.append("userId", "user_id");
-            const { data } = await API.post('/upload', form, {
+            await API.post('./upload', form, {
                 headers : {"content-Type" : "multipart/form-data"},
                 withCredentials : true
-            });
-            if(data === "디폴트 프로필"){
-                window.location.href = "./mypage.html";
-            }
+            });                     
+            
+            window.location.href = "./mypage.html";
+            
 
     } catch (error) {
         console.log(error);
@@ -57,7 +57,7 @@
         const newNickname = prompt("새로운 별명을 입력해주세요.");
         if (newNickname) {
             try {
-                const response = await API.post("/mypage", {
+                const response = await API.post("./mypage", {
                     nickname: newNickname
                 }, {
                     withCredentials: true
@@ -71,7 +71,7 @@
 
     async function getAPI() {
         try {
-            const {data} = await API.get("/login/view",{
+            const {data} = await API.get("./login/view",{
                 withCredentials : true,
             });
             // console.log(data);
@@ -89,9 +89,10 @@
             document.getElementById('gender').innerText = "undefined"
         }
 
-            if (data.profile_img) {
-                document.querySelector("img").src = "/img/" + data.profile_img;
-            }
+        // 프로필 이미지 수정 
+        if (data.profile_img) {
+            document.querySelector("img").src = data.profile_img;
+        }
 
     } catch (error) {
         console.log(error)
@@ -102,10 +103,10 @@
 
     async function getUserPost(){
         try {
-            const { data: posts } = await API.get("/post",{
+            const { data: posts } = await API.get("./post",{
                 withCredentials : true,
             });
-            const { data: userInfo } = await API.get("/login/view",{
+            const { data: userInfo } = await API.get("./login/view",{
                 withCredentials : true,
             });
             
@@ -120,7 +121,7 @@
             }
             listItem.style.cursor = "pointer";
             listItem.addEventListener('click', async () => {
-                const { data } = await API.post(`/mypage/detail`,{
+                const { data } = await API.post(`./mypage/detail`,{
                     data : post.id
                 },{withCredentials : true,})
                 window.location.href = data;

@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script src="/js/index.js"></script>
+    <script src="./js/index.js"></script>
     <style>
         tr{
             cursor: pointer;
@@ -122,7 +122,7 @@
                     _td6.innerHTML = el.postViews;
 
                     _tr.onclick = async()=>{
-                        await API.post('/post/detail',{
+                        await API.post('./post/detail',{
                             headers : {
                                 'Content-Type' : "application/json"
                             },

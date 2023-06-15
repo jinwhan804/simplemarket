@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script src="/js/index.js"></script>
+    <script src="./js/index.js"></script>
     <style>
         #contentArea{
             width: 500px;
@@ -53,7 +53,7 @@
             form.append('userId',user_data.id);
 
             axios.defaults.withCredentials = true;
-            await API.post('/post/insert',form,{
+            await API.post('./post/insert',form,{
                 headers : {
                     "Content-Type" : "application/json"
                 }
