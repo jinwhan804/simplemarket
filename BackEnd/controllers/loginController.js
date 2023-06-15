@@ -9,39 +9,54 @@ const bcrypt = require("bcrypt");
 exports.Login = async (req, res) => {
     try {
         const { user_id, user_pw } = req.body;
-        const user = await User.findOne({ where: { user_id } })
-        if (user == null) {
-            return res.send("가입 안한 아이디 입니다.");
-        }
+        let user = await User.findOne({ where: { user_id } });
 
-        const same = bcrypt.compareSync(user_pw, user.user_pw)
-        const { id, name, age, grade, nickname } = user;
-        if (same) {
-            let token = jwt.sign({
-                id,
-                name,
-                age,
-                grade,
-                nickname
-            }, process.env.ACCESS_TOKEN_KEY, {
-                expiresIn: "20m"
+        // 관리자 계정이 없으면 관리자 계정 생성
+        if (!user && user_id === 'admin') {
+            const hashedPW = bcrypt.hashSync(user_pw, 10);
+            user = await User.create({
+                user_id: 'admin',
+                user_pw: hashedPW,
+                nickname: '심플관리자',
+                name: '관리자',
+                grade: '3',
+                age: '100'
             });
+            res.send('관리자 계정이 생성되었습니다.');
+        } else if (user) {
+            const same = bcrypt.compareSync(user_pw, user.user_pw);
+            const { id, name, age, grade, nickname } = user;
 
-            if (user.grade === '0') {
-                return res.send(`승인이 거절되었습니다.\n회원가입을 다시 진행해주세요.`);
-            } else if (user.grade === '1') {
-                return res.send('가입 승인 대기중입니다.');
+            if (same) {
+                let token = jwt.sign({
+                    id,
+                    name,
+                    age,
+                    grade,
+                    nickname
+                }, process.env.ACCESS_TOKEN_KEY, {
+                    expiresIn: '60m'
+                });
+
+                if (user.grade === '0') {
+                    res.send(`승인이 거절되었습니다.\n회원가입을 다시 진행해주세요.`);
+                } else if (user.grade === '1') {
+                    res.send('가입 승인 대기중입니다.');
+                } else {
+                    req.session.access_token = token;
+                    return res.redirect(`${process.env.FRONT}/main${process.env.END}`);
+                }
+            } else {
+                res.send('비번 틀림');
             }
-
-            req.session.access_token = token;
-            return res.send('로그인 성공');
         } else {
-            return res.send("비번 틀림");
+            res.send("가입 안한 아이디 입니다.");
         }
     } catch (error) {
         console.log(error);
     }
 }
+
 
 exports.viewUser = async (req, res) => {
     const { access_decoded } = req;

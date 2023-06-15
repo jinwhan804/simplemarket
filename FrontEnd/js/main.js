@@ -2,10 +2,10 @@
 const mypageBtn = document.getElementById('mypage-btn');
 
 async function mypageHide() {
-    const { data } = await API.get('/login/view', {
-        withCredentials : true
+    const { data } = await axios.get('http://127.0.0.1:8080/login/view', {
+        withCredentials: true
     })
-    if(!data.name){
+    if (!data.name) {
         mypageBtn.style.display = "none";
     }
 }
@@ -15,22 +15,22 @@ const loginPopup = document.querySelector('.loginPopup');
 const popupLoginBtn = document.getElementById('popup-login');
 
 popupLoginBtn.addEventListener('click', () => {
-    if(loginPopup.style.display === "none"){
+    if (loginPopup.style.display === "none") {
         loginPopup.style.display = "flex"
-    }else{
+    } else {
         loginPopup.style.display = "none"
     }
-    
+
 })
 
 // 로그인 버튼 로그인 되어 있을 떄는 안보이게
 const loginBtn = document.getElementById('loginBtn');
 
 async function loginBtnHide() {
-    const { data } = await API.get('/login/view',{
-        withCredentials : true
+    const { data } = await axios.get('http://127.0.0.1:8080/login/view', {
+        withCredentials: true
     })
-    if(data.name) {
+    if (data.name) {
         popupLoginBtn.style.display = "none";
     }
 }
@@ -40,23 +40,23 @@ const Logout = document.getElementById('logout');
 
 Logout.addEventListener('click', async () => {
     try {
-        const { data } = await API.get("/logout", {
+        const { data } = await axios.get("http://127.0.0.1:8080/logout", {
             withCredentials: true,
         });
         if (data == "메인 페이지") {
             window.location.href = "./main.html"
             alert("로그아웃 되었습니다.")
-        } 
+        }
     } catch (error) {
         console.log(error);
     }
 })
 // 로그아웃 버튼 로그인 안되어 있을 때는 안보이게
 async function logoutBtnHide() {
-    const { data } = await API.get('/login/view', {
-        withCredentials : true
+    const { data } = await axios.get('http://127.0.0.1:8080/login/view', {
+        withCredentials: true
     })
-    if(!data.name){
+    if (!data.name) {
         Logout.style.display = "none";
     }
 }
@@ -64,7 +64,7 @@ async function logoutBtnHide() {
 
 async function getAPI() {
     try {
-        const { data } = await API.get("/login/view", {
+        const { data } = await axios.get("http://127.0.0.1:8080/login/view", {
             withCredentials: true,
         });
 
@@ -95,7 +95,7 @@ const timeString = `${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
 
 // 채팅 목록과 채팅 팝업창 함수
 async function popup() {
-    const { data } = await API.get("/login/view", {
+    const { data } = await axios.get("http://127.0.0.1:8080/login/view", {
         withCredentials: true
     });
     document.body.classList.toggle('active');
@@ -118,7 +118,7 @@ chatBoxClose.forEach(btn => {
 // 관리자 계정의 유저 채팅 목록 창
 async function selectUserChat() {
     try {
-        const response = await API.get('/login/viewAll', {
+        const response = await axios.get('http://127.0.0.1:8080/login/viewAll', {
             withCredentials: true
         });
         console.log(response);
@@ -146,7 +146,7 @@ function openChatBox(userNickname) {
 
 // 채팅 소켓
 async function userInfo() {
-    const response = await API.get('/login/view', {
+    const response = await axios.get('http://127.0.0.1:8080/login/view', {
         withCredentials: true
     });
     console.log(response);
@@ -162,7 +162,7 @@ window.onload = async () => {
     try {
         const { nickname, profileImg, userId, user_info } = await userInfo();
         // 유저의 채팅 리스트
-        const getChatData = await API.get('/chat/all_chats', {
+        const getChatData = await axios.get('http://127.0.0.1:8080/chat/all_chats', {
             withCredentials: true
         });
         console.log(getChatData);
@@ -234,7 +234,7 @@ window.onload = async () => {
                 userInfo: user_info
             }
             socket.emit('message', messageData);
-            API.post('/chat/chat_insert', messageData, {
+            axios.post('/chat/chat_insert', messageData, {
                 withCredentials: true
             })
         }
@@ -245,10 +245,10 @@ window.onload = async () => {
 
 
 // 로그인 기능
-    const LoginForm = document.getElementById('loginForm');
+const LoginForm = document.getElementById('loginForm');
 async function Login(user_id, user_pw) {
     try {
-        const { data } = await API.post('/login', { user_id, user_pw }, {
+        const { data } = await axios.post('http://127.0.0.1:8080/login', { user_id, user_pw }, {
             withCredentials: true
         });
         console.log(data);
