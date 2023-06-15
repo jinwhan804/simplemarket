@@ -6,7 +6,7 @@ exports.logout = (req, res) => {
             console.log(err);
         }
         else {
-            const token = '';
+            const token = null;
             for (const key in req.sessionStore.sessions) {
                 let json = JSON.parse(`${req.sessionStore.sessions[key]}`);
                 json.access_token = token;                
