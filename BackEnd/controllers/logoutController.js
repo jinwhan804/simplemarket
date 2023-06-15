@@ -1,7 +1,7 @@
 const { User } = require("../models");
 
 exports.logout = (req, res) => {
-    req.sessionStore.sessions.destroy(function(err){ 
+    req.session.destroy(function(err){ 
         if(err){
             console.log(err);
         }
