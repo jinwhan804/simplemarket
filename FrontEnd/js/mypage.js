@@ -121,7 +121,7 @@
             }
             listItem.style.cursor = "pointer";
             listItem.addEventListener('click', async () => {
-                const { data } = await API.post(`./mypage/detail`,{
+                const { data } = await API.post('./mypage/detail',{
                     data : post.id
                 },{withCredentials : true,})
                 window.location.href = data;
