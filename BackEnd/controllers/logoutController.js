@@ -5,8 +5,8 @@ exports.logout = (req, res) => {
     console.log("로그아웃 컨트롤러에 들어오니>");
     try {
       // 현재 브라우저 토큰값
-      const th = req.rawHeaders[29].slice(8);
-      console.log(th);
+    //   const th = req.rawHeaders[29].slice(8);
+    //   console.log(th);
   
       // 특정 값을 갖는 키를 찾는 함수를 정의합니다.
       function findKeyByToken(obj, token) {
@@ -34,33 +34,40 @@ exports.logout = (req, res) => {
         }
         return null;
       }
-      const ta = req.sessionStore.sessions;
-      const nowsessioid = findKeyByToken(ta, th); // "aewSIDVHKOMg9OpzsrsCap
-  
-      // res.clearCookie('mytoken', {path : "/"});
-      req.sessionStore.all((err, sessions) => {
-        if (err) {
-          return res.sendStatus(500);
+
+        let th;
+        for (const key in req.sessionStore.sessions) {
+            const json = JSON.parse(`${req.sessionStore.sessions[key]}`);
+            th = json.access_token;
+            console.log(access_token);
         }
+        const ta = req.sessionStore.sessions;
+        const nowsessioid = findKeyByToken(ta, th); // "aewSIDVHKOMg9OpzsrsCap
   
-        const sessionIds = Object.keys(sessions);
-  
-        // Delete each session by ID
-        sessionIds.forEach((el) => {
-          // if(sessionId) {
-          console.log(el);
-          console.log(nowsessioid);
-          if (el == nowsessioid) {
+        // res.clearCookie('mytoken', {path : "/"});
+        req.sessionStore.all((err, sessions) => {
+            if (err) {
+            return res.sendStatus(500);
+            }
+    
+            const sessionIds = Object.keys(sessions);
+    
+            // Delete each session by ID
+            sessionIds.forEach((el) => {
+            // if(sessionId) {
+            console.log(el);
+            console.log(nowsessioid);
+            if (el == nowsessioid) {
             // }
-            req.sessionStore.destroy(nowsessioid, (err) => {
-              if (err) {
-                console.error("Error destroying session:", err);
-              } else {
-                console.log("Session destroyed successfully:", nowsessioid);
-                console.log(ta);
-              }
-            });
-          }
+                req.sessionStore.destroy(nowsessioid, (err) => {
+                    if (err) {
+                        console.error("Error destroying session:", err);
+                    } else {
+                        console.log("Session destroyed successfully:", nowsessioid);
+                        console.log(ta);
+                    }
+                });
+            }
         });
   
         res.sendStatus(200);
