@@ -7,70 +7,62 @@
     <title>Document</title>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="./js/index.js"></script>
-    <style>
-        #contentArea{
-            width: 500px;
-            min-height: 500px;
-            border: 1px solid;
-        }
-        img{
-            width: 300px;
-            height: auto;
-        }
-    </style>
+    <link rel="stylesheet" href="./css/insert.css">
 </head>
 <body>
-    <h1>글 등록</h1>
-    <label for="">제목</label>
-    <input type="text" id="title">
-    <label for="">작성자</label>
-    <input type="text" id="nickname" disabled><br>
-    <label for="">본문</label>
-    <div id="contentArea" contenteditable="true"></div>
-    <button id="insertBtn">추가 하기</button>
-    <a id="toPost">게시판 돌아가기</a>
+    <!-- 헤더 영역 -->
+    <header>
+        <a class="logo">Simple Market</a>
+        <div class="header_div">
+            <ul>
+                <li><a href="./post.html" class="used-market">중고장터</a></li>
+                <li>동네장터</li>
+                <li>신고장터</li>
+            </ul>
+        </div>
+        <!-- 헤더에 가장 오른쪽 버튼 영역 -->
+        <div class="header-btns">
+            <button id="popup-login">Login</button>
+            <button id="mypage-btn">Mypage</button>
+            <button id="logout">Logout</button>
+        </div>
+    </header>    
+    <!----------------- 게시판 영역--------------->
+    <div class="border-container">
+        <h1>내 물건 팔기 </h1>
+        <label for="">제목</label>
+        <input type="text" id="title">
+        <label for="">작성자</label>
+        <input type="text" id="nickname" disabled><br>
+        <label for="">본문</label>
+        <div id="contentArea" contenteditable="true"></div>
+        <button id="insertBtn">추가 하기</button>
+        <a id="toImage">사진 올리기</a>
+        <a id="toPost">뒤로가기</a>
+    </div>
+    <!-- --------------------------------------실시간 채팅----------------------------------------------------- -->
+    <img class="chatImg" onclick="popup()" src="http://localhost:8080/img/bunny-1299162_1280.png">
+    <div class="chatList">
+        <div class="chat_list_title">
+            <p class="title">심플마켓 상담채팅</p>
+            <button class="close_chatBox">X</button>
+        </div>
+        <div class="line"></div>
+        <div class="user_chat_list"></div>
+    </div>
+    <div class="chatBox">
+        <div class="chat_box_title">
+            <div class="back"></div>
+            <p class="title">심플마켓 상담채팅</p>
+            <button class="close_chatBox">X</button>
+        </div>
+        <div class="line"></div>
+        <div class="chat_content"></div>
+        <div class="message_box">
+            <input type="text" id="message">
+            <button id="btn">send</button>
+        </div>
+    </div>    
 </body>
-<script>
-    let user_data = {};
-    
-    window.onload = async()=>{
-        const {data} = await API.get('/post/insert',{
-            headers : {
-                "Content-Type" : "application/json"
-            }
-        })
-        
-        nickname.value = data.nickname;
-        user_data = data;
-    }
-
-    insertBtn.onclick = async()=>{
-        try {
-            const form = new FormData();
-
-            form.append('title',title.value);
-            form.append('content',contentArea.innerHTML);
-            form.append('userId',user_data.id);
-
-            axios.defaults.withCredentials = true;
-            await API.post('./post/insert',form,{
-                headers : {
-                    "Content-Type" : "application/json"
-                }
-            }).then((e)=>{
-                console.log(e.data);
-                location.href = e.data;
-            }).catch((err)=>{
-                console.log('프론트 글 추가하다 에러남');
-                console.log(err);
-            })
-        } catch (error) {
-            console.log(error)
-        }
-    }
-
-    toPost.onclick = ()=>{
-        location.href = `./${mainUrl}`;
-    }
-</script>
+<script src="./js/insert.js"></script>
 </html>

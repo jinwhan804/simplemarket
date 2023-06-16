@@ -60,10 +60,6 @@ img {
     border-radius: 50%;
 }
 
-a{
-    cursor: pointer;
-}
-
 .header_div {
     width: 100%;
     max-width: 1000px;
@@ -96,143 +92,7 @@ a{
     position: absolute;
     left: 1250px;
 }
-/* 가운데 게시판 css */
 
-/* 관계설정 제일 큰 틀 */
-.profile-info {
-    position: relative;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    margin-top: 80px;
-    height: 760px;
-}
-/* 하얀 칠판 */
-#text-container {
-    position: absolute;
-    background-color: #fff;
-    border-radius: 50px;
-    box-shadow: 0px 3px 15px rgba(0,0,0,0.1);
-    overflow: auto;
-    padding: 20px;
-    width: 90%;
-    height: 90%;
-}
-/* 게시판 요소들 */
-h1 {
-    display: flex;
-    justify-content: center;
-}
-#post_list{
-    margin-top: 20px;
-    width: 100%;
-    /* 표의 테두리와 셀의 테두리 간격 없앰 */
-    border-collapse: collapse; 
-}
-#post_list th{
-    background-color: #0079C2;
-    color: white;
-    padding: 10px;
-}
-#post_list td{
-    padding: 10px;
-    border-top: 10px solid #e0e0e0;
-    text-align: center;
-}
-#post_list tr:hover{
-    background-color: #f2f2f2;
-    cursor: pointer;
-}
-.pageBtn {
-    padding: 10px 30px;
-    background-color: #09ec91;
-    color: white;
-    border: 3px solid;
-    border-radius: 50px;
-    cursor: pointer;
-}
-
-.pageBtn:hover {
-    background-color: #0056b3;
-}
-
-#btns {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 10px;
-}
-#inInsert{
-    display: inline-block;
-    position: relative;
-    background-color: #09ec91;
-    color: white;
-    left: 50px;
-    text-decoration: none;
-    padding: 15px;
-    border-radius: 500px;
-    font-weight: bold;
-    font-size: 1.5em;
-}
-#inInsert:hover{
-    background-color: #0056b3;
-}
-
-
-/* 로그인 css */
-form {
-    display: flex;
-    flex-direction: column;
-    width: 350px;
-    padding: 20px;
-    border: red 1px;
-    border-radius: 5px;
-    box-shadow: 0px 3px 15px rgba(0,0,0,0.1);
-    background-color: #09ec91;
-}
-
-label {
-    margin-bottom: 10px;
-    font-weight: bold;
-}
-
-input {
-    margin-bottom: 20px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-#loginBtn {
-    padding: 10px;
-    color: #ffffff;
-    background-color: #0079C2;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-#loginBtn:hover {
-    background-color: #0056b3;
-}
-
-.links {
-    display: flex;
-    justify-content: space-around;
-    font-size: 0.8em;
-    margin-top: 12px;
-}
-.loginPopup {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    
-}
 /* --------------------실시간 채팅------------------------------- */
 .chatImg {
     position: absolute;
@@ -246,15 +106,10 @@ input {
 /* 유저 채팅 리스트 */
 
 .chat_message img {
-    width: 2.083vw;
-    height: 2.083vw;
+    width: 40px;
+    height: 40px;
     margin: 0;
 }
-
-
-
-
-
 
 .chatBox  {
     position: absolute;
@@ -309,8 +164,8 @@ input {
 
 .back {
     background-image: url('../../BackEnd/uploads/back-removebg-preview.png');
-    width: 1.563vw;
-    height: 1.563vw;
+    width: 30px;
+    height: 30px;
     background-size: cover;
     background-position: center;
     background-origin: content-box;
@@ -351,8 +206,6 @@ input {
     /* padding-bottom: 0; */
     position: relative;
 }
-
-
 
 .chat_content::-webkit-scrollbar {
     width: 0.521vw;
@@ -410,7 +263,7 @@ box-shadow: inset 0px 0px 0.26vw white;
     position: relative;
     margin: 0.26vw;
     width: auto;
-    max-width: 11.979vw;
+    max-width: 229.997px;
     height: auto;
     background:#d5d0d0;
     border-radius: 0.521vw;
@@ -485,4 +338,114 @@ box-shadow: inset 0px 0px 0.26vw white;
 .other-message .date {
     font-size: 0.677vw;
     text-align: right;
+}
+
+
+/* --------------------게시판 영역------------------- */
+/* #contentArea{
+    width: 500px;
+    min-height: 500px;
+    border: 1px solid;
+}
+
+img{
+    width: 300px;
+    height: auto;
+}
+
+.unable{
+    display: none;
+}
+
+#write_area{
+    width: 500px;
+    height: 100px;
+    border: 1px solid;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+#write_reply{
+    width: 400px;
+    height: 80px;
+    border: 1px solid;
+}
+
+#reply_list{
+    list-style: none;
+}
+
+#reply_list li{
+    list-style: none;
+    min-height: 50px;
+}
+
+#reply_list li div{
+    display: inline-block;
+    border: 1px solid;
+    min-height: 50px;
+}
+
+.reply1{
+    width: 40px;
+}
+
+.reply2{
+    width: 250px;
+}
+
+.reply3{
+    width: 80px;
+}
+
+.reply4{
+    width: 100px;
+} */
+
+.border-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-top: 60px;
+    height: 760px;
+}
+
+.left-side {
+    /* background-color: red; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 50%;
+    height: 100%;
+    overflow: hidden;
+    padding: 20px;
+}
+
+.right-side {
+    /* background-color: blue; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 50%;
+    height: 100%;
+    overflow: hidden;
+    padding: 20px;
+}
+
+.text-container {
+    background-color: #fff;
+    width: 95%;
+    height: 95%;
+    border-radius: 50px;
+}
+
+.img-container {
+    background-color: #fff;
+    width: 95%;
+    height: 95%;
+    border-radius: 50px;
 }

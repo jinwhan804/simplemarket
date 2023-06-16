@@ -2,10 +2,10 @@
 const mypageBtn = document.getElementById('mypage-btn');
 
 async function mypageHide() {
-    const { data } = await API.get('/login/view', {
+    const { data } = await API.get('./login/view', {
         withCredentials : true
     })
-    if (!data.name) {
+    if(!data.name){
         mypageBtn.style.display = "none";
     }
 }
@@ -21,7 +21,7 @@ popupLoginBtn.addEventListener('click', () => {
     } else {
         loginPopup.style.display = "none";
     }
-
+    
 })
 
 // 로그인 버튼 로그인 되어 있을 떄는 안보이게
@@ -31,7 +31,7 @@ async function loginBtnHide() {
     const { data } = await API.get('./login/view',{
         withCredentials : true
     })
-    if (data.name) {
+    if(data.name) {
         popupLoginBtn.style.display = "none";
     }
 }
@@ -62,7 +62,7 @@ const Logout = document.getElementById('logout');
 
 Logout.addEventListener('click', async () => {
     try {
-        const { data } = await API.get("/logout", {
+        const { data } = await API.get("./logout", {
             withCredentials: true,
         });
         if (data.msg == "메인 페이지") {
@@ -77,9 +77,9 @@ Logout.addEventListener('click', async () => {
 // 로그아웃 버튼 로그인 안되어 있을 때는 안보이게
 async function logoutBtnHide() {
     const { data } = await API.get('/login/view', {
-        withCredentials: true
+        withCredentials : true
     })
-    if (!data.name) {
+    if(!data.name){
         Logout.style.display = "none";
     }
 }
@@ -87,7 +87,7 @@ async function logoutBtnHide() {
 
 async function getAPI_popup() {
     try {
-        const { data } = await API.get("/login/view", {
+        const { data } = await API.get("./login/view", {
             withCredentials: true,
         });
 
@@ -107,35 +107,20 @@ getAPI_popup();
 mypageHide();
 loginBtnHide();
 logoutBtnHide();
-
-// 로고 클릭 시 main으로 돌아가기
-const logo = document.querySelector('.logo');
-logo.onclick = ()=>{
-    location.href = `./${mainUrl}`
-}
-
-// 마이 페이지 버튼 기능
-const mypage_btn = document.getElementById('mypage-btn');
-mypage_btn.onclick = ()=>{
-    location.href = `./mypage${urlEnd}`;
-}
-
 // -----------------------------------------실시간 채팅------------------------------------------------------
 
 const chatBox = document.querySelector('.chatBox');
 const chatList = document.querySelector('.chatList');
 const chatBoxClose = document.querySelectorAll('.close_chatBox');
 const chatContent = document.querySelector('.chat_content');
-const back = document.querySelector('.back');
 const now = new Date();
 const hours = now.getHours();
 const minutes = now.getMinutes();
 const timeString = `${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
 
-
 // 채팅 목록과 채팅 팝업창 함수
 async function popup() {
-    const { data } = await API.get("/login/view", {
+    const { data } = await API.get("./login/view", {
         withCredentials: true
     });
     document.body.classList.toggle('active');
@@ -158,11 +143,14 @@ chatBoxClose.forEach(btn => {
 // 관리자 계정의 유저 채팅 목록 창
 async function selectUserChat() {
     try {
-        const response = await API.get('/login/viewAll', {
+        const response = await API.get('./login/viewAll', {
             withCredentials: true
         });
+        console.log(response);
         const users = response.data;
+        console.log(users);
         const chatMessages = document.querySelectorAll(`.chat_message`);
+        console.log(chatMessages);
         chatMessages.forEach((e, index) => {
             if (users[index]) {
                 e.addEventListener('dblclick', () => {
@@ -178,7 +166,6 @@ async function selectUserChat() {
 
 function openChatBox(userNickname) {
     chatBox.classList.add('active');
-    chatList.classList.remove('active');
 }
 
 
@@ -206,12 +193,17 @@ window.onload = async () => {
     try {
         const { nickname, profileImg, userId, user_info } = await userInfo();
         // 유저의 채팅 리스트
-        const getChatData = await API.get('/chat/all_chats', {
+        const getChatData = await API.get('./chat/all_chats', {
             withCredentials: true
         });
         console.log(getChatData);
         const chatData = getChatData.data;
         const userChatList = document.querySelector('.user_chat_list');
+
+
+
+        // userChatList.innerHTML = chatDataHTML;
+
         const socket = io.connect(serverUrl);
 
         chatData.forEach(data => {
@@ -289,10 +281,9 @@ window.onload = async () => {
             chatContent.innerHTML += el;
         })
 
-        // 채팅 목록 코드
         chatData.forEach(data => {
             const userInList = userChatList.querySelector(`.chat_message[data_nickname="${data.nickname}"]`);
-            // console.log(data);
+            console.log(data);
             if (userInList) {
                 // 채팅 목록에서 해당 유저가 있으면 목록에 추가하지 않고 메시지만 업데이트
                 userInList.querySelector('.message_content').textContent = data.message;
@@ -315,7 +306,6 @@ window.onload = async () => {
 
         selectUserChat();
 
-        // 메시지 보내는 코드
         btn.onclick = () => {
             const messageData = {
                 user_id: userId,
@@ -336,18 +326,17 @@ window.onload = async () => {
     }
 }
 
+
 // 로그인 기능
-const LoginForm = document.getElementById('loginForm');
+    const LoginForm = document.getElementById('loginForm');
 async function Login(user_id, user_pw) {
     try {
-        const { data } = await API.post('/login', { user_id, user_pw }, {
+        const { data } = await API.post('./login', { user_id, user_pw }, {
             withCredentials: true
         });
         console.log(data);
-        if (data == '가입 안한 아이디 입니다.' || data == '비번 틀림') {
+        if (data == '가입 안한 아이디 입니다.' || data == '비번 틀림' || data == `승인이 거절되었습니다.\n회원가입을 다시 진행해주세요.` || data == '가입 승인 대기중입니다.') {
             alert(data);
-        }else if(data.msg == `승인이 거절되었습니다.\n회원가입을 다시 진행해주세요.` || data.msg == '가입 승인 대기중입니다.'){
-            alert(data.msg);
         } else {
             setCookie('login',data.token,30);
             window.location.href = `./${mainUrl}`;            
@@ -361,7 +350,28 @@ loginBtn.onclick = function () {
     Login(user_id.value, user_pw.value);
 }
 
-// 메인 게시판 영역
+// 회원가입 클릭, 로고 클릭, 마이페이지 버튼 클릭
+
+// const toInsert = document.getElementById('toInsert');
+const toSignUp = document.getElementById('toSignUp')
+
+// toInsert.addEventListener ('click', () => {
+//     location.href = `./insert${urlEnd}`;
+// })
+
+toSignUp.addEventListener ('click', () => {
+    location.href = `./signUp${urlEnd}`;
+})
+
+const Logo = document.querySelector('.logo').addEventListener('click', () => {
+    location.href = `./main${urlEnd}`;
+})
+
+mypageBtn.addEventListener('click', () => {
+    location.href = `./mypage${urlEnd}`;
+})
+
+////////////////////////////// 메인 게시판 영역 ////////////////////////////////////
 
 async function GetAPI(currentPage){
     try {
@@ -462,7 +472,7 @@ async function GetAPI(currentPage){
                 _td6.innerHTML = el.postViews;
 
                 _tr.onclick = async()=>{
-                    await API.post('/post/detail',{
+                    await API.post('./post/detail',{
                         headers : {
                             'Content-Type' : "application/json"
                         },
