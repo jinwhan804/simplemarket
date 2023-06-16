@@ -146,17 +146,22 @@ function openChatBox(userNickname) {
 
 // 채팅 소켓
 async function userInfo() {
-    const response = await axios.get('http://127.0.0.1:8080/login/view', {
-        withCredentials: true
-    });
+    try {
+        const { data } = await axios.get('http://127.0.0.1:8080/login/view', {
+            withCredentials: true
+        });
 
-    console.log(response);
-    return {
-        nickname: response.data.nickname,
-        profileImg: response.data.profile_img,
-        userId: response.data.user_id,
-        user_info: response.data.id
-    };
+        console.log(data);
+        return {
+            nickname: data.nickname,
+            profileImg: data.profile_img,
+            userId: data.user_id,
+            user_info: data.id
+        };
+    } catch (error) {
+        console.log(error);
+    }
+
 }
 
 window.onload = async () => {
@@ -205,13 +210,10 @@ window.onload = async () => {
             const { data } = await axios.get("http://127.0.0.1:8080/login/view", {
                 withCredentials: true
             });
-            console.log(data);
             if (data.grade === '3') {
                 back.style.display = 'block';
-                console.log('1');
             } else {
                 back.style.display = 'none';
-                console.log('2');
             }
         } catch (error) {
             console.log(error);
@@ -225,17 +227,13 @@ window.onload = async () => {
 
         // 채팅방 채팅 코드
         socket.on('message', (data) => {
-            const now = new Date(data.createdAt);
-            const hours = now.getHours();
-            const minutes = now.getMinutes();
-            const time = `${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
             console.log(data);
             let el;
             if (data.nickname === nickname) {
                 el = `
                 <div class="content my-message">
                     <p class="message ballon">${data.message}</p>
-                    <p class="date">${time}</p>
+                    <p class="date">${timeString}</p>
                 </div>
                 `;
             } else {
@@ -245,7 +243,7 @@ window.onload = async () => {
                     <div class="message-display">
                         <p class="nickname">${data.nickname}</p>
                         <p class="message ballon">${data.message}</p>
-                        <p class="date">${time}</p>
+                        <p class="date">${timeString}</p>
                     </div>
                 </div>
                 `;
@@ -289,6 +287,7 @@ window.onload = async () => {
                 profile_img: profileImg,
                 userInfo: user_info
             }
+
             socket.emit('message', messageData);
             axios.post('http://127.0.0.1:8080/chat/chat_insert', messageData, {
                 withCredentials: true

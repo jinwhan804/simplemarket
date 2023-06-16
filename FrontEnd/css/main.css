@@ -156,8 +156,8 @@ input {
 /* 유저 채팅 리스트 */
 
 .chat_message img {
-    width: 40px;
-    height: 40px;
+    width: 2.083vw;
+    height: 2.083vw;
     margin: 0;
 }
 
@@ -219,8 +219,8 @@ input {
 
 .back {
     background-image: url('../../BackEnd/uploads/back-removebg-preview.png');
-    width: 30px;
-    height: 30px;
+    width: 1.563vw;
+    height: 1.563vw;
     background-size: cover;
     background-position: center;
     background-origin: content-box;
@@ -320,7 +320,7 @@ box-shadow: inset 0px 0px 0.26vw white;
     position: relative;
     margin: 0.26vw;
     width: auto;
-    max-width: 229.997px;
+    max-width: 11.979vw;
     height: auto;
     background:#d5d0d0;
     border-radius: 0.521vw;

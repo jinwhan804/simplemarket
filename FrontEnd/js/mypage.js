@@ -19,7 +19,7 @@ Logout.addEventListener('click', async () => {
             withCredentials: true,
         });
         if (data == "메인 페이지") {
-            window.location.href = "/FrontEnd/main.html";
+            window.location.href = "./main.html";
             alert("로그아웃 되었습니다.")
         }
     } catch (error) {
