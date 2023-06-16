@@ -32,6 +32,21 @@ header {
     background-color: #007bff;
     border-radius: 5px;
 }
+.logo:hover {
+    background-color: #0056b3;
+}
+
+.used-market {
+    text-decoration: none;
+    color: #ffffff;
+    background-color: #007bff;
+    margin: 10px;
+    padding: 10px 20px;
+    border-radius: 40px;
+}
+.used-market:hover {
+    background-color: #0056b3;
+}
 
 img {
     display: block;
@@ -42,10 +57,6 @@ img {
     box-shadow: 0px 3px 15px rgba(0,0,0,0.1);
     object-fit: contain;
     border-radius: 50%;
-}
-
-.logo:hover {
-    background-color: #0056b3;
 }
 
 .header_div {
@@ -80,26 +91,86 @@ img {
     position: absolute;
     left: 1250px;
 }
+/* 가운데 게시판 css */
+
+/* 관계설정 제일 큰 틀 */
 .profile-info {
+    position: relative;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
     margin-top: 80px;
-    gap: 20px; /* 사진과 정보 사이의 간격 */
     height: 760px;
 }
+/* 하얀 칠판 */
+.text-container {
+    position: absolute;
+    background-color: #fff;
+    border-radius: 50px;
+    box-shadow: 0px 3px 15px rgba(0,0,0,0.1);
+    overflow: auto;
+    padding: 20px;
+    width: 90%;
+    height: 90%;
+}
+/* 게시판 요소들 */
+h1 {
+    display: flex;
+    justify-content: center;
+}
+#post_list{
+    margin-top: 20px;
+    width: 100%;
+    /* 표의 테두리와 셀의 테두리 간격 없앰 */
+    border-collapse: collapse; 
+}
+#post_list th{
+    background-color: #0079C2;
+    color: white;
+    padding: 10px;
+}
+#post_list td{
+    padding: 10px;
+    border-top: 10px solid #e0e0e0;
+    text-align: center;
+}
+#post_list tr:hover{
+    background-color: #f2f2f2;
+    cursor: pointer;
+}
+.pageBtn {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #0079C2;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.pageBtn:hover {
+    background-color: #0056b3;
+}
+
+#btns {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
 
 /* 로그인 css */
-
 form {
     display: flex;
     flex-direction: column;
     width: 350px;
     padding: 20px;
+    border: red 1px;
     border-radius: 5px;
     box-shadow: 0px 3px 15px rgba(0,0,0,0.1);
-    background-color: #ffffff;
+    background-color: #FFFEA7;
 }
 
 label {
@@ -117,7 +188,7 @@ input {
 #loginBtn {
     padding: 10px;
     color: #ffffff;
-    background-color: #007bff;
+    background-color: #0079C2;
     border: none;
     border-radius: 5px;
     cursor: pointer;

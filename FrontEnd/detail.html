@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script src="/js/index.js"></script>
+    <script src="./js/index.js"></script>
     <style>
         #contentArea{
             width: 500px;
@@ -288,7 +288,7 @@
 
     toUpdate.onclick = async()=>{
         try {
-            await API.post('/post/updateview',{
+            await API.post('./post/updateview',{
                 headers : {
                     "Content-Type" : "application/json"
                 },
@@ -306,7 +306,7 @@
     toDelete.onclick = async()=>{
         try {
             if(confirm('정말 삭제하시겠습니까?')){
-                await API.post('/post/delete',{
+                await API.post('./post/delete',{
                     headers : {
                         "Content-Type" : "application/json"
                     },
@@ -353,7 +353,7 @@
                 form.append('id',posts.id);
                 form.append('postLikes',posts.postLikes);
                 
-                await API.post('/post/likes',form,{
+                await API.post('./post/likes',form,{
                     headers : {
                         "Content-Type" : "application/json"
                     }
@@ -372,7 +372,7 @@
             form.append('userId', users.id);
             form.append('postId', posts.id);
 
-            await API.post('/reply/insert',form).then((e)=>{
+            await API.post('./reply/insert',form).then((e)=>{
                 location.href = e.data;
             }).catch((err)=>{
                 console.log(err);
