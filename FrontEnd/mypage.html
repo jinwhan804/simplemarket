@@ -6,23 +6,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script src="./js/index.js"></script>
-    <link rel="stylesheet" href="./css/mypage.css">
+    <script src="/js/index.js"></script>
+    <link rel="stylesheet" href="/css/mypage.css">
 </head>
 <body>
     <!-- 헤더 영역 -->
     <header>
-        <a href="http://127.0.0.1:5500/FrontEnd/main.html" class="logo">Simple Market</a>
+        <a class="logo">Simple Market</a>
         <div class="header_div">
             <ul>
-                <li><a href="./post.html" class="used-market">중고장터</a></li>
+                <li><a class="used-market">중고장터</a></li>
                 <li>동네장터</li>
                 <li>신고장터</li>
             </ul>
         </div>
         <!-- 헤더에 가장 오른쪽 버튼 영역 -->
         <div class="header-btns">
-                <button onclick="window.location.href='http://127.0.0.1:5500/FrontEnd/signUpList.html'" id="admin-hide">Admin</button>
+                <button id="admin-hide">Admin</button>
                 <button id="logout">Logout</button>
         </div>
     </header>
@@ -70,5 +70,5 @@
         </div>
     </div>
 </body>
-<script src="./js/mypage.js"></script>
+<script src="/js/mypage.js"></script>
 </html>
