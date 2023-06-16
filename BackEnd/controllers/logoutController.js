@@ -1,7 +1,7 @@
 const { User } = require("../models");
 
 exports.logout = (req, res) => {
-    console.log(req);
+    // console.log(req);
     console.log("로그아웃 컨트롤러에 들어오니>");
     try {
       // 현재 브라우저 토큰값
