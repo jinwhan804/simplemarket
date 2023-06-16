@@ -14,11 +14,12 @@ async function mypageHide() {
 const loginPopup = document.querySelector('.loginPopup');
 const popupLoginBtn = document.getElementById('popup-login');
 
+const postArea = document.getElementById('text-container');
 popupLoginBtn.addEventListener('click', () => {
     if (loginPopup.style.display === "none") {
-        loginPopup.style.display = "flex"
+        loginPopup.style.display = "flex";
     } else {
-        loginPopup.style.display = "none"
+        loginPopup.style.display = "none";
     }
 
 })
@@ -35,6 +36,26 @@ async function loginBtnHide() {
     }
 }
 
+// 쿠키 생성
+const setCookie = (cname, cvalue, cexpire) => {
+  
+    // 만료일 생성 -> 현재에서 30일간으로 생성 -> setDate() 메서드 사용
+    let expiration = new Date();
+    expiration.setDate(expiration.getDate() + parseInt(cexpire)); // Number()로 처리 가능
+  
+    // 쿠키 생성하기
+    let cookie = '';
+    cookie = `${cname}=${cvalue}; expires=${expiration.toUTCString()};`;
+    // console.log(cookie);
+  
+    // 쿠키 저장하기
+    document.cookie = cookie;
+};
+
+const delCookie = (cname) => {
+    setCookie(cname, '', 0);
+};
+
 // 로그아웃 기능
 const Logout = document.getElementById('logout');
 
@@ -43,9 +64,10 @@ Logout.addEventListener('click', async () => {
         const { data } = await API.get("/logout", {
             withCredentials: true,
         });
-        if (data == "메인 페이지") {
+        if (data.msg == "메인 페이지") {
+            delCookie('login');
             window.location.href = `./${mainUrl}`;
-            alert("로그아웃 되었습니다.")
+            alert("로그아웃 되었습니다.");
         }
     } catch (error) {
         console.log(error);
@@ -70,8 +92,10 @@ async function getAPI_popup() {
 
         if (data.name) {
             loginPopup.style.display = "none";
+            postArea.style.display = 'block';
         } else {
             loginPopup.style.display = "flex";
+            postArea.style.display = 'none';
         }
 
     } catch (error) {
@@ -325,8 +349,8 @@ async function Login(user_id, user_pw) {
         }else if(data.msg == `승인이 거절되었습니다.\n회원가입을 다시 진행해주세요.` || data.msg == '가입 승인 대기중입니다.'){
             alert(data.msg);
         } else {
-            document.cookie = `connect.sid=${data.token}; path=/`;
-            window.location.href = `./${mainUrl}`;
+            setCookie('login',data.token,30);
+            window.location.href = `./${mainUrl}`;            
         }
     } catch (error) {
         console.log(error);
@@ -467,4 +491,10 @@ toInsert.onclick=()=>{
 
 toSignUp.onclick = ()=>{
     location.href = `./signUp${urlEnd}`;
+}
+
+const usedMarket = document.querySelector('.used-market');
+
+usedMarket.onclick= ()=>{
+    location.href = `./${mainUrl}`;
 }
