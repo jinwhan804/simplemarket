@@ -495,11 +495,6 @@ async function GetAPI(currentPage){
 
 GetAPI(0);
 
-// 글추가 페이지로 이동
-toInsert.onclick=()=>{
-    location.href = `./insert${urlEnd}`;
-}
-
 // 회원 가입 페이지로 이동
 toSignUp.onclick = ()=>{
     location.href = `./signUp${urlEnd}`;
