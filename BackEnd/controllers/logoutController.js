@@ -69,8 +69,8 @@ exports.logout = (req, res) => {
             }
         });
         
-        res.sendStatus(200);
         res.send("메인 페이지");
+        res.sendStatus(200);
       });
     } catch (error) {
       console.log("로그아웃 컨트롤러에서 오류" + error);
