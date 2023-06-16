@@ -9,10 +9,7 @@ const bcrypt = require("bcrypt");
 exports.Login = async (req, res) => {
     try {
         const { user_id, user_pw } = req.body;
-        const user = await User.findOne({ where: { user_id } })
-        if (user == null) {
-            return res.send("가입 안한 아이디 입니다.");
-        }
+        let user = await User.findOne({ where: { user_id } });
 
         const same = bcrypt.compareSync(user_pw, user.user_pw)
         const { id, name, age, grade, nickname } = user;
@@ -28,6 +25,7 @@ exports.Login = async (req, res) => {
                 expiresIn: "20m"
             });
 
+                
             if (user.grade === '0') {
                 data.msg = `승인이 거절되었습니다.\n회원가입을 다시 진행해주세요.`;
                 return res.send(data);
@@ -48,6 +46,7 @@ exports.Login = async (req, res) => {
         console.log(error);
     }
 }
+
 
 exports.viewUser = async (req, res) => {
     const { access_decoded } = req;

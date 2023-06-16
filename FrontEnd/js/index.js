@@ -9,9 +9,9 @@ const urlEnd = '';
 const mainUrl = '';
 
 const API = axios.create({
-    baseURL : serverUrl,
-    headers : {
-        'Content-Type' : 'application/json'
+    baseURL: serverUrl,
+    headers: {
+        'Content-Type': 'application/json'
     },
-    withCredentials : true
+    withCredentials: true
 })

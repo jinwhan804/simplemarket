@@ -1,7 +1,7 @@
 async function getUserInfo() {
     try {
         let userInfo = document.querySelector('.list_user');
-        const { data } = await API.get('/admin/signUp', {
+        const { data } = await axios.get('http://127.0.0.1:8080/admin/signUp', {
             withCredentials: true,
         });
         console.log(data);
@@ -35,7 +35,7 @@ getUserInfo();
 // 회원가입 요청에 대한 승인 코드
 async function approveUser(user_id) {
     try {
-        await API.post('/signUpList/approve_user', { user_id }, {
+        await axios.post('http://127.0.0.1:8080/signUpList/approve_user', { user_id }, {
             withCredentials: true
         });
         getUserInfo();
@@ -47,7 +47,7 @@ async function approveUser(user_id) {
 // 회원가입 요청에 대한 거절 코드
 async function rejectUser(user_id) {
     try {
-        await API.post('/signUpList/reject_user', { user_id }, {
+        await axios.post('http://127.0.0.1:8080/signUpList/reject_user', { user_id }, {
             withCredentials: true
         });
         getUserInfo();
@@ -61,13 +61,13 @@ const Logout = document.getElementById('logout');
 
 Logout.addEventListener('click', async () => {
     try {
-        const { data } = await API.get("/logout", {
+        const { data } = await axios.get("http://127.0.0.1:8080/logout", {
             withCredentials: true,
         });
         if (data == "메인 페이지") {
             window.location.href = `./${mainUrl}`;
             alert("로그아웃 되었습니다.")
-        } 
+        }
     } catch (error) {
         console.log(error);
     }
