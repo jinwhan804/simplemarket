@@ -74,6 +74,7 @@ Logout.addEventListener('click', async () => {
         console.log(error);
     }
 })
+
 // 로그아웃 버튼 로그인 안되어 있을 때는 안보이게
 async function logoutBtnHide() {
     const { data } = await API.get('/login/view', {
