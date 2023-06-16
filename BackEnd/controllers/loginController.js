@@ -23,7 +23,6 @@ exports.Login = async (req, res) => {
                 age: '100'
             });
             res.send('관리자 계정이 생성되었습니다.');
-            return res.redirect(`${process.env.FRONT}/main${process.env.END}`);
         } else if (user) {
             const same = bcrypt.compareSync(user_pw, user.user_pw);
             const { id, name, age, grade, nickname } = user;
@@ -49,7 +48,6 @@ exports.Login = async (req, res) => {
                     req.session.access_token = token;
                 }
                 res.send(data);
-                return res.redirect(`${process.env.FRONT}/main${process.env.END}`);
             } else {
                 res.send('비번 틀림');
             }

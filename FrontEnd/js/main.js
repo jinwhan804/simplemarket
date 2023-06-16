@@ -324,7 +324,7 @@ async function Login(user_id, user_pw) {
             alert(data.msg);
         } else {
             document.cookie = `connect.sid=${data.token}; path=/`;
-            window.location.href = `./mypage${urlEnd}`;
+            window.location.href = `./${mainUrl}`;
         }
     } catch (error) {
         console.log(error);
