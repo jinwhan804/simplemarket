@@ -40,16 +40,14 @@ exports.Login = async (req, res) => {
 
                 if (user.grade === '0') {
                     data.msg = `승인이 거절되었습니다.\n회원가입을 다시 진행해주세요.`;
-                    res.send(data);
                 } else if (user.grade === '1') {
                     data.msg = '가입 승인 대기중입니다.';
-                    res.send(data);
                 } else {
                     data.msg = '로그인 성공';
                     data.token = token;
                     req.session.access_token = token;
-                    res.send(data);
                 }
+                res.send(data);
             } else {
                 res.send('비번 틀림');
             }

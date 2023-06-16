@@ -320,8 +320,10 @@ async function Login(user_id, user_pw) {
             withCredentials: true
         });
         console.log(data);
-        if (data == '가입 안한 아이디 입니다.' || data == '비번 틀림' || data == `승인이 거절되었습니다.\n회원가입을 다시 진행해주세요.` || data == '가입 승인 대기중입니다.') {
+        if (data == '가입 안한 아이디 입니다.' || data == '비번 틀림') {
             alert(data);
+        }else if(data.msg == `승인이 거절되었습니다.\n회원가입을 다시 진행해주세요.` || data.msg == '가입 승인 대기중입니다.'){
+            alert(data.msg);
         } else {
             document.cookie = `connect.sid=${data.token}; path=/`;
             window.location.href = `./${mainUrl}`;
