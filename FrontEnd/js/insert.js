@@ -2,7 +2,7 @@
 const mypageBtn = document.getElementById('mypage-btn');
 
 async function mypageHide() {
-    const { data } = await API.get('./login/view', {
+    const { data } = await API.get('/login/view', {
         withCredentials : true
     })
     if(!data.name){
@@ -27,7 +27,7 @@ popupLoginBtn.addEventListener('click', () => {
 const loginBtn = document.getElementById('loginBtn');
 
 async function loginBtnHide() {
-    const { data } = await API.get('./login/view',{
+    const { data } = await API.get('/login/view',{
         withCredentials : true
     })
     if(data.name) {
@@ -40,7 +40,7 @@ const Logout = document.getElementById('logout');
 
 Logout.addEventListener('click', async () => {
     try {
-        const { data } = await API.get("./logout", {
+        const { data } = await API.get("/logout", {
             withCredentials: true,
         });
         if (data == "메인 페이지") {
@@ -77,7 +77,7 @@ const timeString = `${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
 
 // 채팅 목록과 채팅 팝업창 함수
 async function popup() {
-    const { data } = await API.get("./login/view", {
+    const { data } = await API.get("/login/view", {
         withCredentials: true
     });
     document.body.classList.toggle('active');
@@ -100,7 +100,7 @@ chatBoxClose.forEach(btn => {
 // 관리자 계정의 유저 채팅 목록 창
 async function selectUserChat() {
     try {
-        const response = await API.get('./login/viewAll', {
+        const response = await API.get('/login/viewAll', {
             withCredentials: true
         });
         console.log(response);
@@ -128,7 +128,7 @@ function openChatBox(userNickname) {
 
 // 채팅 소켓
 async function userInfo() {
-    const response = await API.get('./login/view', {
+    const response = await API.get('/login/view', {
         withCredentials: true
     });
     console.log(response);
@@ -144,7 +144,7 @@ window.onload = async () => {
     try {
         const { nickname, profileImg, userId, user_info } = await userInfo();
         // 유저의 채팅 리스트
-        const getChatData = await API.get('./chat/all_chats', {
+        const getChatData = await API.get('/chat/all_chats', {
             withCredentials: true
         });
         console.log(getChatData);
@@ -245,7 +245,7 @@ mypageBtn.addEventListener('click', () => {
     let user_data = {};
     
     window.onload = async()=>{
-        const {data} = await API.get('./post/insert',{
+        const {data} = await API.get('/post/insert',{
             headers : {
                 "Content-Type" : "application/json"
             }
@@ -264,7 +264,7 @@ mypageBtn.addEventListener('click', () => {
             form.append('userId',user_data.id);
 
             axios.defaults.withCredentials = true;
-            await API.post('./post/insert',form,{
+            await API.post('/post/insert',form,{
                 headers : {
                     "Content-Type" : "application/json"
                 }

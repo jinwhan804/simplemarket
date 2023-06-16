@@ -1,7 +1,7 @@
     // 관리자 게시판 기능 (유저만 안보이게)
     async function checkAdmin() {
         const adminHide = document.getElementById('admin-hide');
-        const {data} = await API.get("./login/view", {
+        const {data} = await API.get("/login/view", {
         withCredentials : true
         });
         if(data && data.grade == "3"){
@@ -113,7 +113,7 @@ document.getElementById("nickname-update-button").addEventListener("click", asyn
 
     async function getAPI() {
         try {
-            const {data} = await API.get("./login/view",{
+            const {data} = await API.get("/login/view",{
                 withCredentials : true,
             });
             // console.log(data);
@@ -145,10 +145,10 @@ document.getElementById("nickname-update-button").addEventListener("click", asyn
 
 async function getUserPost(){
     try {
-        const { data: posts } = await API.get("./post",{
+        const { data: posts } = await API.get("/post",{
             withCredentials : true,
         });
-        const { data: userInfo } = await API.get("./login/view",{
+        const { data: userInfo } = await API.get("/login/view",{
             withCredentials : true,
         });
         
@@ -163,7 +163,7 @@ async function getUserPost(){
         }
         listItem.style.cursor = "pointer";
         listItem.addEventListener('click', async () => {
-            const { data } = await API.post(`./mypage/detail`,{
+            const { data } = await API.post(`/mypage/detail`,{
                 data : post.id
             },{withCredentials : true,})
             window.location.href = data;
