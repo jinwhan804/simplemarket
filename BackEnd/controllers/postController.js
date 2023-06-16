@@ -77,7 +77,7 @@ exports.PostInsert = async (req, res) => {
             userId
         })
 
-        res.send(`${process.env.FRONT}/post${process.env.END}`);
+        res.send(`${process.env.FRONT}/${process.env.MAIN}`);
     } catch (error) {
         console.log('포스트 컨트롤러에서 글 추가하다가 에러남');
         console.log(error);
@@ -135,7 +135,7 @@ exports.PostDelete = async(req,res)=>{
             })
         })
 
-        res.send(`${process.env.FRONT}/post${process.env.END}`);
+        res.send(`${process.env.FRONT}/${process.env.MAIN}`);
     } catch (error) {
         console.log('포스트 컨트롤러에서 글 지우다 에러남');
         console.log(error);
