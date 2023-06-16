@@ -1,20 +1,20 @@
 const Sequelize = require('sequelize');
 
-class Reply extends Sequelize.Model{
+class Rereply extends Sequelize.Model{
     static init(sequelize){
         return super.init({
             content : {
                 type : Sequelize.STRING(256),
             },
-            replyLikes: {
+            rereplyLikes: {
                 type : Sequelize.STRING(256),
             }
         },{
             sequelize,
             timestamps : true,
             underscored :false,
-            modelName : "Reply",
-            tableName : "replys",
+            modelName : "Rereply",
+            tableName : "rereplys",
             paranoid : false,
             charset : 'utf8',
             collate : 'utf8_general_ci'
@@ -22,10 +22,9 @@ class Reply extends Sequelize.Model{
     }
 
     static associate(db){
-        db.Reply.belongsTo(db.User,{foreignKey : "userId", TargetKey : "id"});
-        db.Reply.belongsTo(db.Post,{foreignKey : "postId", TargetKey : "id"});
-        db.Reply.hasMany(db.Rereply,{foreignKey : "replyId", SourceKey : 'id'});
+        db.Rereply.belongsTo(db.User,{foreignKey : "userId", TargetKey : "id"});
+        db.Rereply.belongsTo(db.Reply,{foreignKey : "replyId", TargetKey : "id"});
     }
 }
 
-module.exports = Reply;
+module.exports = Rereply;

@@ -45,7 +45,7 @@ const setCookie = (cname, cvalue, cexpire) => {
   
     // 쿠키 생성하기
     let cookie = '';
-    cookie = `${cname}=${cvalue}; expires=${expiration.toUTCString()};`;
+    cookie = `${cname}=${cvalue}; path=/;expires=${expiration.toUTCString()};`;
     // console.log(cookie);
   
     // 쿠키 저장하기
@@ -55,6 +55,7 @@ const setCookie = (cname, cvalue, cexpire) => {
 const delCookie = (cname) => {
     setCookie(cname, '', 0);
 };
+
 
 // 로그아웃 기능
 const Logout = document.getElementById('logout');
@@ -485,14 +486,17 @@ async function GetAPI(currentPage){
 
 GetAPI(0);
 
+// 글추가 페이지로 이동
 toInsert.onclick=()=>{
     location.href = `./insert${urlEnd}`;
 }
 
+// 회원 가입 페이지로 이동
 toSignUp.onclick = ()=>{
     location.href = `./signUp${urlEnd}`;
 }
 
+// 전체 글 목록 페이지로 이동 = 메인 페이지
 const usedMarket = document.querySelector('.used-market');
 
 usedMarket.onclick= ()=>{

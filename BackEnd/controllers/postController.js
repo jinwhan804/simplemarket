@@ -1,4 +1,4 @@
-const { Post, User } = require('../models');
+const { Post, User,Reply,Rereply } = require('../models');
 
 exports.PostViewAll = async (req, res) => {
     try {
@@ -118,10 +118,21 @@ exports.PostUpdate = async(req,res)=>{
 exports.PostDelete = async(req,res)=>{
     try {
         const id = req.body.data;
-        console.log(req.body)
 
         await Post.destroy({
             where : {id}
+        })
+
+        const reply = await Reply.findAll({where : {postId : id}});
+
+        await Reply.destroy({
+            where : {postId : id}
+        })
+
+        reply.forEach(async(el)=>{
+            await Rereply.destroy({
+                where : {replyId : el.id}
+            })
         })
 
         res.send(`${process.env.FRONT}/post${process.env.END}`);
