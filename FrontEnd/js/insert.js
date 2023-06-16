@@ -44,7 +44,7 @@ Logout.addEventListener('click', async () => {
             withCredentials: true,
         });
         if (data == "메인 페이지") {
-            window.location.href = "./main.html"
+            location.href = `./${mainUrl}`;
             alert("로그아웃 되었습니다.")
         } 
     } catch (error) {
@@ -61,24 +61,6 @@ async function logoutBtnHide() {
     }
 }
 
-
-async function getAPI_popup() {
-    try {
-        const { data } = await API.get("./login/view", {
-            withCredentials: true,
-        });
-
-        if (data.name) {
-            loginPopup.style.display = "none";
-        } else {
-            loginPopup.style.display = "flex";
-        }
-
-    } catch (error) {
-        console.log(error)
-    }
-}
-getAPI_popup();
 mypageHide();
 loginBtnHide();
 logoutBtnHide();
@@ -243,170 +225,61 @@ window.onload = async () => {
     }
 }
 
-
-// 로그인 기능
-    const LoginForm = document.getElementById('loginForm');
-async function Login(user_id, user_pw) {
-    try {
-        const { data } = await API.post('./login', { user_id, user_pw }, {
-            withCredentials: true
-        });
-        console.log(data);
-        if (data == '가입 안한 아이디 입니다.' || data == '비번 틀림' || data == `승인이 거절되었습니다.\n회원가입을 다시 진행해주세요.` || data == '가입 승인 대기중입니다.') {
-            alert(data);
-        } else {
-            window.location.href = "./main.html";
-        }
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-loginBtn.onclick = function () {
-    Login(user_id.value, user_pw.value);
-}
-
 // 회원가입 클릭, 로고 클릭, 마이페이지 버튼 클릭
 
 // const toInsert = document.getElementById('toInsert');
-const toSignUp = document.getElementById('toSignUp')
 
 // toInsert.addEventListener ('click', () => {
 //     location.href = `./insert${urlEnd}`;
 // })
 
-toSignUp.addEventListener ('click', () => {
-    location.href = `./signUp${urlEnd}`;
-})
-
 const Logo = document.querySelector('.logo').addEventListener('click', () => {
-    location.href = `./main${urlEnd}`;
+    location.href = `./${mainUrl}`;
 })
 
 mypageBtn.addEventListener('click', () => {
     location.href = `./mypage${urlEnd}`;
 })
 
-////////////////////////////// 메인 게시판 영역 ////////////////////////////////////
-
-async function GetAPI(currentPage){
-    try {
-        post_list.innerHTML = "";
-        let _tr1 = document.createElement('tr');
-        let _th1 = document.createElement('th');
-        let _th2 = document.createElement('th');
-        let _th3 = document.createElement('th');
-        let _th4 = document.createElement('th');
-        let _th5 = document.createElement('th');
-        let _th6 = document.createElement('th');
-        _th1.innerHTML = "No.";
-        _th2.innerHTML = '제목';
-        _th3.innerHTML = '작성자';
-        _th4.innerHTML = '작성일';
-        _th5.innerHTML = '수정일';
-        _th6.innerHTML = '조회수';
-        _tr1.append(_th1,_th2,_th3,_th4,_th5,_th6);
-        post_list.append(_tr1);
-
-        btns.innerHTML = '';
-        
-        const {data} = await API.get('/post',{
+////////////////////////// 게시판 영역 ///////////////////////////
+    let user_data = {};
+    
+    window.onload = async()=>{
+        const {data} = await API.get('./post/insert',{
             headers : {
-                'Content-Type' : "application/json"
+                "Content-Type" : "application/json"
             }
-        });
-
-        let pageOffset = 10;
-        let pageGroup = currentPage * pageOffset;
-        let pageNum = 0;
-
-        if(data == null){
-            return;
-        }else{
-            data.forEach((el,index)=>{
-                if(index % pageOffset == 0){
-                    let btn = document.createElement('button');
-                    btn.innerHTML = index / 10 + 1;
-                    btn.className = 'pageBtn';
-                    btn.onclick = ()=>{
-                        pageNum = index;
-                        GetAPI(index / pageOffset);
-                    }
-                    btns.append(btn);
-                }
-            })
-            
-            const _data = data.slice(pageGroup,pageGroup + pageOffset);
-
-            _data.forEach((el,index) => {
-                let date = new Date();
-                let year = date.getFullYear();
-                let month = date.getMonth() + 1;
-                let day = date.getDate();
-                let nowdate = year.toString();
-                
-                if(month >= 10){
-                    nowdate += month;
-                }else{
-                    nowdate += '0' + month;
-                }
-
-                if(day >= 10){
-                    nowdate += day;
-                }else{
-                    nowdate += '0' + day;
-                }
-
-                nowdate = Number(nowdate);
-
-                let createDate = Number(el.createdAt.slice(0,10).split('-').join(''));
-                let updateDate = Number(el.updatedAt.slice(0,10).split('-').join(''));
-
-                let _tr = document.createElement('tr');
-                let _td1 = document.createElement('td');
-                let _td2 = document.createElement('td');
-                let _td3 = document.createElement('td');
-                let _td4 = document.createElement('td');
-                let _td5 = document.createElement('td');
-                let _td6 = document.createElement('td');
-                _td1.innerHTML = index + 1;
-                _td2.innerHTML = el.title;
-                _td3.innerHTML = el.User.nickname;
-
-                if(nowdate > createDate){
-                    _td4.innerHTML = el.createdAt.slice(0,10);
-                }else{
-                    _td4.innerHTML = el.createdAt.slice(11,19);
-                }
-
-                if(nowdate > updateDate){
-                    _td5.innerHTML = el.updatedAt.slice(0,10);
-                }else{
-                    _td5.innerHTML = el.updatedAt.slice(11,19);
-                }
-
-                _td6.innerHTML = el.postViews;
-
-                _tr.onclick = async()=>{
-                    await API.post('./post/detail',{
-                        headers : {
-                            'Content-Type' : "application/json"
-                        },
-                        data : el.id
-                    }).then((e)=>{
-                        location.href = e.data;
-                    }).catch((err)=>{
-                        console.log(err);
-                    })
-                }
-
-                _tr.append(_td1,_td2,_td3,_td4,_td5,_td6);
-                post_list.append(_tr);
-            });
-        }
-    } catch (error) {
-        console.log(error);
+        })
+        
+        nickname.value = data.nickname;
+        user_data = data;
     }
-}
 
-GetAPI(0);
+    insertBtn.onclick = async()=>{
+        try {
+            const form = new FormData();
+
+            form.append('title',title.value);
+            form.append('content',contentArea.innerHTML);
+            form.append('userId',user_data.id);
+
+            axios.defaults.withCredentials = true;
+            await API.post('./post/insert',form,{
+                headers : {
+                    "Content-Type" : "application/json"
+                }
+            }).then((e)=>{
+                console.log(e.data);
+                location.href = e.data;
+            }).catch((err)=>{
+                console.log('프론트 글 추가하다 에러남');
+                console.log(err);
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    toPost.onclick = ()=>{
+        location.href = `./${mainUrl}`;
+    }

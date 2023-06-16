@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script src="/js/index.js"></script>
+    <script src="./js/index.js"></script>
     <style>
         tr{
             cursor: pointer;
@@ -44,7 +44,7 @@
 
             btns.innerHTML = '';
             
-            const {data} = await API.get('/post',{
+            const {data} = await API.get('./post',{
                 headers : {
                     'Content-Type' : "application/json"
                 }

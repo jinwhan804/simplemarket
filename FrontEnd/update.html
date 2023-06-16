@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script src="/js/index.js"></script>
+    <script src="./js/index.js"></script>
     <style>
         #contentArea{
             width: 500px;
@@ -36,7 +36,7 @@
     let posts = {};
     async function GetAPI(){
         try {
-            const {data} = await API.get('/post/updateview',{
+            const {data} = await API.get('./post/updateview',{
                 headers : {
                     "Content-Type" : "application/json"
                 }
@@ -65,7 +65,7 @@
             form.append('content',contentArea.innerHTML);
             form.append('id',posts.id);
 
-            await API.post('/post/update',form,{
+            await API.post('./post/update',form,{
                 headers : {
                     'Content-Type' : "application/json"
                 }
@@ -83,7 +83,7 @@
 
     cencelBtn.onclick = async()=>{
         try {
-            await API.post('/post/detail',{
+            await API.post('./post/detail',{
                 headers : {
                     'Content-Type' : "application/json"
                 },
