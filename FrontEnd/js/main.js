@@ -495,11 +495,6 @@ async function GetAPI(currentPage){
 
 GetAPI(0);
 
-// 회원 가입 페이지로 이동
-toSignUp.onclick = ()=>{
-    location.href = `./signUp${urlEnd}`;
-}
-
 // 전체 글 목록 페이지로 이동 = 메인 페이지
 const usedMarket = document.querySelector('.used-market');
 
