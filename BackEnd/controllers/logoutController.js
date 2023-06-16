@@ -39,7 +39,6 @@ exports.logout = (req, res) => {
         for (const key in req.sessionStore.sessions) {
             const json = JSON.parse(`${req.sessionStore.sessions[key]}`);
             th = json.access_token;
-            console.log(access_token);
         }
         const ta = req.sessionStore.sessions;
         const nowsessioid = findKeyByToken(ta, th); // "aewSIDVHKOMg9OpzsrsCap
