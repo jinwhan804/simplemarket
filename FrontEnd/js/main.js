@@ -94,6 +94,7 @@ const hours = now.getHours();
 const minutes = now.getMinutes();
 const timeString = `${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
 
+
 // 채팅 목록과 채팅 팝업창 함수
 async function popup() {
     const { data } = await axios.get("http://127.0.0.1:8080/login/view", {
@@ -122,11 +123,8 @@ async function selectUserChat() {
         const response = await axios.get('http://127.0.0.1:8080/login/viewAll', {
             withCredentials: true
         });
-        console.log(response);
         const users = response.data;
-        console.log(users);
         const chatMessages = document.querySelectorAll(`.chat_message`);
-        console.log(chatMessages);
         chatMessages.forEach((e, index) => {
             if (users[index]) {
                 e.addEventListener('dblclick', () => {
@@ -146,32 +144,12 @@ function openChatBox(userNickname) {
 }
 
 
-// 아래 코드 안되니까 나중에 다시보자
-
-// chatBox에서 chatList로 가는 함수
-// window.onload = async function () {
-//     const { data } = await axios.get("http://127.0.0.1:8080/login/view", {
-//         withCredentials: true
-//     });
-
-//     if (data.grade === '3') {
-//         back.style.display = 'block';
-//     } else {
-//         back.style.display = 'none';
-//     }
-// };
-
-// back.addEventListener('click', function () {
-//     chatList.classList.add('active');
-//     chatBox.classList.remove('active');
-// });
-
-
 // 채팅 소켓
 async function userInfo() {
     const response = await axios.get('http://127.0.0.1:8080/login/view', {
         withCredentials: true
     });
+
     console.log(response);
     return {
         nickname: response.data.nickname,
@@ -191,20 +169,20 @@ window.onload = async () => {
         console.log(getChatData);
         const chatData = getChatData.data;
         const userChatList = document.querySelector('.user_chat_list');
-
-
-
-        // userChatList.innerHTML = chatDataHTML;
-
         const socket = io.connect(serverUrl);
-        socket.on('message', (data) => {
-            console.log(data);
+
+        chatData.forEach(data => {
+            const now = new Date(data.createdAt);
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+            const time = `${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
+            // console.log(data);
             let el;
             if (data.nickname === nickname) {
                 el = `
                 <div class="content my-message">
                     <p class="message ballon">${data.message}</p>
-                    <p class="date">${data.date}</p>
+                    <p class="date">${time}</p>
                 </div>
                 `;
             } else {
@@ -214,7 +192,60 @@ window.onload = async () => {
                     <div class="message-display">
                         <p class="nickname">${data.nickname}</p>
                         <p class="message ballon">${data.message}</p>
-                        <p class="date">${data.date}</p>
+                        <p class="date">${time}</p>
+                    </div>
+                </div>
+                `;
+            }
+            chatContent.innerHTML += el;
+        });
+
+        // 관리자만 보이게 하는 뒤로가기 버튼
+        try {
+            const { data } = await axios.get("http://127.0.0.1:8080/login/view", {
+                withCredentials: true
+            });
+            console.log(data);
+            if (data.grade === '3') {
+                back.style.display = 'block';
+                console.log('1');
+            } else {
+                back.style.display = 'none';
+                console.log('2');
+            }
+        } catch (error) {
+            console.log(error);
+        }
+
+        // chatBox에서 chatList로 가는 버튼
+        back.addEventListener('click', () => {
+            chatList.classList.add('active');
+            chatBox.classList.remove('active');
+        });
+
+        // 채팅방 채팅 코드
+        socket.on('message', (data) => {
+            const now = new Date(data.createdAt);
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+            const time = `${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
+            console.log(data);
+            let el;
+            if (data.nickname === nickname) {
+                el = `
+                <div class="content my-message">
+                    <p class="message ballon">${data.message}</p>
+                    <p class="date">${time}</p>
+                </div>
+                `;
+            } else {
+                el = `
+                <div class="content other-message">
+                    <img src="${data.profile_img}">
+                    <div class="message-display">
+                        <p class="nickname">${data.nickname}</p>
+                        <p class="message ballon">${data.message}</p>
+                        <p class="date">${time}</p>
                     </div>
                 </div>
                 `;
@@ -222,9 +253,10 @@ window.onload = async () => {
             chatContent.innerHTML += el;
         })
 
+        // 채팅 목록 코드
         chatData.forEach(data => {
             const userInList = userChatList.querySelector(`.chat_message[data_nickname="${data.nickname}"]`);
-            console.log(data);
+            // console.log(data);
             if (userInList) {
                 // 채팅 목록에서 해당 유저가 있으면 목록에 추가하지 않고 메시지만 업데이트
                 userInList.querySelector('.message_content').textContent = data.message;
@@ -247,6 +279,7 @@ window.onload = async () => {
 
         selectUserChat();
 
+        // 메시지 보내는 코드
         btn.onclick = () => {
             const messageData = {
                 user_id: userId,

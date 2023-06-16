@@ -72,11 +72,17 @@ const io = socketIo(server, {
 
 let userId = [];
 let userList = [];
-let userName = [];
 
 io.sockets.on('connection', (socket) => {
+    console.log('유저 입장');
+
     userId.push(socket.id);
     console.log(userId);
+
+    socket.on('joinUser', (name) => {
+        userList.push(name);
+        io.socket.emit('joinUser', userList, userId);
+    })
 
     socket.on('message', (data) => {
         io.sockets.emit('message', data);
@@ -85,5 +91,14 @@ io.sockets.on('connection', (socket) => {
 
     socket.on('oneUserChat', (id, nickName, msg) => {
         io.to(id).emit('chat', nickName, msg);
+    })
+
+    socket.on('disconnect', () => {
+        console.log('유저 퇴장');
+        let index = userId.indexOf(socket.id);
+        userId = userId.filter((value) => value != socket.id);
+        userList.splice(index, 1);
+        io.emit('userList', userList);
+        console.log(userId);
     })
 })
