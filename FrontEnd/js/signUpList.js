@@ -1,7 +1,7 @@
 async function getUserInfo() {
     try {
         let userInfo = document.querySelector('.list_user');
-        const { data } = await API.get('http://127.0.0.1:8080/admin/signUp', {
+        const { data } = await API.get('/admin/signUp', {
             withCredentials: true,
         });
         console.log(data);
@@ -35,7 +35,7 @@ getUserInfo();
 // 회원가입 요청에 대한 승인 코드
 async function approveUser(user_id) {
     try {
-        await API.post('http://127.0.0.1:8080/signUpList/approve_user', { user_id }, {
+        await API.post('/signUpList/approve_user', { user_id }, {
             withCredentials: true
         });
         getUserInfo();
@@ -83,4 +83,10 @@ logo.onclick = ()=>{
 const mypage_btn = document.getElementById('mypage-btn');
 mypage_btn.onclick = ()=>{
     location.href = `./mypage${urlEnd}`;
+}
+
+const usedMarket = document.querySelector('.used-market');
+
+usedMarket.onclick= ()=>{
+    location.href = `./${mainUrl}`;
 }

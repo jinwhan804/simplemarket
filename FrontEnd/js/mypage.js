@@ -147,3 +147,9 @@ async function getUserPost(){
 getAPI();
 checkAdmin();
 getUserPost();
+
+const usedMarket = document.querySelector('.used-market');
+
+usedMarket.onclick= ()=>{
+    location.href = `./${mainUrl}`;
+}

@@ -458,3 +458,11 @@ async function GetAPI(currentPage){
 }
 
 GetAPI(0);
+
+toInsert.onclick=()=>{
+    location.href = `./insert${urlEnd}`;
+}
+
+toSignUp.onclick = ()=>{
+    location.href = `./signUp${urlEnd}`;
+}
