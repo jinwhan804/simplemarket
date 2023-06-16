@@ -511,3 +511,9 @@ const usedMarket = document.querySelector('.used-market');
 usedMarket.onclick= ()=>{
     location.href = `./${mainUrl}`;
 }
+
+const toInsert = document.getElementById('inInsert');
+
+toInsert.onclick = ()=>{
+    location.href = `./insert${urlEnd}`;
+}
