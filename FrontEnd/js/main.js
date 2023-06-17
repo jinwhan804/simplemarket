@@ -86,6 +86,7 @@ logoutBtnHide();
 
 const chatBox = document.querySelector('.chatBox');
 const chatList = document.querySelector('.chatList');
+const userChatList = document.querySelector('.user_chat_list');
 const chatBoxClose = document.querySelectorAll('.close_chatBox');
 const chatContent = document.querySelector('.chat_content');
 const back = document.querySelector('.back');
@@ -97,18 +98,23 @@ const timeString = `${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
 
 // 채팅 목록과 채팅 팝업창 함수
 async function popup() {
-    const { data } = await axios.get("http://127.0.0.1:8080/login/view", {
-        withCredentials: true
-    });
-    document.body.classList.toggle('active');
-    if (data.grade === '3') {
-        chatList.classList.add('active');
-    } else {
-        chatBox.classList.add('active');
+    try {
+        const { data } = await axios.get("http://127.0.0.1:8080/login/view", {
+            withCredentials: true
+        });
+
+        document.body.classList.toggle('active');
+        if (data.grade === '3') {
+            chatList.classList.add('active');
+        } else {
+            chatBox.classList.add('active');
+        }
+    } catch (error) {
+        console.error(error);
     }
 }
 
-// 채팅 목록과 채팅 팝업창 닫는 함수
+// 채팅 목록과 채팅 팝업창 close 이벤트
 chatBoxClose.forEach(btn => {
     btn.addEventListener('click', () => {
         chatBox.classList.remove('active');
@@ -116,22 +122,17 @@ chatBoxClose.forEach(btn => {
     });
 });
 
-
-// 관리자 계정의 유저 채팅 목록 창
+// 유저와의 채팅 목록을 나타내는 이벤트(관리자만 볼 수 있음)
 async function selectUserChat() {
     try {
-        const response = await axios.get('http://127.0.0.1:8080/login/viewAll', {
-            withCredentials: true
-        });
-        const users = response.data;
+        console.log(userChatList);
         const chatMessages = document.querySelectorAll(`.chat_message`);
-        chatMessages.forEach((e, index) => {
-            if (users[index]) {
-                e.addEventListener('dblclick', () => {
-                    const userNickname = users[index].nickname;
-                    openChatBox(userNickname);
-                });
-            }
+        chatMessages.forEach((e) => {
+            e.addEventListener('dblclick', () => {
+                const userNickname = e.getAttribute('data_nickname');
+                openChatBox(userNickname);
+                console.log(userNickname);
+            })
         })
     } catch (error) {
         console.error(error);
@@ -144,7 +145,6 @@ function openChatBox(userNickname) {
 }
 
 
-// 채팅 소켓
 async function userInfo() {
     try {
         const { data } = await axios.get('http://127.0.0.1:8080/login/view', {
@@ -159,22 +159,23 @@ async function userInfo() {
             user_info: data.id
         };
     } catch (error) {
-        console.log(error);
+        console.error(error);
     }
-
 }
 
-window.onload = async () => {
+async function chatSocket() {
     try {
         const { nickname, profileImg, userId, user_info } = await userInfo();
+
         // 유저의 채팅 리스트
         const getChatData = await axios.get('http://127.0.0.1:8080/chat/all_chats', {
             withCredentials: true
         });
         console.log(getChatData);
         const chatData = getChatData.data;
-        const userChatList = document.querySelector('.user_chat_list');
         const socket = io.connect(serverUrl);
+
+        socket.emit('join', userId)
 
         chatData.forEach(data => {
             const now = new Date(data.createdAt);
@@ -205,7 +206,7 @@ window.onload = async () => {
             chatContent.innerHTML += el;
         });
 
-        // 관리자만 보이게 하는 뒤로가기 버튼
+        // chatBox 창의 뒤로가기 버튼(관리자만 보임)
         try {
             const { data } = await axios.get("http://127.0.0.1:8080/login/view", {
                 withCredentials: true
@@ -297,6 +298,12 @@ window.onload = async () => {
         console.log(error);
     }
 }
+
+window.onload = async () => {
+    await selectUserChat();
+    chatSocket();
+};
+
 
 
 // 로그인 기능

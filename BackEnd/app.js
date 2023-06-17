@@ -70,38 +70,58 @@ const io = socketIo(server, {
     }
 });
 
-let list = [{ user_id: "", socketId: "" }]
-let temp = list.filter((e) => e.user_id == "1");
-console.log(temp.socketId);
-let userId = [];
+
+// let temp = list.filter((e) => e.user_id == "1");
+// console.log(temp.socketId);
+// let userId = [];
 let userList = [];
+// let list = [{ user_id: '', socketId: '' }];
+let users = {};
+
 
 io.sockets.on('connection', (socket) => {
+
 
     console.log('유저 입장', socket.id);
 
     userId.push(socket.id);
     console.log(userId);
 
-    socket.on('joinUser', (name) => {
-        userList.push(name);
-        io.emit('joinUser', userList, userId);
+    socket.on('join', (userId) => {
+        users[userId] = socket.id;
+        userList.push(users);
+        console.log(userList);
     })
+
+    // socket.on('joinRoom', (room, name) => {
+    //     socket.join(room);
+
+    //     userList.push({ user_id: name, socketId: socket.id });
+    //     console.log(userList);
+    //     io.emit('joinUser', userList, userId);
+    // })
 
     socket.on('message', (messageData) => {
         // const nickname = userId[socket.id];
         // console.log(data);
         console.log(messageData)
-        io.to(userId[0]).emit('message', messageData);
-        io.to(userId[1]).emit('message', messageData);
+        io.to(users[userId]).emit('message', messageData);
+        io.to(users[userId]).emit('message', messageData);
     })
-
 
     socket.on('disconnect', () => {
-        console.log('유저 퇴장');
-        const index = userId.indexOf(socket.id);
-        userId.splice(index, 1);
-        io.emit('userList', userList);
-        console.log(userId);
-    })
+        for (let userId in users) {
+            if (users[userId] === socket.id) {
+                delete users[userId];
+            }
+        }
+    });
+
+    // socket.on('disconnect', () => {
+    //     console.log('유저 퇴장');
+    //     const index = userId.indexOf(socket.id);
+    //     userId.splice(index, 1);
+    //     io.emit('userList', userList);
+    //     console.log(userId);
+    // })
 })
