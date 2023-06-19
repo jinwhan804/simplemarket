@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script src="./js/index.js"></script>
+    <script src="/js/index.js"></script>
 </head>
 <style>
   body {
@@ -104,7 +104,7 @@
             <select id="guSelect" onchange="updateDongs(); updateAddress();"></select>
             <select id="dongSelect" onchange="updateAddress();"></select>
       </div>
-        <button>회원가입</button>
+        <button id="singupBtn">회원가입</button>
     </form>
 </body>
 <script>
@@ -207,6 +207,9 @@
       addressInput.value = `${selectedCity} ${selectedGu} ${selectedDong}`;
     }
     
+    // singupBtn.onclick() = () => {
+    //   location.href = `./${mainUrl}`;
+    // }
   </script>
   
 </html>

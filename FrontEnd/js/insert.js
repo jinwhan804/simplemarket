@@ -263,7 +263,6 @@ insertBtn.onclick = async()=>{
         form.append('content',contentArea.innerHTML);
         form.append('userId',user_data.id);
 
-        axios.defaults.withCredentials = true;
         await API.post('/post/insert',form,{
             headers : {
                 "Content-Type" : "application/json"
@@ -279,10 +278,36 @@ insertBtn.onclick = async()=>{
         console.log(error)
     }
 }
-
+// 뒤로가기 버튼
 toPost.onclick = ()=>{
-    location.href = `./${mainUrl}`;
-}
+    location.href = `./${mainUrl}`;}
+
+
+// 이미지 삽입 버튼
+document.getElementById('toImageBtn').addEventListener('click', async () => {
+    try {
+        const form = new FormData();
+        form.append('imgs', imgs.value);
+        form.append('upload', file.files[0]);
+        form.append('userId', 'user_id');
+        await API.post('./upload/postImg', form,{
+            headers : { "content-Type" : "multipart/form-data" },
+            withCredentials : true
+        });
+
+        let reader = new FileReader();
+        reader.onload = () => {
+            let dataURL = reader.result;
+            let img = document.createElement('img');
+            img.src = dataURL;
+            document.getElementById('contentArea').appendChild(img);
+        };
+        reader.readAsDataURL(file.files[0]);
+        
+    } catch (error) {
+        console.log(error);
+    }
+})
 
 // 전체 글 목록 페이지로 이동 = 메인 페이지
 const usedMarket = document.querySelector('.used-market');

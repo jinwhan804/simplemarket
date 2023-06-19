@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script src="./js/index.js"></script>
-    <link rel="stylesheet" href="./css/insert.css">
+    <script src="/js/index.js"></script>
+    <link rel="stylesheet" href="/css/insert.css">
 </head>
 <body>
     <!-- 헤더 영역 -->
@@ -35,9 +35,11 @@
         <label for="">작성자</label>
         <input type="text" id="nickname" disabled><br>
         <label for="">본문</label>
+        <input type="text" id="imgs" placeholder="선택한 파일이 삽입됩니다." style="display: none;">
         <div id="contentArea" contenteditable="true"></div>
+        <input type="file" id="file">
+        <button id="toImageBtn">사진 올리기</button>
         <button id="insertBtn">추가 하기</button>
-        <a id="toImage">사진 올리기</a>
         <a id="toPost">뒤로가기</a>
     </div>
     <!-- --------------------------------------실시간 채팅----------------------------------------------------- -->
@@ -64,5 +66,5 @@
         </div>
     </div>    
 </body>
-<script src="./js/insert.js"></script>
+<script src="/js/insert.js"></script>
 </html>

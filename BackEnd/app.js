@@ -40,11 +40,15 @@ app.use(session({
     saveUninitialized: false
 }));
 
-app.use(express.urlencoded({ extended: false }));
+// app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ limit: '4mb', extended: true }));
 
 app.use("/img", express.static(path.join(__dirname, "uploads")));
 
-app.use(express.json());
+// app.use(express.json());
+app.use(express.json({ limit: '4mb' }));
+
+
 
 app.use(cors({
     origin: `${process.env.FRONT_SERVER}`,
