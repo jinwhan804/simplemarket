@@ -10,7 +10,7 @@ router.post('/insert',PostInsert);
 
 router.post('/detail',isLogin,PostViewSelect);
 
-router.get('/detail',isLogin,PostViewOne);
+router.get('/detail',PostViewOne);
 
 router.post('/updateview',isLogin,PostUpdateSelect);
 
