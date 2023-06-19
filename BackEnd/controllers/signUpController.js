@@ -19,7 +19,7 @@ exports.SignUp = async (req, res) => {
             grade,
             address
         })
-        res.redirect(`${process.env.FRONT}/${process.env.MAIN}`);
+        res.send(`${process.env.FRONT}/${process.env.MAIN}`);
     } catch (error) {
         console.log(error);
     }
