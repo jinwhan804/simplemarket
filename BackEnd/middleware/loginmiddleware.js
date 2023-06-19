@@ -2,7 +2,6 @@ const jwt = require("jsonwebtoken");
 
 exports.isLogin = (req, res, next) => {
     let access_token;
-    console.log(req)
     for (const key in req.sessionStore.sessions) {
         const json = JSON.parse(`${req.sessionStore.sessions[key]}`);
         
