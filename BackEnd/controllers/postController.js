@@ -65,6 +65,8 @@ exports.PostViewOne = async (req, res) => {
             th = json.pageId;
         }
 
+        console.log(th)
+
         const ta = req.sessionStore.sessions;
         const nowsessioid = findKeyByToken(ta, th); 
 
@@ -93,7 +95,7 @@ exports.PostViewOne = async (req, res) => {
         })
 
         const post = await Post.findOne({
-            where : {id},
+            where : {id : th},
             include : {
                 model : User
             }
