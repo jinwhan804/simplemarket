@@ -1,4 +1,4 @@
-const {Reply,User} =require('../models');
+const {Reply,User,Rereply} =require('../models');
 
 exports.ReplyViewAll = async(req,res)=>{
     try {
@@ -60,7 +60,7 @@ exports.ReplyDelete = async(req,res)=>{
     
         await Reply.destroy({where : {id}});
 
-        res.send(`${process.env.FRONT}/detail${process.env.END}`);        
+        res.send(`${process.env.FRONT}/detail${process.env.END}`);
     } catch (error) {
         console.log(error);
     }

@@ -5,9 +5,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <script src="http://localhost:8080/socket.io/socket.io.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="/js/index.js"></script>
-    <link rel="stylesheet" href="/css/insert.css">
+    <link rel="stylesheet" href="/css/local.css">
 </head>
 <body>
     <!-- 헤더 영역 -->
@@ -26,21 +27,31 @@
             <button id="mypage-btn">Mypage</button>
             <button id="logout">Logout</button>
         </div>
-    </header>    
-    <!----------------- 게시판 영역--------------->
-    <div class="border-container">
-        <h1>내 물건 팔기 </h1>
-        <label for="">제목</label>
-        <input type="text" id="title">
-        <label for="">작성자</label>
-        <input type="text" id="nickname" disabled><br>
-        <label for="">본문</label>
-        <input type="text" id="imgs" placeholder="선택한 파일이 삽입됩니다." style="display: none;">
-        <div id="contentArea" contenteditable="true"></div>
-        <input type="file" id="file">
-        <button id="toImageBtn">사진 올리기</button>
-        <button id="insertBtn">추가 하기</button>
-        <a id="toPost">뒤로가기</a>
+    </header>
+    <!-- 페이지(게시판) 영역 -->
+    <div class="profile-info">
+        <div id="text-container">
+            <h1>동네 중고 장터</h1>
+            <a id="inInsert">내 물건 팔기</a>
+            <table id="post_list">
+                
+            </table>
+            <div id="btns">        
+            </div>
+        </div>
+    </div>
+    <!-- 로그인 팝업 -->
+    <div class="loginPopup">
+        <form id="loginForm">
+            <label for="">ID</label>
+            <input type="text" id="user_id">
+            <label for="">Password</label>
+            <input type="password" id="user_pw">
+            <button type="button" id="loginBtn">Login</button>
+            <div class="links">
+                <a id="toSignUp">SignUp</a>
+            </div>
+        </form>
     </div>
     <!-- --------------------------------------실시간 채팅----------------------------------------------------- -->
     <img class="chatImg" onclick="popup()" src="http://localhost:8080/img/bunny-1299162_1280.png">
@@ -64,7 +75,7 @@
             <input type="text" id="message">
             <button id="btn">send</button>
         </div>
-    </div>    
+    </div>
 </body>
-<script src="/js/insert.js"></script>
+<script src="/js/local.js"></script>
 </html>

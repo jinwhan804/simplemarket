@@ -37,7 +37,8 @@ header {
     background-color: #0056b3;
 }
 
-.used-market {
+.used-market,
+.local-market{
     text-decoration: none;
     color: #ffffff;
     background-color: #007bff;
@@ -45,7 +46,8 @@ header {
     padding: 10px 20px;
     border-radius: 40px;
 }
-.used-market:hover {
+.used-market:hover, 
+.local-market:hover{
     background-color: #0056b3;
 }
 
@@ -396,9 +398,9 @@ box-shadow: inset 0px 0px 0.26vw white;
     background-color: #0056b3;
 }
 
-.border-container #toPost {
+.border-container #toPost, .border-container #toImageBtn {
     display: block;
-    width: 10%;
+    width: 98%;
     text-decoration: none;
     color: #333;
     text-align: center;
@@ -411,7 +413,7 @@ box-shadow: inset 0px 0px 0.26vw white;
     margin-left: auto;
     margin-right: 0px;
 }
-.border-container #toPost:hover {
+.border-container #toPost:hover, .border-container #toImageBtn:hover {
     background-color: #333;
     color: #fff;
 }

@@ -269,6 +269,8 @@ let posts = {};
 let users = {};
 let replys = [];
 let likeNum = [];
+
+const updateBtn = document.getElementById('update_btn');
 async function GetAPI(){
     try {
         const {data} = await API.get('/post/detail',{
@@ -347,7 +349,7 @@ async function GetAPI(){
 
                 nowdate = Number(nowdate);
 
-                e.data.forEach((el,index) => {
+                e.data.forEach(async(el,index) => {
                     let updateDate = Number(el.updatedAt.slice(0,10).split('-').join(''));
 
                     let _li1 = document.createElement('li');
@@ -384,7 +386,9 @@ async function GetAPI(){
                         let rerebtn2 = document.createElement('button');
                         
                         rediv.className = 'rereply_area';
+                        rediv.style.border = '1px solid';
                         recontentdiv.className = 'rereply_content';
+                        recontentdiv.style.border = '1px solid';
                         recontentdiv.contentEditable = true;
 
                         rerebtn1.innerHTML = '등록';
@@ -491,6 +495,185 @@ async function GetAPI(){
                     }
 
                     reply_list.append(_li1);
+
+                    await API.post('/rereply',{
+                        data : el.id
+                    }).then((e)=>{
+                        if(e.data == null){
+                            return;
+                        }else{
+                            let date = new Date();
+                            let year = date.getFullYear();
+                            let month = date.getMonth() + 1;
+                            let day = date.getDate();
+                            let nowdate = year.toString();
+                            
+                            if(month >= 10){
+                                nowdate += month;
+                            }else{
+                                nowdate += '0' + month;
+                            }
+                
+                            if(day >= 10){
+                                nowdate += day;
+                            }else{
+                                nowdate += '0' + day;
+                            }
+                
+                            nowdate = Number(nowdate);
+                            
+                            e.data.forEach((el,index) => {
+                                
+                                let updateDate = Number(el.updatedAt.slice(0,10).split('-').join(''));
+        
+                                let _li2 = document.createElement('li');
+                                let _rediv1 = document.createElement('div');
+                                let _rediv2 = document.createElement('div');
+                                let _rediv3 = document.createElement('div');
+                                let _rediv4 = document.createElement('div');
+                                let rebtn1 = document.createElement('button');
+                                
+                                _li2.className = 'rereplyLi';
+                                _rediv1.className = 'reply1';
+                                _rediv2.className = 'reply2';
+                                _rediv3.className = 'reply3';
+                                _rediv4.className = 'reply4';
+                
+                                _rediv1.innerHTML = index + 1;
+                                _rediv2.innerHTML = ">RE : " + el.content;
+                                _rediv3.innerHTML = el.User.nickname;
+                                rebtn1.innerHTML = "댓글";
+                                
+                                if(nowdate > updateDate){
+                                    _rediv4.innerHTML = el.updatedAt.slice(0,10);
+                                }else{
+                                    _rediv4.innerHTML = el.updatedAt.slice(11,19);
+                                }
+                
+                                _li2.append(_rediv1,_rediv2,_rediv3,_rediv4,rebtn1);
+
+                                rebtn1.onclick = ()=>{
+                                    let rediv = document.createElement('span');
+                                    let recontentdiv = document.createElement('span');
+                                    let rerebtn1 = document.createElement('button');
+                                    let rerebtn2 = document.createElement('button');
+                                    
+                                    rediv.className = 'rereply_area';
+                                    rediv.style.border = '1px solid';
+                                    recontentdiv.className = 'rereply_content';
+                                    recontentdiv.style.border = '1px solid';
+                                    recontentdiv.contentEditable = true;
+            
+                                    rerebtn1.innerHTML = '등록';
+                                    rerebtn2.innerHTML = '취소';
+            
+                                    rediv.append(recontentdiv,rerebtn1,rerebtn2);
+                                    
+                                    rerebtn1.onclick = async()=>{
+                                        const form = new FormData();
+            
+                                        form.append('content',recontentdiv.innerHTML);
+                                        form.append('userId',users.id);
+                                        form.append('replyId',el.id);
+                                        
+                                        _li2.removeChild(rediv);
+                                        await API.post('/rereply/insert',form).then((e)=>{
+                                            location.href = e.data;
+                                        }).catch((err)=>{
+                                            console.log(err);
+                                        })
+                                    }
+            
+                                    rerebtn2.onclick = ()=>{
+                                        _li2.removeChild(rediv);
+                                    }
+            
+                                    _li2.append(rediv);
+                                }
+                                
+                                if(users.id == el.User.id){
+                                    let rebtn2 = document.createElement('button');
+                                    let rebtn3 = document.createElement('button');
+                                    let rebtn4 = document.createElement('button');
+                                    let rebtn5 = document.createElement('button');
+                
+                                    rebtn2.innerHTML = '수정';
+                                    rebtn3.innerHTML = '삭제';
+                
+                                    rebtn4.innerHTML = '수정';
+                                    rebtn5.innerHTML = '취소';
+                
+                                    
+                                    rebtn2.onclick = ()=>{
+                                        _rediv2.contentEditable = true;
+                
+                                        rebtn2.classList.add('unable');
+                                        rebtn3.classList.add('unable');
+                                        rebtn4.classList.remove('unable');
+                                        rebtn5.classList.remove('unable');
+                                    }
+                                    
+                                    rebtn3.onclick = async()=>{
+                                        try {
+                                            if(confirm('정말 삭제하시겠습니까?')){
+                                                await API.post('/rereply/delete',{
+                                                    data : el.id
+                                                }).then((e)=>{
+                                                    location.href = e.data;
+                                                }).catch((err)=>{
+                                                    console.log(err);
+                                                })
+                                            }
+                                        } catch (error) {
+                                            console.log(error);
+                                        }
+                                    }
+                
+                                    rebtn4.onclick = async()=>{
+                                        _rediv2.contentEditable = false;
+                
+                                        rebtn2.classList.remove('unable');
+                                        rebtn3.classList.remove('unable');
+                                        rebtn4.classList.add('unable');
+                                        rebtn5.classList.add('unable');
+                
+                                        const form = new FormData();
+                
+                                        form.append('id', el.id);
+                                        form.append('content',_rediv2.innerHTML);
+                
+                                        await API.post('/rereply/update',form).then((e)=>{
+                                            location.href = e.data;
+                                        }).catch((err)=>{
+                                            console.log(err);
+                                        })
+                                    }
+                                    
+                                    rebtn5.onclick = ()=>{
+                                        _rediv2.contentEditable = false;
+                
+                                        _rediv2.innerHTML = el.content;
+                
+                                        rebtn2.classList.remove('unable');
+                                        rebtn3.classList.remove('unable');
+                                        rebtn4.classList.add('unable');
+                                        rebtn5.classList.add('unable');
+                                    }
+                
+                                    rebtn4.classList.add('unable');
+                                    rebtn5.classList.add('unable');
+                
+                
+                                    _li2.append(rebtn2,rebtn3,rebtn4,rebtn5);
+                                }
+                
+                                _li1.append(_li2);
+                                
+                            });
+                        }
+                    }).catch((err)=>{
+                        console.log(err);
+                    })
                 });
             }
         }).catch((err)=>{
@@ -501,145 +684,13 @@ async function GetAPI(){
     }
 }
 
-// async function RereplyView (){
-//     await API.post('/rereply').then((e)=>{
-//         if(e.data == null){
-//             return;
-//         }else{
-//             let date = new Date();
-//             let year = date.getFullYear();
-//             let month = date.getMonth() + 1;
-//             let day = date.getDate();
-//             let nowdate = year.toString();
-            
-//             if(month >= 10){
-//                 nowdate += month;
-//             }else{
-//                 nowdate += '0' + month;
-//             }
+async function RereplyView (){
+    
+}
 
-//             if(day >= 10){
-//                 nowdate += day;
-//             }else{
-//                 nowdate += '0' + day;
-//             }
+GetAPI();
 
-//             nowdate = Number(nowdate);
-
-//             replys.forEach((element)=>{
-                
-//             })
-//             e.data.forEach((el,index) => {
-//                 let updateDate = Number(el.updatedAt.slice(0,10).split('-').join(''));
-
-//                 let _li2 = document.createElement('li');
-//                 let _rediv1 = document.createElement('div');
-//                 let _rediv2 = document.createElement('div');
-//                 let _rediv3 = document.createElement('div');
-//                 let _rediv4 = document.createElement('div');
-//                 _li2.className = 'rereplyLine';
-//                 _rediv1.className = 'reply1';
-//                 _rediv2.className = 'reply2';
-//                 _rediv3.className = 'reply3';
-//                 _rediv4.className = 'reply4';
-
-//                 _rediv1.innerHTML = index + 1;
-//                 _rediv2.innerHTML = el.content;
-//                 _rediv3.innerHTML = el.User.nickname;
-                
-//                 if(nowdate > updateDate){
-//                     _rediv4.innerHTML = el.updatedAt.slice(0,10);
-//                 }else{
-//                     _rediv4.innerHTML = el.updatedAt.slice(11,19);
-//                 }
-
-//                 _li2.append(_rediv1,_rediv2,_rediv3,_rediv4);
-                
-//                 if(users.id == el.User.id){
-//                     let rebtn2 = document.createElement('button');
-//                     let rebtn3 = document.createElement('button');
-//                     let rebtn4 = document.createElement('button');
-//                     let rebtn5 = document.createElement('button');
-
-//                     rebtn2.innerHTML = '수정';
-//                     rebtn3.innerHTML = '삭제';
-
-//                     rebtn4.innerHTML = '수정';
-//                     rebtn5.innerHTML = '취소';
-
-                    
-//                     rebtn2.onclick = ()=>{
-//                         _rediv2.contentEditable = true;
-
-//                         rebtn2.classList.add('unable');
-//                         rebtn3.classList.add('unable');
-//                         rebtn4.classList.remove('unable');
-//                         rebtn5.classList.remove('unable');
-//                     }
-                    
-//                     rebtn3.onclick = async()=>{
-//                         try {
-//                             if(confirm('정말 삭제하시겠습니까?')){
-//                                 await API.post('/rereply/delete',{
-//                                     data : el.id
-//                                 }).then((e)=>{
-//                                     location.href = e.data;
-//                                 }).catch((err)=>{
-//                                     console.log(err);
-//                                 })
-//                             }
-//                         } catch (error) {
-//                             console.log(error);
-//                         }
-//                     }
-
-//                     rebtn4.onclick = async()=>{
-//                         _rediv2.contentEditable = false;
-
-//                         rebtn2.classList.remove('unable');
-//                         rebtn3.classList.remove('unable');
-//                         rebtn4.classList.add('unable');
-//                         rebtn5.classList.add('unable');
-
-//                         const form = new FormData();
-
-//                         form.append('id', el.id);
-//                         form.append('content',_rediv2.innerHTML);
-
-//                         await API.post('/rereply/update',form).then((e)=>{
-//                             location.href = e.data;
-//                         }).catch((err)=>{
-//                             console.log(err);
-//                         })
-//                     }
-                    
-//                     rebtn5.onclick = ()=>{
-//                         _rediv2.contentEditable = false;
-
-//                         _rediv2.innerHTML = el.content;
-
-//                         rebtn2.classList.remove('unable');
-//                         rebtn3.classList.remove('unable');
-//                         rebtn4.classList.add('unable');
-//                         rebtn5.classList.add('unable');
-//                     }
-
-//                     rebtn4.classList.add('unable');
-//                     rebtn5.classList.add('unable');
-
-
-//                     _li2.append(rebtn2,rebtn3,rebtn4,rebtn5);
-//                 }
-
-//                 reply_list.append(_li2);
-//             });
-//         }
-//     }).catch((err)=>{
-//         console.log(err);
-//     })
-// }
-
-GetAPI();    
+RereplyView();
 
 toUpdate.onclick = async()=>{
     try {
@@ -741,4 +792,18 @@ reply_on.onclick = async()=>{
 
 toPost.onclick = ()=>{
     location.href = `./${mainUrl}`;
+}
+
+// 전체 글 목록 페이지로 이동 = 메인 페이지
+const usedMarket = document.querySelector('.used-market');
+
+usedMarket.onclick= ()=>{
+    location.href = `./${mainUrl}`;
+}
+
+// 동네 장터 이동
+const localMarket = document.querySelector('.local-market');
+
+localMarket.onclick = ()=>{
+    location.href = `./local${urlEnd}`;
 }

@@ -41,7 +41,12 @@ class User extends Sequelize.Model {
             profile_img: {
                 type: Sequelize.STRING,
                 allowNull: true
-            }
+            },
+
+            // post_img: {
+            //     type: Sequelize.STRING,
+            //     allowNull : true
+            // }
         }, {
             sequelize: seq,
             timestamps: true,

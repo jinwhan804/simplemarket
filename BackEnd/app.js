@@ -21,6 +21,7 @@ const boardRouter = require('./routers/boardRouter');
 const chatRouter = require('./routers/chatRouter');
 const replyRouter = require('./routers/reply');
 const rereplyRouter = require('./routers/rereply');
+const localpostRouter = require('./routers/localpost');
 
 const app = express();
 
@@ -39,11 +40,15 @@ app.use(session({
     saveUninitialized: false
 }));
 
-app.use(express.urlencoded({ extended: false }));
+// app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ limit: '4mb', extended: true }));
 
 app.use("/img", express.static(path.join(__dirname, "uploads")));
 
-app.use(express.json());
+// app.use(express.json());
+app.use(express.json({ limit: '4mb' }));
+
+
 
 app.use(cors({
     origin: `${process.env.FRONT_SERVER}`,
@@ -61,6 +66,7 @@ app.use('/signUpList', boardRouter);
 app.use('/chat', chatRouter);
 app.use('/reply', replyRouter);
 app.use('/rereply', rereplyRouter);
+app.use('/localpost',localpostRouter);
 
 const server = app.listen(8080, () => {
     console.log("8080 Server Open");
