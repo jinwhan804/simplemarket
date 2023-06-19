@@ -21,6 +21,7 @@ exports.PostViewAll = async (req, res) => {
 exports.PostViewSelect = (req, res) => {
     try {
         const id = req.body.data;
+        console.log('id들어오나',id)
         req.pageId = id;
         res.send(`${process.env.FRONT}/detail${process.env.END}`)
     } catch (error) {
@@ -42,8 +43,8 @@ exports.PostViewOne = async (req, res) => {
         })
 
         if(access_decoded.id != post.userId){
-            let likeAdd = post.postViews + 1;
-            Post.update({postViews : likeAdd},{where : {id}});
+            let viewAdd = post.postViews + 1;
+            Post.update({postViews : viewAdd},{where : {id}});
         }
         
         const data = {posts : post, users : access_decoded};
