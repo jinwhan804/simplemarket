@@ -475,7 +475,7 @@ async function GetAPI(currentPage){
                 _td6.innerHTML = el.postViews;
 
                 _tr.onclick = async()=>{
-                    await API.post('./post/detail',{
+                    await API.post('/post/detail',{
                         headers : {
                             'Content-Type' : "application/json"
                         },

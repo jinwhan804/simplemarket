@@ -99,7 +99,7 @@ document.getElementById("nickname-update-button").addEventListener("click", asyn
     const newNickname = prompt("새로운 별명을 입력해주세요.");
     if (newNickname) {
         try {
-            const response = await API.post("./mypage", {
+            const response = await API.post("/mypage", {
                 nickname: newNickname
             }, {
                 withCredentials: true
