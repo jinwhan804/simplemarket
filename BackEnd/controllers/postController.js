@@ -208,6 +208,8 @@ exports.PostLikes = async(req,res)=>{
             where : {id}
         })
 
+        req.session.pageId = id;
+
         res.send(`${process.env.FRONT}/detail${process.env.END}`);
     } catch (error) {
         console.log(error);

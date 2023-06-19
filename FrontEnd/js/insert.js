@@ -216,7 +216,7 @@ window.onload = async () => {
                 userInfo: user_info
             }
             socket.emit('message', messageData);
-            API.post('./chat/chat_insert', messageData, {
+            API.post('/chat/chat_insert', messageData, {
                 withCredentials: true
             })
         }

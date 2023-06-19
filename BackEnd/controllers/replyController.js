@@ -26,6 +26,8 @@ exports.ReplyInsert = async(req,res)=>{
             userId
         })
 
+        req.session.pageId = postId;
+
         res.send(`${process.env.FRONT}/detail${process.env.END}`);
     } catch (error) {
         console.log(error);
@@ -36,7 +38,11 @@ exports.ReplyUpdate = async(req,res)=>{
     try {
         const {content, id} = req.body;
     
-        await Reply.update({content},{where : {id}})        
+        const reply = await Reply.findOne({where : {id}});
+
+        await Reply.update({content},{where : {id}});
+
+        req.session.pageId = reply.postId;
 
         res.send(`${process.env.FRONT}/detail${process.env.END}`);
     } catch (error) {
@@ -47,8 +53,12 @@ exports.ReplyUpdate = async(req,res)=>{
 exports.ReplyDelete = async(req,res)=>{
     try {
         const id = req.body.data;
+
+        const reply = await Reply.findOne({where : {id}});
+
+        req.session.pageId = reply.postId;
     
-        await Reply.destroy({where : {id}})
+        await Reply.destroy({where : {id}});
 
         res.send(`${process.env.FRONT}/detail${process.env.END}`);        
     } catch (error) {
