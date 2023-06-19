@@ -21,6 +21,7 @@ const boardRouter = require('./routers/boardRouter');
 const chatRouter = require('./routers/chatRouter');
 const replyRouter = require('./routers/reply');
 const rereplyRouter = require('./routers/rereply');
+const localpostRouter = require('./routers/localpost');
 
 const app = express();
 
@@ -61,6 +62,7 @@ app.use('/signUpList', boardRouter);
 app.use('/chat', chatRouter);
 app.use('/reply', replyRouter);
 app.use('/rereply', rereplyRouter);
+app.use('/localpost',localpostRouter);
 
 const server = app.listen(8080, () => {
     console.log("8080 Server Open");

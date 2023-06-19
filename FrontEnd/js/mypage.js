@@ -183,3 +183,10 @@ const usedMarket = document.querySelector('.used-market');
 usedMarket.onclick= ()=>{
     location.href = `./${mainUrl}`;
 }
+
+// 동네 장터 이동
+const localMarket = document.querySelector('.local-market');
+
+localMarket.onclick = ()=>{
+    location.href = `./local${urlEnd}`;
+}

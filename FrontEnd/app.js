@@ -51,7 +51,10 @@ app.get('/update',(req,res)=>{
    res.send(page);
 })
 
-
+app.get('/local',(req,res)=>{
+   const page = fs.readFileSync('./local.html','utf-8');
+   res.send(page);
+})
 
 app.listen(3000,()=>{
    console.log('front server on');

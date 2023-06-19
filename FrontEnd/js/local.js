@@ -397,7 +397,7 @@ async function GetAPI(currentPage){
 
         btns.innerHTML = '';
         
-        const {data} = await API.get('/post',{
+        const {data} = await API.get('/localpost',{
             headers : {
                 'Content-Type' : "application/json"
             }

@@ -242,46 +242,71 @@ mypageBtn.addEventListener('click', () => {
 })
 
 ////////////////////////// 게시판 영역 ///////////////////////////
-let user_data = {};
+let posts = {};
+async function GetAPI(){
+    try {
+        const {data} = await API.get('/post/updateview',{
+            headers : {
+                "Content-Type" : "application/json"
+            }
+        })
 
-window.onload = async()=>{
-    const {data} = await API.get('/post/insert',{
-        headers : {
-            "Content-Type" : "application/json"
-        }
-    })
-    
-    nickname.value = data.nickname;
-    user_data = data;
+        title.value = data.posts.title;
+        nickname.value = data.posts.User.nickname;
+        contentArea.innerHTML = data.posts.content;
+
+        posts = data.posts;
+
+        console.log(posts);
+
+    } catch (error) {
+        console.log(error);
+    }
 }
 
-insertBtn.onclick = async()=>{
+GetAPI();
+
+updateBtn.onclick = async()=>{
     try {
         const form = new FormData();
 
         form.append('title',title.value);
         form.append('content',contentArea.innerHTML);
-        form.append('userId',user_data.id);
+        form.append('id',posts.id);
 
-        axios.defaults.withCredentials = true;
-        await API.post('/post/insert',form,{
+        await API.post('/post/update',form,{
             headers : {
-                "Content-Type" : "application/json"
+                'Content-Type' : "application/json"
             }
         }).then((e)=>{
-            console.log(e.data);
             location.href = e.data;
         }).catch((err)=>{
-            console.log('프론트 글 추가하다 에러남');
+            console.log('업데이트 화면에서 글 수정하다 포스트 에러남');
             console.log(err);
         })
     } catch (error) {
-        console.log(error)
+        console.log('업데이트 화면에서 글 수정하다 에러남');
+        console.log(error);
     }
 }
 
-toPost.onclick = ()=>{
-    location.href = `./${mainUrl}`;
+cencelBtn.onclick = async()=>{
+    try {
+        await API.post('/post/detail',{
+            headers : {
+                'Content-Type' : "application/json"
+            },
+            data : posts.id
+        }).then((e)=>{
+            location.href = e.data;
+        }).catch((err)=>{
+            console.log('업데이트 화면에서 취소하고 상세보기로 넘어가다 포스트 에러남');
+            console.log(err);
+        })
+    } catch (error) {
+        console.log('업데이트 화면에서 취소하고 상세보기로 넘어가다 에러남');
+        console.log(error);
+    }
 }
 
 // 전체 글 목록 페이지로 이동 = 메인 페이지

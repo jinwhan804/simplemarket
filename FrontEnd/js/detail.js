@@ -792,3 +792,17 @@ reply_on.onclick = async()=>{
 toPost.onclick = ()=>{
     location.href = `./${mainUrl}`;
 }
+
+// 전체 글 목록 페이지로 이동 = 메인 페이지
+const usedMarket = document.querySelector('.used-market');
+
+usedMarket.onclick= ()=>{
+    location.href = `./${mainUrl}`;
+}
+
+// 동네 장터 이동
+const localMarket = document.querySelector('.local-market');
+
+localMarket.onclick = ()=>{
+    location.href = `./local${urlEnd}`;
+}
