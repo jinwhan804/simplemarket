@@ -19,7 +19,7 @@ exports.isLogin = (req, res, next) => {
         } else {
             // console.log(acc_decoded)
             req.access_decoded = acc_decoded;
-            req.session.pageId = pageId;
+            req.pageId = pageId;
             next();
         }
     })

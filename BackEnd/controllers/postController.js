@@ -21,7 +21,7 @@ exports.PostViewAll = async (req, res) => {
 exports.PostViewSelect = (req, res) => {
     try {
         const id = req.body.data;
-        req.session.pageId = id;
+        req.pageId = id;
         res.send(`${process.env.FRONT}/detail${process.env.END}`)
     } catch (error) {
         console.log('포스트 컨트롤러에서 글 하나 보여주다 에러남 1');
@@ -31,7 +31,7 @@ exports.PostViewSelect = (req, res) => {
 
 exports.PostViewOne = async (req, res) => {
     try {
-        const id = req.session.pageId;
+        const id = req.pageId;
         const {access_decoded} = req;
 
         const post = await Post.findOne({
