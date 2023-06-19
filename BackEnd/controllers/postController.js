@@ -21,7 +21,6 @@ exports.PostViewAll = async (req, res) => {
 exports.PostViewSelect = (req, res) => {
     try {
         const id = req.body.data;
-        console.log(req.body);
         req.body.pageId = id;
         res.send(`${process.env.FRONT}/detail${process.env.END}`)
     } catch (error) {
@@ -33,6 +32,7 @@ exports.PostViewSelect = (req, res) => {
 exports.PostViewOne = async (req, res) => {
     try {
         const id = req.body.pageId;
+        console.log(req.body)
         const {access_decoded} = req;
 
         const post = await Post.findOne({
