@@ -22,10 +22,9 @@ exports.PostViewSelect = (req, res) => {
     try {
         const id = req.body.data;
         for (const key in req.sessionStore.sessions) {
-            const json = JSON.parse(`${req.sessionStore.sessions[key]}`);
+            req.sessionStore.sessions[key].pageId = id;
             
-            json.pageId = id;
-            console.log(req.sessionStore.sessions);
+            console.log('페이지 들어가나',req.sessionStore.sessions);
         }
         
         res.send(`${process.env.FRONT}/detail${process.env.END}`)
