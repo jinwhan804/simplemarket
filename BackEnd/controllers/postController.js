@@ -115,26 +115,22 @@ exports.PostUpdate = async(req,res)=>{
     }
 }
 
-exports.PostDelete = async(req,res)=>{
+exports.PostDelete = async(req,res,next)=>{
     try {
         const id = req.body.data;
 
-        await Post.destroy({
-            where : {id}
-        })
-
         const reply = await Reply.findAll({where : {postId : id}});
 
-        await Reply.destroy({
-            where : {postId : id}
-        })
-
         reply.forEach(async(el)=>{
-            await Rereply.destroy({
-                where : {replyId : el.id}
-            })
+            await Rereply.destroy({where : {replyId : el.id}});
         })
 
+        await Reply.destroy({where : {postId : id}})
+
+        await Post.destroy({
+            where : {id}
+        });
+        
         res.send(`${process.env.FRONT}/${process.env.MAIN}`);
     } catch (error) {
         console.log('포스트 컨트롤러에서 글 지우다 에러남');
