@@ -276,6 +276,7 @@ async function GetAPI(){
                 "Content-Type" : "application/json"
             }
         }) 
+        console.log(data)
         title.value = data.posts.title;
         nickname.value = data.posts.User.nickname;
         contentArea.innerHTML = data.posts.content;
