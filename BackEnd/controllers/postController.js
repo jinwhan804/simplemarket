@@ -21,7 +21,6 @@ exports.PostViewAll = async (req, res) => {
 exports.PostViewSelect = (req, res) => {
     try {
         const id = req.body.data;
-        console.log('id들어오나',id)
         req.pageId = id;
         res.send(`${process.env.FRONT}/detail${process.env.END}`)
     } catch (error) {
