@@ -32,7 +32,8 @@ class Chat extends Sequelize.Model {
     }
 
     static associate(db) {
-        db.Chat.belongsTo(db.User, { foreignKey: 'userInfo', targetKey: 'id' });
+        db.Chat.belongsTo(db.User, { foreignKey: 'sender', targetKey: 'id' });
+        db.Chat.belongsTo(db.User, { foreignKey: 'receiver', targetKey: 'id' });
     }
 }
 

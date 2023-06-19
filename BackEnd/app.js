@@ -71,11 +71,11 @@ const io = socketIo(server, {
 });
 
 
+// let list = [{ user_id: '', socketId: '' }];
 // let temp = list.filter((e) => e.user_id == "1");
 // console.log(temp.socketId);
-// let userId = [];
+let userId = [];
 let userList = [];
-// let list = [{ user_id: '', socketId: '' }];
 let users = {};
 
 
@@ -88,40 +88,57 @@ io.sockets.on('connection', (socket) => {
     console.log(userId);
 
     socket.on('join', (userId) => {
+        // console.log(userId);
         users[userId] = socket.id;
+        console.log(users);  // { admin: 'socket.id', a: 'socket.id'}
+
+        if (!users[userId]) {
+            users[userId] = [];
+        }
         userList.push(users);
-        console.log(userList);
+        // console.log(userList);
+
     })
 
-    // socket.on('joinRoom', (room, name) => {
-    //     socket.join(room);
-
-    //     userList.push({ user_id: name, socketId: socket.id });
-    //     console.log(userList);
-    //     io.emit('joinUser', userList, userId);
-    // })
-
-    socket.on('message', (messageData) => {
+    socket.on('message', (messageData, userId) => {
         // const nickname = userId[socket.id];
         // console.log(data);
+        console.log(users["admin"])
+        console.log(users[userId])
+        // userId 어드민은 보내는 유저를 넣어주자
+
         console.log(messageData)
-        io.to(users[userId]).emit('message', messageData);
+        io.to(users['admin']).emit('message', messageData);
         io.to(users[userId]).emit('message', messageData);
     })
 
+    // socket.on('message', (messageData, receiverId) => {
+    //     // Ensure the recipient user exists and is online.
+    //     if (!users[receiverId]) {
+    //         console.error(`User ${receiverId} is not online or doesn't exist.`);
+    //         return;
+    //     }
+
+    //     // Retrieve recipient socket id from 'users' object
+    //     const receiverSocketId = users[receiverId];
+
+    //     // Send message to the recipient and the sender
+    //     socket.to(receiverSocketId).emit('message', messageData);
+    //     socket.emit('message', messageData);
+    // })
+
+
     socket.on('disconnect', () => {
-        for (let userId in users) {
-            if (users[userId] === socket.id) {
-                delete users[userId];
+        console.log('유저 퇴장');
+        const index = userId.indexOf(socket.id);
+        userId = userId.filter((value) => value != socket.id);
+        for (let user in users) {
+            if (users[user] === socket.id) {
+                delete users[user];
             }
         }
-    });
-
-    // socket.on('disconnect', () => {
-    //     console.log('유저 퇴장');
-    //     const index = userId.indexOf(socket.id);
-    //     userId.splice(index, 1);
-    //     io.emit('userList', userList);
-    //     console.log(userId);
-    // })
+        userList.splice(index, 1);
+        io.emit('userList', userList);
+        console.log(userId);
+    })
 })
