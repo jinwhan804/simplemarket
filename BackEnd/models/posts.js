@@ -8,7 +8,7 @@ class Post extends Sequelize.Model {
                 allowNull: false
             },
             content: {
-                type: Sequelize.STRING(256),
+                type: Sequelize.JSON,
             },
             postLikes: {
                 type: Sequelize.STRING(256),
@@ -17,7 +17,7 @@ class Post extends Sequelize.Model {
             postViews: {
                 type: Sequelize.INTEGER,
                 defaultValue: 0
-            }
+            },
         }, {
             sequelize,
             timestamps: true,

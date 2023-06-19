@@ -1,17 +1,17 @@
-    // 관리자 게시판 기능 (유저만 안보이게)
-    async function checkAdmin() {
-        const adminHide = document.getElementById('admin-hide');
-        const {data} = await API.get("./login/view", {
-        withCredentials : true
-        });
-        if(data && data.grade == "3"){
-            adminHide.style.display = "block";
-        }else{
-            adminHide.style.display = "none"
+        // 관리자 게시판 기능 (유저만 안보이게)
+        async function checkAdmin() {
+            const adminHide = document.getElementById('admin-hide');
+            const {data} = await API.get("./login/view", {
+            withCredentials : true
+            });
+            if(data && data.grade == "3"){
+                adminHide.style.display = "block";
+            }else{
+                adminHide.style.display = "none"
+            }
         }
-    }
-    // 로그아웃 기능 
-    const Logout = document.getElementById('logout');
+        // 로그아웃 기능 
+        const Logout = document.getElementById('logout');
 
 Logout.addEventListener('click', async ()=> {
     try {
@@ -148,6 +148,7 @@ getAPI();
 checkAdmin();
 getUserPost();
 
+// 헤더에 중고장터 a 태그
 const usedMarket = document.querySelector('.used-market');
 
 usedMarket.onclick= ()=>{

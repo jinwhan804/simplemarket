@@ -482,3 +482,11 @@ box-shadow: inset 0px 0px 0.26vw white;
     font-size: 0.677vw;
     text-align: right;
 }
+
+#toSignUp {
+    color: #ffffff;
+    cursor: pointer;
+}
+#toSignUp:hover {
+    color: #0056b3
+}

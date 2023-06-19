@@ -44,3 +44,32 @@ exports.uploadProfileImage = async (req, res) => {
         res.send('업로드 실패');
     }
 };
+exports.uploadProfileImage2 = async (req, res) => {
+    const file = req.file;
+    if (!req.file) {
+        return res.status(400).send('파일 업로드 자체가 안됐음');
+    }
+    
+    const params = {
+        Bucket: process.env.AWS_BUCKET_NAME, // 사용할 S3 버킷명
+        Key: file.originalname, // 저장할 파일명
+        Body: file.buffer, // 업로드할 파일
+        ACL: 'public-read' // 파일에 대한 접근 권한 설정. public-read로 설정하면 파일이 공개적으로 접근 가능하게 됩니다.
+    };
+    
+    try {
+        s3.upload(params, async (err, data) => {
+            if (err) {
+                console.log('Error occurred while trying to upload to S3 bucket', err);
+            }
+            
+            if (data) {
+                res.send('프로필 이미지 업로드에 성공하였습니다.');
+            }
+        });
+    } catch (error) {
+        console.log(error);
+        res.send('업로드 실패');
+    }
+};
+

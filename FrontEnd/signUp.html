@@ -104,7 +104,7 @@
             <select id="guSelect" onchange="updateDongs(); updateAddress();"></select>
             <select id="dongSelect" onchange="updateAddress();"></select>
       </div>
-        <button>회원가입</button>
+        <button id="singupBtn">회원가입</button>
     </form>
 </body>
 <script>
@@ -207,6 +207,9 @@
       addressInput.value = `${selectedCity} ${selectedGu} ${selectedDong}`;
     }
     
+    // singupBtn.onclick() = () => {
+    //   location.href = `./${mainUrl}`;
+    // }
   </script>
   
 </html>
