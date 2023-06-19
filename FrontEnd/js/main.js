@@ -90,6 +90,7 @@ const userChatList = document.querySelector('.user_chat_list');
 const chatBoxClose = document.querySelectorAll('.close_chatBox');
 const chatContent = document.querySelector('.chat_content');
 const back = document.querySelector('.back');
+
 const now = new Date();
 const hours = now.getHours();
 const minutes = now.getMinutes();
@@ -122,32 +123,30 @@ chatBoxClose.forEach(btn => {
     });
 });
 
-// 유저와의 채팅 목록을 나타내는 이벤트(관리자만 볼 수 있음)
-// async function selectUserChat() {
-//     try {
-//         console.log(userChatList);
-//         const chatMessages = document.querySelectorAll(`.chat_message`);
-//         chatMessages.forEach((e) => {
-//             e.addEventListener('dblclick', () => {
-//                 const userNickname = e.getAttribute('data_nickname');
-//                 openChatBox(userNickname);
-//                 console.log(userNickname);
-//                 return userNickname;
-//             })
-//         })
-//     } catch (error) {
-//         console.error(error);
-//     }
-// }
 
-let chatUser = null;
+// 유저와의 채팅 목록을 나타내는 이벤트(관리자만 볼 수 있음)
+async function selectUserChat() {
+    try {
+        console.log(userChatList);
+        const chatMessages = document.querySelectorAll(`.chat_message`);
+
+        chatMessages.forEach((e) => {
+            const userNickname = e.getAttribute('data_nickname');
+            e.addEventListener('dblclick', () => {
+                openChatBox(userNickname);
+                console.log(userNickname);
+
+            })
+        })
+    } catch (error) {
+        console.error(error);
+    }
+}
+
 function openChatBox(userNickname) {
     chatBox.classList.add('active');
     chatList.classList.remove('active');
-    chatUser = getUserNickname(userNickname);
 }
-
-
 
 
 async function userInfo() {
@@ -167,7 +166,7 @@ async function userInfo() {
     }
 }
 
-async function chatSocket(userNickname) {
+async function chatSocket() {
     try {
         const socket = io.connect(serverUrl);
 
@@ -212,20 +211,11 @@ async function chatSocket(userNickname) {
             const { data } = await axios.get('http://127.0.0.1:8080/login/view', {
                 withCredentials: true
             });
-            console.log(userChatList);
-            const chatMessages = document.querySelectorAll(`.chat_message`);
-            chatMessages.forEach((e) => {
-                const userNickname = e.getAttribute('data_nickname');
-                e.addEventListener('dblclick', () => {
-                    openChatBox(userNickname);
-                    console.log(userNickname);
-                })
-                // 메시지 보내는 코드
-                btn.onclick = async () => {
-                    if (!chatUser) {
-                        console.log('error');
-                        return;
-                    }
+
+
+            // 메시지 보내는 코드
+            btn.onclick = async () => {
+                try {
                     const messageData = {
                         user_id: userId,
                         nickname: nickname,
@@ -233,19 +223,23 @@ async function chatSocket(userNickname) {
                         date: timeString,
                         profile_img: profileImg,
                         sender: senderId,
-                        receiver: chatUser.id
+                        // receiver: chatUser.id
                     }
                     if (data.grade === '3') {
-                        socket.emit('message', messageData, chatUser.user_id);
+                        socket.emit('message', messageData);
                     } else {
                         socket.emit('message', messageData, userId);
                     }
-                    // socket.emit('message', messageData, chatUser.user_id);
+                    // socket.emit('message', messageData, userId);
                     await axios.post('http://127.0.0.1:8080/chat/chat_insert', messageData, {
                         withCredentials: true
                     })
+                } catch (error) {
+                    console.log(error);
                 }
-            })
+            }
+
+
 
             // 유저의 채팅 리스트
             // const getOneChat = await axios.get(`http://127.0.0.1:8080/chat/${nickname}`, {
@@ -283,34 +277,11 @@ async function chatSocket(userNickname) {
                 }
                 chatContent.innerHTML += el;
             });
-
-
-
-
         } catch (error) {
             console.error(error);
         }
 
-        // chatBox 창의 뒤로가기 버튼(관리자만 보임)
-        try {
-            const { data } = await axios.get("http://127.0.0.1:8080/login/view", {
-                withCredentials: true
-            });
-            socket.emit('join', userId)
-            if (data.grade === '3') {
-                back.style.display = 'block';
-            } else {
-                back.style.display = 'none';
-            }
-        } catch (error) {
-            console.log(error);
-        }
-
-        // chatBox에서 chatList로 가는 버튼
-        back.addEventListener('click', () => {
-            chatList.classList.add('active');
-            chatBox.classList.remove('active');
-        });
+        selectUserChat();
 
         // 채팅방 채팅 코드
         socket.on('message', (data) => {
@@ -339,7 +310,26 @@ async function chatSocket(userNickname) {
         })
 
 
+        // chatBox 창의 뒤로가기 버튼(관리자만 보임)
+        try {
+            const { data } = await axios.get("http://127.0.0.1:8080/login/view", {
+                withCredentials: true
+            });
+            socket.emit('join', userId)
+            if (data.grade === '3') {
+                back.style.display = 'block';
+            } else {
+                back.style.display = 'none';
+            }
+        } catch (error) {
+            console.log(error);
+        }
 
+        // chatBox에서 chatList로 가는 버튼
+        back.addEventListener('click', () => {
+            chatList.classList.add('active');
+            chatBox.classList.remove('active');
+        });
 
 
     } catch (error) {

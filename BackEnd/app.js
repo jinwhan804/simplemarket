@@ -75,8 +75,8 @@ const io = socketIo(server, {
 // let temp = list.filter((e) => e.user_id == "1");
 // console.log(temp.socketId);
 let userId = [];
-let userList = [];
 let users = {};
+let userList = [];
 
 
 io.sockets.on('connection', (socket) => {
@@ -85,7 +85,7 @@ io.sockets.on('connection', (socket) => {
     console.log('유저 입장', socket.id);
 
     userId.push(socket.id);
-    console.log(userId);
+    console.log(userId);  // ['socket.id', 'socket.id',...]
 
     socket.on('join', (userId) => {
         // console.log(userId);
@@ -96,7 +96,7 @@ io.sockets.on('connection', (socket) => {
             users[userId] = [];
         }
         userList.push(users);
-        // console.log(userList);
+        console.log(userList);
 
     })
 
