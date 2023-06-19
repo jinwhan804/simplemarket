@@ -21,12 +21,7 @@ exports.PostViewAll = async (req, res) => {
 exports.PostViewSelect = (req, res) => {
     try {
         const id = req.body.data;
-        for (const key in req.sessionStore.sessions) {
-            req.sessionStore.sessions[key].pageId = id;
-            
-            console.log('페이지 들어가나',req.sessionStore.sessions);
-        }
-        
+        req.session.pageId = id;
         res.send(`${process.env.FRONT}/detail${process.env.END}`)
     } catch (error) {
         console.log('포스트 컨트롤러에서 글 하나 보여주다 에러남 1');
@@ -36,8 +31,66 @@ exports.PostViewSelect = (req, res) => {
 
 exports.PostViewOne = async (req, res) => {
     try {
-        const id = req.body.pageId;
         const {access_decoded} = req;
+
+        function findKeyByToken(obj, pageId) {
+            for (let key in obj) {
+                if (typeof obj[key] === "string") {
+                    let parsedObj;
+                    try {
+                        // JSON 문자열을 파싱하여 객체로 변환합니다.
+                        parsedObj = JSON.parse(obj[key]);
+                    } catch (err) {
+                        // 파싱 실패 시에는 다음 키로 이동합니다.
+                        continue;
+                    }
+                    if (parsedObj.pageId === pageId) {
+                        // 원하는 값을 찾았다면, 해당 키를 반환합니다.
+                        return key;
+                    }
+                } else if (typeof obj[key] === "object" && obj[key] !== null) {
+                        // 값이 객체일 경우, 재귀적으로 함수를 호출하여 탐색을 계속합니다.
+                        const result = findKeyByToken(obj[key], pageId);
+                    if (result) {
+                        return result;
+                    }
+                }
+            }
+            return null;
+        }
+
+        let th;
+        for (const key in req.sessionStore.sessions) {
+            const json = JSON.parse(`${req.sessionStore.sessions[key]}`);
+            th = json.pageId;
+        }
+
+        const ta = req.sessionStore.sessions;
+        const nowsessioid = findKeyByToken(ta, th); 
+
+        req.sessionStore.all((err, sessions) => {
+            if (err) {
+            return res.sendStatus(500);
+            }
+      
+            const sessionIds = Object.keys(sessions);
+
+            // Delete each session by ID
+            sessionIds.forEach((el) => {
+                console.log(el);
+                console.log(nowsessioid);
+                if (el == nowsessioid) {
+                    req.sessionStore.destroy(nowsessioid, (err) => {
+                        if (err) {
+                            console.error("Error destroying session:", err);
+                        } else {
+                            console.log("Session destroyed successfully:", nowsessioid);
+                            console.log(ta);
+                        }
+                    });
+                }
+            });
+        })
 
         const post = await Post.findOne({
             where : {id},
@@ -47,8 +100,8 @@ exports.PostViewOne = async (req, res) => {
         })
 
         if(access_decoded.id != post.userId){
-            let viewAdd = post.postViews + 1;
-            Post.update({postViews : viewAdd},{where : {id}});
+            let likeAdd = post.postViews + 1;
+            Post.update({postViews : likeAdd},{where : {id}});
         }
         
         const data = {posts : post, users : access_decoded};
@@ -120,26 +173,22 @@ exports.PostUpdate = async(req,res)=>{
     }
 }
 
-exports.PostDelete = async(req,res)=>{
+exports.PostDelete = async(req,res,next)=>{
     try {
         const id = req.body.data;
 
-        await Post.destroy({
-            where : {id}
-        })
-
         const reply = await Reply.findAll({where : {postId : id}});
 
-        await Reply.destroy({
-            where : {postId : id}
-        })
-
         reply.forEach(async(el)=>{
-            await Rereply.destroy({
-                where : {replyId : el.id}
-            })
+            await Rereply.destroy({where : {replyId : el.id}});
         })
 
+        await Reply.destroy({where : {postId : id}})
+
+        await Post.destroy({
+            where : {id}
+        });
+        
         res.send(`${process.env.FRONT}/${process.env.MAIN}`);
     } catch (error) {
         console.log('포스트 컨트롤러에서 글 지우다 에러남');
