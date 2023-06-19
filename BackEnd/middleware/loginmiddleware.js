@@ -2,11 +2,14 @@ const jwt = require("jsonwebtoken");
 
 exports.isLogin = (req, res, next) => {
     let access_token;
+    let pageId;
     console.log(req.sessionStore.sessions);
     for (const key in req.sessionStore.sessions) {
         const json = JSON.parse(`${req.sessionStore.sessions[key]}`);
         if(json.access_token != null){
             access_token = json.access_token;
+        }else{
+            pageId = json.pageId;
         }
     }
     console.log("aaaaaaaaaaaaaaa",access_token);
@@ -16,6 +19,7 @@ exports.isLogin = (req, res, next) => {
         } else {
             // console.log(acc_decoded)
             req.access_decoded = acc_decoded;
+            req.session.pageId = pageId;
             next();
         }
     })
