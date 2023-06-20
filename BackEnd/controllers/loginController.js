@@ -23,30 +23,35 @@ exports.Login = async (req, res) => {
                 age: '100'
             });
             res.send('관리자 계정이 생성되었습니다.');
-            return res.redirect(`${process.env.FRONT}/main${process.env.END}`);
         } else if (user) {
             const same = bcrypt.compareSync(user_pw, user.user_pw);
-            const { id, name, age, grade, nickname } = user;
-
+            const { id, name, age, grade, nickname, address } = user;
+            const data = {msg : '', token : null}
             if (same) {
                 let token = jwt.sign({
                     id,
                     name,
                     age,
                     grade,
-                    nickname
+                    nickname,
+                    address
                 }, process.env.ACCESS_TOKEN_KEY, {
                     expiresIn: '60m'
                 });
 
                 if (user.grade === '0') {
-                    res.send(`승인이 거절되었습니다.\n회원가입을 다시 진행해주세요.`);
+                    data.msg = `승인이 거절되었습니다.\n회원가입을 다시 진행해주세요.`;
                 } else if (user.grade === '1') {
-                    res.send('가입 승인 대기중입니다.');
+                    data.msg = '가입 승인 대기중입니다.';
                 } else {
+                    data.msg = '로그인 성공';
+                    data.token = token;
                     req.session.access_token = token;
-                    return res.redirect(`${process.env.FRONT}/main${process.env.END}`);
                 }
+
+                console.log('login : ',data.token);
+
+                res.send(data);
             } else {
                 res.send('비번 틀림');
             }

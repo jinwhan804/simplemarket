@@ -2,10 +2,11 @@ const { Chat, User } = require('../models');
 
 exports.ChatInsert = async (req, res) => {
     try {
-        const { message, chatId } = req.body;
+        const { message, sender, receiver } = req.body;
         await Chat.create({
             message,
-            chatId
+            sender,
+            receiver
         })
     } catch (error) {
         console.log(error);
@@ -13,12 +14,16 @@ exports.ChatInsert = async (req, res) => {
 }
 
 exports.ViewAllChats = async (req, res) => {
-    const { nickname } = req.params;
     try {
-        const chats = await Chat.findAll();
-        // console.log(chats);
+        const chats = await Chat.findAll({
+            include: [
+                {
+                    model: User,
+                    attributes: ['id', 'nickname', 'profile_img']
+                }
+            ]
+        });
         res.json(chats);
-        console.log(nickname);
     } catch (error) {
         console.log(error);
     }

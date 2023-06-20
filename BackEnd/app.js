@@ -8,6 +8,7 @@ const { sequelize } = require("./models");
 const path = require("path");
 const socketIo = require("socket.io");
 const cookieParser = require('cookie-parser');
+const AWS = require('aws-sdk'); // 이미지 파일 업로드 클라우드
 
 const SignUpRouter = require("./routers/signUp");
 const LoginRouter = require("./routers/login");
@@ -19,6 +20,8 @@ const adminRouter = require('./routers/adminRouter');
 const boardRouter = require('./routers/boardRouter');
 const chatRouter = require('./routers/chatRouter');
 const replyRouter = require('./routers/reply');
+const rereplyRouter = require('./routers/rereply');
+const localpostRouter = require('./routers/localpost');
 
 const app = express();
 
@@ -37,11 +40,15 @@ app.use(session({
     saveUninitialized: false
 }));
 
-app.use(express.urlencoded({ extended: true }));
+// app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ limit: '4mb', extended: true }));
 
 app.use("/img", express.static(path.join(__dirname, "uploads")));
 
-app.use(express.json());
+// app.use(express.json());
+app.use(express.json({ limit: '4mb' }));
+
+
 
 app.use(cors({
     origin: `${process.env.FRONT_SERVER}`,
@@ -58,6 +65,8 @@ app.use('/admin', adminRouter);
 app.use('/signUpList', boardRouter);
 app.use('/chat', chatRouter);
 app.use('/reply', replyRouter);
+app.use('/rereply', rereplyRouter);
+app.use('/localpost', localpostRouter);
 
 const server = app.listen(8080, () => {
     console.log("8080 Server Open");
@@ -84,6 +93,7 @@ io.sockets.on('connection', (socket) => {
 
     console.log('유저 입장', socket.id);
     userId.push(socket.id);
+    console.log(userId);
 
     socket.on('joinRoom', (room, nickname) => {
         socket.join(room);
@@ -91,7 +101,11 @@ io.sockets.on('connection', (socket) => {
         io.to(room).emit('joinRoom', room, nickname, userList);
     })
 
-    // socket.on('message', ())
+
+    // 닉네임 : 메시지를 보내는 사용자의 닉네임
+    socket.on('message', (nickname, room, messageData) => {
+        io.to(room).emit('message', nickname, messageData);
+    })
 
     socket.on('disconnect', () => {
         console.log('유저 나감');

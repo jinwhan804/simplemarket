@@ -6,10 +6,6 @@ class Chat extends Sequelize.Model {
             message: {
                 type: Sequelize.STRING,
                 allowNull: false
-            },
-            chatId: {
-                type: Sequelize.INTEGER,
-                allowNull: false
             }
         }, {
             sequelize,
@@ -24,7 +20,8 @@ class Chat extends Sequelize.Model {
     }
 
     static associate(db) {
-        db.Chat.belongsTo(db.User, { foreignKey: 'chatId', targetKey: 'id' });
+        db.Chat.belongsTo(db.User, { foreignKey: 'sender', targetKey: 'id' });
+        db.Chat.belongsTo(db.User, { foreignKey: 'receiver', targetKey: 'id' });
     }
 }
 
