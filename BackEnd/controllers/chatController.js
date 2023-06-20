@@ -2,14 +2,10 @@ const { Chat, User } = require('../models');
 
 exports.ChatInsert = async (req, res) => {
     try {
-        const { user_id, nickname, message, profile_img, sender, receiver } = req.body;
+        const { message, chatId } = req.body;
         await Chat.create({
-            user_id,
-            nickname,
             message,
-            profile_img,
-            sender,
-            receiver
+            chatId
         })
     } catch (error) {
         console.log(error);

@@ -37,7 +37,7 @@ app.use(session({
     saveUninitialized: false
 }));
 
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 
 app.use("/img", express.static(path.join(__dirname, "uploads")));
 
@@ -76,69 +76,26 @@ const io = socketIo(server, {
 // console.log(temp.socketId);
 let userId = [];
 let users = {};
-let userList = [];
+let userList = []; // 방에 있는 유저
 
 
 io.sockets.on('connection', (socket) => {
 
 
     console.log('유저 입장', socket.id);
-
     userId.push(socket.id);
-    console.log(userId);  // ['socket.id', 'socket.id',...]
 
-    socket.on('join', (userId) => {
-        // console.log(userId);
-        users[userId] = socket.id;
-        console.log(users);  // { admin: 'socket.id', a: 'socket.id'}
-
-        if (!users[userId]) {
-            users[userId] = [];
-        }
-        userList.push(users);
-        console.log(userList);
-
+    socket.on('joinRoom', (room, nickname) => {
+        socket.join(room);
+        userList.push({ nickname, id: socket.id });
+        io.to(room).emit('joinRoom', room, nickname, userList);
     })
 
-    socket.on('message', (messageData, userId) => {
-        // const nickname = userId[socket.id];
-        // console.log(data);
-        console.log(users["admin"])
-        console.log(users[userId])
-        // userId 어드민은 보내는 유저를 넣어주자
-
-        console.log(messageData)
-        io.to(users['admin']).emit('message', messageData);
-        io.to(users[userId]).emit('message', messageData);
-    })
-
-    // socket.on('message', (messageData, receiverId) => {
-    //     // Ensure the recipient user exists and is online.
-    //     if (!users[receiverId]) {
-    //         console.error(`User ${receiverId} is not online or doesn't exist.`);
-    //         return;
-    //     }
-
-    //     // Retrieve recipient socket id from 'users' object
-    //     const receiverSocketId = users[receiverId];
-
-    //     // Send message to the recipient and the sender
-    //     socket.to(receiverSocketId).emit('message', messageData);
-    //     socket.emit('message', messageData);
-    // })
-
+    // socket.on('message', ())
 
     socket.on('disconnect', () => {
-        console.log('유저 퇴장');
-        const index = userId.indexOf(socket.id);
+        console.log('유저 나감');
+        userList = userList.filter((value) => value.id != socket.id);
         userId = userId.filter((value) => value != socket.id);
-        for (let user in users) {
-            if (users[user] === socket.id) {
-                delete users[user];
-            }
-        }
-        userList.splice(index, 1);
-        io.emit('userList', userList);
-        console.log(userId);
     })
 })
