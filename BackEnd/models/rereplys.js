@@ -5,9 +5,6 @@ class Rereply extends Sequelize.Model{
         return super.init({
             content : {
                 type : Sequelize.STRING(256),
-            },
-            rereplyLikes: {
-                type : Sequelize.STRING(256),
             }
         },{
             sequelize,
@@ -24,6 +21,7 @@ class Rereply extends Sequelize.Model{
     static associate(db){
         db.Rereply.belongsTo(db.User,{foreignKey : "userId", TargetKey : "id"});
         db.Rereply.belongsTo(db.Reply,{foreignKey : "replyId", TargetKey : "id"});
+        db.Rereply.hasMany(db.Stat,{foreignKey : "rereplyId", SourceKey : "id"});
     }
 }
 

@@ -5,9 +5,6 @@ class Reply extends Sequelize.Model{
         return super.init({
             content : {
                 type : Sequelize.STRING(256),
-            },
-            replyLikes: {
-                type : Sequelize.STRING(256),
             }
         },{
             sequelize,
@@ -25,6 +22,7 @@ class Reply extends Sequelize.Model{
         db.Reply.belongsTo(db.User,{foreignKey : "userId", TargetKey : "id"});
         db.Reply.belongsTo(db.Post,{foreignKey : "postId", TargetKey : "id"});
         db.Reply.hasMany(db.Rereply,{foreignKey : "replyId", SourceKey : 'id'});
+        db.Reply.hasMany(db.Stat,{foreignKey : "replyId", SourceKey : 'id'});
     }
 }
 

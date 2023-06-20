@@ -278,26 +278,33 @@ async function GetAPI(){
                 "Content-Type" : "application/json"
             }
         }) 
-        console.log(data)
         title.value = data.posts.title;
         nickname.value = data.posts.User.nickname;
         contentArea.innerHTML = data.posts.content;
-        
-        if(data.posts.postLikes != null && data.posts.postLikes != 'null'){
-            likeNum = data.posts.postLikes.split(',');
-            postLikes.value = likeNum.length;
-        }else{
-            postLikes.value = 0;
-        }            
-        
+                
         posts = data.posts;
         users = data.users;
+        
+        const form = new FormData();
+
+        form.append('postId', posts.id);
+        form.append('userId',users.id);
+
+        // 조회수 추가
+        await API.post('/viewcheck/add',form);
 
         if(data.users.id != data.posts.userId){
             updateBtn.classList.add('unable');
         }else{
             updateBtn.classList.remove('unable');
         }
+
+        // 좋아요 카운팅
+        const likeCount = await API.post('/likecheck/post',{
+            data : posts.id
+        });
+
+        postLikes.value = likeCount.data.length;  
         
         await API.post('/reply',{
             headers : {
@@ -679,18 +686,14 @@ async function GetAPI(){
         }).catch((err)=>{
             console.log(err);
         })
+
+        
     } catch (error) {
         console.log(error);
     }
 }
 
-async function RereplyView (){
-    
-}
-
 GetAPI();
-
-RereplyView();
 
 toUpdate.onclick = async()=>{
     try {
@@ -728,44 +731,20 @@ toDelete.onclick = async()=>{
     }
 }
 
+// 좋아요 버튼 기능
 likeBtn.onclick = async()=>{
     try {
-        if(posts.userId != users.id){                
-            let likeUser = [];
+        const form = new FormData();
 
-            if(posts.postLikes == null || posts.postLikes == 'null'){
-                posts.postLikes = users.id.toString();
-                likeUser.push(posts.postLikes);
-            }else{
-                likeUser = posts.postLikes.split(",");
+        form.append('postId',posts.id);
+        form.append('userId',users.id);
 
-                if(!likeUser.includes(users.id.toString())){
-                    likeUser.push(users.id.toString());
-                    posts.postLikes = likeUser.join(',');                    
-                }else{
-                    likeUser.splice(likeUser.indexOf(users.id.toString()),1);
-                    if(likeUser.length == 0){
-                        posts.postLikes = null;
-                    }else{
-                        posts.postLikes = likeUser.join(',');
-                    }
-                }
-            }
-
-            postLikes.value = likeUser.length;
-
-            const form = new FormData();
-
-            form.append('id',posts.id);
-            form.append('postLikes',posts.postLikes);
-            
-
-            await API.post('/post/likes',form,{
-                headers : {
-                    "Content-Type" : "application/json"
-                }
-            })
-        }
+        await API.post('/likecheck/post/add',form).then((e)=>{
+            location.href = e.data;
+        }).catch((err)=>{
+            console.log(err);
+        })
+        
     } catch (error) {
         console.log(error);
     }
