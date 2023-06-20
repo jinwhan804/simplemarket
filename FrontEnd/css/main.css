@@ -237,6 +237,7 @@ input {
     right: 5%;
     bottom: 5%;
     cursor: pointer;
+    position: fixed;
 }
 
 /* 유저 채팅 리스트 */
