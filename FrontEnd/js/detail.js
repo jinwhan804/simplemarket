@@ -281,6 +281,7 @@ async function GetAPI(){
         title.value = data.posts.title;
         nickname.value = data.posts.User.nickname;
         contentArea.innerHTML = data.posts.content;
+        document.getElementById('userImg').src = data.posts.User.profile_img; // 이미지 추가
                 
         posts = data.posts;
         users = data.users;
@@ -293,11 +294,11 @@ async function GetAPI(){
         // 조회수 추가
         await API.post('/viewcheck/add',form);
 
-        if(data.users.id != data.posts.userId){
-            updateBtn.classList.add('unable');
-        }else{
-            updateBtn.classList.remove('unable');
-        }
+        // if(data.users.id != data.posts.userId){
+        //     updateBtn.classList.add('unable');
+        // }else{
+        //     updateBtn.classList.remove('unable');
+        // }
 
         // 좋아요 카운팅
         const likeCount = await API.post('/likecheck/post',{

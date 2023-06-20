@@ -7,6 +7,7 @@
     <title>Document</title>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="./js/index.js"></script>
+    <script src="./js/index.js"></script>
 </head>
 <style>
   body {
@@ -98,7 +99,7 @@
         <label for="female">여자</label>
       </div>
         <label for="">주소</label>
-        <input type="text" name="address" id="address" placeholder="ex-XX시 XX구 XX동" required>
+        <input type="text" name="address" id="address" placeholder="아래 도시 선택" required>
       <div class="address-select">
             <select id="citySelect" onchange="updateGus(); updateAddress();">
               <option value="">시/도</option>
@@ -141,11 +142,19 @@
 
   signUpForm.action = `${serverUrl}/signUp`;
 
+
     window.onload = function() {
       const citySelect = document.getElementById("citySelect");
+
+      const defaultOption = document.createElement("option");
+      defaultOption.text = "-";
+      defaultOption.value = "";
+      citySelect.add(defaultOption);
+
       for (const city in regionData) {
         const option = document.createElement("option");
         option.text = city;
+        option.value = city
         citySelect.add(option);
       }
   

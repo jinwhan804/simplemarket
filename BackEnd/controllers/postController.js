@@ -42,12 +42,24 @@ exports.PostViewAll = async (req, res) => {
             //         th = json.pageId;
             //         const ta = req.sessionStore.sessions;
             //         const nowsessioid = findKeyByToken(ta, th); 
+            // let th;
+            // for (const key in req.sessionStore.sessions) {
+            //     const json = JSON.parse(`${req.sessionStore.sessions[key]}`);
+            //     if(json.pageId != null){
+            //         th = json.pageId;
+            //         const ta = req.sessionStore.sessions;
+            //         const nowsessioid = findKeyByToken(ta, th); 
             
             //         req.sessionStore.all((err, sessions) => {
             //             if (err) {
             //             return res.sendStatus(500);
             //             }
+            //         req.sessionStore.all((err, sessions) => {
+            //             if (err) {
+            //             return res.sendStatus(500);
+            //             }
                 
+            //             const sessionIds = Object.keys(sessions);
             //             const sessionIds = Object.keys(sessions);
             
             //             // Delete each session by ID
@@ -101,6 +113,7 @@ exports.PostViewOne = async (req, res) => {
                 model : User
             }
         })
+
 
         const data = {posts : post, users : access_decoded};
 
