@@ -181,6 +181,21 @@ h1 {
     background-color: #0056b3;
 }
 
+#text-container select{
+    width: 100px;
+    position: absolute;
+    top: 150px;
+}
+
+#first-select{
+    right: 300px;
+}
+#second-select{
+    right: 180px;
+}
+#third-select{
+    right: 60px;
+}
 
 /* 로그인 css */
 form {
