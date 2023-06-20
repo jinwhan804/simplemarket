@@ -186,7 +186,7 @@ window.onload = async () => {
     const getChatData = await axios.get(`http://127.0.0.1:8080/chat/all_chats`, {
         withCredentials: true
     });
-    // console.log(getChatData);
+    console.log(getChatData);
     const chatData = getChatData.data;
     console.log(chatData);
 
@@ -197,7 +197,7 @@ window.onload = async () => {
         }
 
         const userInList = userChatList.querySelector(`.chat_message[data_nickname="${data.nickname}"]`);
-        // console.log(data);
+        console.log(data);
         if (userInList) {
             // 채팅 목록에서 해당 유저가 있으면 목록에 추가하지 않고 메시지만 업데이트
             userInList.querySelector('.message_content').textContent = data.message;
@@ -246,8 +246,6 @@ window.onload = async () => {
         }
         chatContent.innerHTML += el;
     })
-
-
 
     btn.onclick = async () => {
         const messageData = {
@@ -382,7 +380,7 @@ async function GetAPI(currentPage) {
 
             const _data = data.slice(pageGroup, pageGroup + pageOffset);
 
-            _data.forEach(async(el,index) => {
+            _data.forEach(async (el, index) => {
                 let date = new Date();
                 let year = date.getFullYear();
                 let month = date.getMonth() + 1;
@@ -407,14 +405,14 @@ async function GetAPI(currentPage) {
                 let updateDate = Number(el.updatedAt.slice(0, 10).split('-').join(''));
 
                 // 조회수 계산
-                const stat = await API.post('/viewcheck',{
+                const stat = await API.post('/viewcheck', {
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    data : el.id
+                    data: el.id
                 })
 
-                console.log('불러온거',stat.data)
+                console.log('불러온거', stat.data)
 
                 let _tr = document.createElement('tr');
                 let _td1 = document.createElement('td');

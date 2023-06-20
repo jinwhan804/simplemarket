@@ -43,7 +43,7 @@ app.use(session({
 }));
 
 // app.use(express.urlencoded({ extended: false }));
-app.use(express.urlencoded({ limit: '4mb', extended: true }));
+app.use(express.urlencoded({ limit: '4mb', extended: false }));
 
 app.use("/img", express.static(path.join(__dirname, "uploads")));
 
@@ -68,9 +68,9 @@ app.use('/signUpList', boardRouter);
 app.use('/chat', chatRouter);
 app.use('/reply', replyRouter);
 app.use('/rereply', rereplyRouter);
-app.use('/localpost',localpostRouter);
-app.use('/viewcheck',viewcheckRouter);
-app.use('/likecheck',likecheckRouter);
+app.use('/localpost', localpostRouter);
+app.use('/viewcheck', viewcheckRouter);
+app.use('/likecheck', likecheckRouter);
 
 const server = app.listen(8080, () => {
     console.log("8080 Server Open");
