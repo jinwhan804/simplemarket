@@ -32,21 +32,15 @@ class User extends Sequelize.Model {
                 type: Sequelize.STRING(100),
                 allowNull: true
             },
-            grade: {
-                type: Sequelize.STRING(10),
-                allowNull: false,
-                defaultValue: '1'
-            },
-
             profile_img: {
                 type: Sequelize.STRING,
                 allowNull: true
             },
-
-            // post_img: {
-            //     type: Sequelize.STRING,
-            //     allowNull : true
-            // }
+            grade: {
+                type: Sequelize.STRING,
+                allowNull: false,
+                defaultValue: '1'  // 0 : 승인거절, 1 : 승인대기, 2 : 승인, 3 : 관리자
+            }
         }, {
             sequelize: seq,
             timestamps: true,
@@ -57,15 +51,6 @@ class User extends Sequelize.Model {
             charset: "utf8",
             collate: "utf8_general_ci"
         })
-    }
-
-    static associate(db) {
-        db.User.hasMany(db.Post, { foreignKey: "userId", SourceKey: "id" });
-        db.User.hasMany(db.Chat, { foreignKey: 'sender', SourceKey: 'id' });
-        db.User.hasMany(db.Chat, { foreignKey: 'receiver', SourceKey: 'id' });
-        db.User.hasMany(db.Reply, { foreignKey: "userId", SourceKey: "id" });
-        db.User.hasMany(db.Rereply, { foreignKey: "userId", SourceKey: "id" });
-        db.User.hasMany(db.Stat, {foreignKey : "userId", SourceKey : "id"});
     }
 }
 

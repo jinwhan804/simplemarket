@@ -83,38 +83,37 @@ const io = socketIo(server, {
     }
 });
 
-let list = [{ user_id: "", socketId: "" }]
-let temp = list.filter((e) => e.user_id == "1");
-console.log(temp.socketId);
+
+// let list = [{ user_id: '', socketId: '' }];
+// let temp = list.filter((e) => e.user_id == "1");
+// console.log(temp.socketId);
 let userId = [];
-let userList = [];
+let users = {};
+let userList = []; // 방에 있는 유저
+
 
 io.sockets.on('connection', (socket) => {
 
-    console.log('유저 입장', socket.id);
 
+    console.log('유저 입장', socket.id);
     userId.push(socket.id);
     console.log(userId);
 
-    socket.on('joinUser', (name) => {
-        userList.push(name);
-        io.emit('joinUser', userList, userId);
+    socket.on('joinRoom', (room, nickname) => {
+        socket.join(room);
+        userList.push({ nickname, id: socket.id });
+        io.to(room).emit('joinRoom', room, nickname, userList);
     })
 
-    socket.on('message', (messageData) => {
-        // const nickname = userId[socket.id];
-        // console.log(data);
-        console.log(messageData)
-        io.to(userId[0]).emit('message', messageData);
-        io.to(userId[1]).emit('message', messageData);
-    })
 
+    // 닉네임 : 메시지를 보내는 사용자의 닉네임
+    socket.on('message', (nickname, room, messageData) => {
+        io.to(room).emit('message', nickname, messageData);
+    })
 
     socket.on('disconnect', () => {
-        console.log('유저 퇴장');
-        const index = userId.indexOf(socket.id);
-        userId.splice(index, 1);
-        io.emit('userList', userList);
-        console.log(userId);
+        console.log('유저 나감');
+        userList = userList.filter((value) => value.id != socket.id);
+        userId = userId.filter((value) => value != socket.id);
     })
 })
