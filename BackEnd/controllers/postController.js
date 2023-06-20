@@ -78,20 +78,20 @@ exports.PostViewOne = async (req, res) => {
             const sessionIds = Object.keys(sessions);
 
             // Delete each session by ID
-            sessionIds.forEach((el) => {
-                console.log(el);
-                console.log(nowsessioid);
-                if (el == nowsessioid) {
-                    req.sessionStore.destroy(nowsessioid, (err) => {
-                        if (err) {
-                            console.error("Error destroying session:", err);
-                        } else {
-                            console.log("Session destroyed successfully:", nowsessioid);
-                            console.log(ta);
-                        }
-                    });
-                }
-            });
+            // sessionIds.forEach((el) => {
+            //     console.log(el);
+            //     console.log(nowsessioid);
+            //     if (el == nowsessioid) {
+            //         req.sessionStore.destroy(nowsessioid, (err) => {
+            //             if (err) {
+            //                 console.error("Error destroying session:", err);
+            //             } else {
+            //                 console.log("Session destroyed successfully:", nowsessioid);
+            //                 console.log(ta);
+            //             }
+            //         });
+            //     }
+            // });
         })
 
         const post = await Post.findOne({

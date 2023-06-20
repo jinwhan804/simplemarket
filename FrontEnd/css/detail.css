@@ -8,6 +8,7 @@ body {
 /*  헤더  */
 header {
     width: 100%;
+    max-width: 100%;
     height: 64px;
     position: fixed;
     background-color: #007bff;
@@ -17,6 +18,7 @@ header {
     align-items: center;
     color: #ffffff;
     font-size: 1.5em;
+    z-index: 1;
 }
 
 .logo {
@@ -344,67 +346,6 @@ box-shadow: inset 0px 0px 0.26vw white;
 
 
 /* --------------------게시판 영역------------------- */
-/* #contentArea{
-    width: 500px;
-    min-height: 500px;
-    border: 1px solid;
-}
-
-img{
-    width: 300px;
-    height: auto;
-}
-
-.unable{
-    display: none;
-}
-
-#write_area{
-    width: 500px;
-    height: 100px;
-    border: 1px solid;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-}
-
-#write_reply{
-    width: 400px;
-    height: 80px;
-    border: 1px solid;
-}
-
-#reply_list{
-    list-style: none;
-}
-
-#reply_list li{
-    list-style: none;
-    min-height: 50px;
-}
-
-#reply_list li div{
-    display: inline-block;
-    border: 1px solid;
-    min-height: 50px;
-}
-
-.reply1{
-    width: 40px;
-}
-
-.reply2{
-    width: 250px;
-}
-
-.reply3{
-    width: 80px;
-}
-
-.reply4{
-    width: 100px;
-} */
-
 .border-container {
     display: flex;
     flex-direction: row;
@@ -415,7 +356,6 @@ img{
 }
 
 .left-side {
-    /* background-color: red; */
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -428,7 +368,6 @@ img{
 }
 
 .right-side {
-    /* background-color: blue; */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -453,4 +392,72 @@ img{
     height: 95%;
     border-radius: 50px;
     overflow: auto;
+    position: relative;
+}
+.img-container #toDelete {
+    display: flex;
+    position: fixed;
+    right: 0;
+}
+.img-container #toUpdate {
+    display: flex;
+    position: fixed;
+}
+.img-container button {
+    background-color: #007bff;
+    color: #ffffff;
+    cursor: pointer;
+    margin: 10px;
+    border-radius: 100%;
+    width: 5%;
+    height: 8%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 100%;
+    top: 50%;
+}
+.img-container button:hover{
+    color: black;
+}
+
+/*////////////////////////// 오른쪽 사이드 ////////////////////////*/
+.infoSide {
+    width: 100%;
+    height: 25%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#userImg {
+    display: block;
+    width: 40%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: fill;
+}
+.info-content {
+    width: 60%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    /* color: #007bff; */
+}
+.info-item {
+    margin: 10px;
+    font-size: 1.5em;
+}
+
+#title, #nickname, #postLikes{
+    font-size: 20px;
+}
+
+/* 댓글란 */
+.replySide{
+    background-color: red;
+    max-width: 100%;
+    height: 100%;
 }

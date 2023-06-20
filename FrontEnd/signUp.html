@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script src="/js/index.js"></script>
+    <script src="./js/index.js"></script>
 </head>
 <style>
   body {
@@ -98,7 +98,7 @@
         <label for="female">여자</label>
       </div>
         <label for="">주소</label>
-        <input type="text" name="address" id="address" placeholder="ex-XX시 XX구 XX동" required>
+        <input type="text" name="address" id="address" placeholder="아래 도시 선택" required>
       <div class="address-select">
             <select id="citySelect" onchange="updateGus(); updateAddress();"></select>
             <select id="guSelect" onchange="updateDongs(); updateAddress();"></select>
@@ -146,12 +146,19 @@
           "남구": ["대연동", "용호동", "문현동"],
         },
     };
-   // 디폴트 옵션 공란으로
+
     window.onload = function() {
       const citySelect = document.getElementById("citySelect");
+
+      const defaultOption = document.createElement("option");
+      defaultOption.text = "-";
+      defaultOption.value = "";
+      citySelect.add(defaultOption);
+
       for (const city in data) {
         const option = document.createElement("option");
         option.text = city;
+        option.value = city
         citySelect.add(option);
       }
   
