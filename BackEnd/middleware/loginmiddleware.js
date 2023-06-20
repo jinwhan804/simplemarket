@@ -3,16 +3,22 @@ const jwt = require("jsonwebtoken");
 exports.isLogin = (req, res, next) => {
     let access_token;
     let pageId;
-    console.log(req.sessionStore.sessions);
+    // console.log(req.sessionStore.sessions);
     for (const key in req.sessionStore.sessions) {
         const json = JSON.parse(`${req.sessionStore.sessions[key]}`);
+        
+        // 서버용
         if(json.access_token != null){
             access_token = json.access_token;
         }else{
             pageId = json.pageId;
         }
+        
+        // 로컬용
+        // access_token = json.access_token;
+        // pageId = json.pageId;
     }
-    console.log("aaaaaaaaaaaaaaa",access_token);
+    // console.log("aaaaaaaaaaaaaaa",access_token);
     jwt.verify(access_token, process.env.ACCESS_TOKEN_KEY, (err, acc_decoded) => {
         if (err) {
             res.send("토큰이 만료되었습니다. 다시 로그인 해주세요.")

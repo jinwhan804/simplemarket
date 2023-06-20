@@ -8,6 +8,7 @@ body {
 /*  헤더  */
 header {
     width: 100%;
+    max-width: 100%;
     height: 64px;
     position: fixed;
     background-color: #007bff;
@@ -17,6 +18,7 @@ header {
     align-items: center;
     color: #ffffff;
     font-size: 1.5em;
+    z-index: 1;
 }
 
 .logo {
@@ -102,6 +104,7 @@ img {
     right: 5%;
     bottom: 5%;
     cursor: pointer;
+    position: fixed;
 }
 
 /* 유저 채팅 리스트 */
@@ -343,15 +346,128 @@ box-shadow: inset 0px 0px 0.26vw white;
 
 
 /* --------------------게시판 영역------------------- */
+.border-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-top: 60px;
+    height: 760px;
+}
+
+.left-side {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 50%;
+    height: 100%;
+    overflow: hidden;
+    padding: 20px;
+}
+
+.right-side {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 50%;
+    height: 100%;
+    overflow: hidden;
+    padding: 20px;
+}
+
+.text-container {
+    background-color: #fff;
+    width: 95%;
+    height: 95%;
+    border-radius: 50px;
+    overflow: auto;
+}
+
+.img-container {
+    background-color: #fff;
+    width: 95%;
+    height: 95%;
+    border-radius: 50px;
+    overflow: auto;
+    position: relative;
+}
+.img-container #toDelete {
+    display: flex;
+    position: fixed;
+    right: 0;
+}
+.img-container #toUpdate {
+    display: flex;
+    position: fixed;
+}
+.img-container button {
+    /* background-color: #007bff; */
+    /* color: #ffffff; */
+    cursor: pointer;
+    /* margin: 10px; */
+    /* border-radius: 100%; */
+    width: 4%;
+    height: 5%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 100%;
+    top: 50%;
+}
+.img-container button:hover{
+    color: black;
+}
+
+/*////////////////////////// 오른쪽 사이드 ////////////////////////*/
+.infoSide {
+    width: 100%;
+    height: 25%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#userImg {
+    display: block;
+    width: 40%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: fill;
+}
+.info-content {
+    width: 60%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    /* color: #007bff; */
+}
+.info-item {
+    margin: 10px;
+    font-size: 1.5em;
+}
+
+#title, #nickname, #postLikes{
+    font-size: 20px;
+}
+
+/* 댓글란 */
+.replySide{
+    /* background-color: red; */
+    max-width: 100%;
+    height: 100%;
+}
+
+/* ///////////////////////////// */
+
 /* #contentArea{
     width: 500px;
     min-height: 500px;
     border: 1px solid;
-}
-
-img{
-    width: 300px;
-    height: auto;
 }
 
 .unable{
@@ -403,53 +519,3 @@ img{
 .reply4{
     width: 100px;
 } */
-
-.border-container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    margin-top: 60px;
-    height: 760px;
-}
-
-.left-side {
-    /* background-color: red; */
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    width: 50%;
-    height: 100%;
-    overflow: hidden;
-    padding: 20px;
-}
-
-.right-side {
-    /* background-color: blue; */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    width: 50%;
-    height: 100%;
-    overflow: hidden;
-    padding: 20px;
-}
-
-.text-container {
-    background-color: #fff;
-    width: 95%;
-    height: 95%;
-    border-radius: 50px;
-    overflow: auto;
-}
-
-.img-container {
-    background-color: #fff;
-    width: 95%;
-    height: 95%;
-    border-radius: 50px;
-    overflow: auto;
-}

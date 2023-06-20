@@ -20,6 +20,4 @@ router.post('/update',PostUpdate);
 
 router.post('/delete',isLogin,PostDelete);
 
-router.post('/likes',isLogin,PostLikes);
-
 module.exports = router;

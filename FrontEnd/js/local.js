@@ -517,3 +517,178 @@ const localMarket = document.querySelector('.local-market');
 localMarket.onclick = ()=>{
     location.href = `./local${urlEnd}`;
 }
+
+// 지역 선택 함수
+
+const firstSelect = document.getElementById('first-select');
+const secondSelect = document.getElementById('second-select');
+const thirdSelect = document.getElementById('third-select');
+
+function SelectOnload (){
+    for(const city in regionData){
+        const opt = document.createElement('option');
+        opt.text = city;
+        opt.value = city;
+        firstSelect.add(opt);
+    }
+}
+
+SelectOnload();
+
+firstSelect.onchange = (e)=>{
+    secondSelect.innerHTML = '<option>구/군</option>';
+    const citySelect = e.target.value;
+    const guSelect = regionData[citySelect];
+    for(const gu in guSelect){
+        const opt = document.createElement('option');
+        opt.text = gu;
+        opt.value = gu;
+        secondSelect.add(opt);
+    }
+}
+
+secondSelect.onchange =(e)=>{
+    thirdSelect.innerHTML = '<option>동/면</option>';
+    const citySelect = firstSelect.value;
+    const guSelect = e.target.value;
+    const dongSelect = regionData[citySelect] && regionData[citySelect][guSelect];
+    console.log(dongSelect)
+    for(const dong of dongSelect){
+        const opt = document.createElement('option');
+        console.log(dong)
+        opt.text = dong;
+        opt.value = dong;
+        thirdSelect.add(opt);
+    }
+}
+
+let addressValue = '';
+
+async function SelectLocal (currentPage){
+    try {
+        post_list.innerHTML = "";
+        let _tr1 = document.createElement('tr');
+        let _th1 = document.createElement('th');
+        let _th2 = document.createElement('th');
+        let _th3 = document.createElement('th');
+        let _th4 = document.createElement('th');
+        let _th5 = document.createElement('th');
+        let _th6 = document.createElement('th');
+        _th1.innerHTML = "No.";
+        _th2.innerHTML = '제목';
+        _th3.innerHTML = '작성자';
+        _th4.innerHTML = '작성일';
+        _th5.innerHTML = '수정일';
+        _th6.innerHTML = '조회수';
+        _tr1.append(_th1,_th2,_th3,_th4,_th5,_th6);
+        post_list.append(_tr1);
+
+        btns.innerHTML = '';        
+
+        const form = new FormData();
+
+        form.append('address',addressValue)
+        
+        const {data} = await API.post('/localpost',form,{
+            headers : {
+                'Content-Type' : "application/json"
+            }
+        });
+
+        let pageOffset = 10;
+        let pageGroup = currentPage * pageOffset;
+        let pageNum = 0;
+
+        if(data == null){
+            return;
+        }else{
+            data.forEach((el,index)=>{
+                if(index % pageOffset == 0){
+                    let btn = document.createElement('button');
+                    btn.innerHTML = index / 10 + 1;
+                    btn.className = 'pageBtn';
+                    btn.onclick = ()=>{
+                        pageNum = index;
+                        SelectLocal(index / pageOffset);
+                    }
+                    btns.append(btn);
+                }
+            })
+            
+            const _data = data.slice(pageGroup,pageGroup + pageOffset);
+
+            _data.forEach((el,index) => {
+                let date = new Date();
+                let year = date.getFullYear();
+                let month = date.getMonth() + 1;
+                let day = date.getDate();
+                let nowdate = year.toString();
+                
+                if(month >= 10){
+                    nowdate += month;
+                }else{
+                    nowdate += '0' + month;
+                }
+
+                if(day >= 10){
+                    nowdate += day;
+                }else{
+                    nowdate += '0' + day;
+                }
+
+                nowdate = Number(nowdate);
+
+                let createDate = Number(el.createdAt.slice(0,10).split('-').join(''));
+                let updateDate = Number(el.updatedAt.slice(0,10).split('-').join(''));
+
+                let _tr = document.createElement('tr');
+                let _td1 = document.createElement('td');
+                let _td2 = document.createElement('td');
+                let _td3 = document.createElement('td');
+                let _td4 = document.createElement('td');
+                let _td5 = document.createElement('td');
+                let _td6 = document.createElement('td');
+                _td1.innerHTML = index + 1;
+                _td2.innerHTML = el.title;
+                _td3.innerHTML = el.User.nickname;
+
+                if(nowdate > createDate){
+                    _td4.innerHTML = el.createdAt.slice(0,10);
+                }else{
+                    _td4.innerHTML = el.createdAt.slice(11,19);
+                }
+
+                if(nowdate > updateDate){
+                    _td5.innerHTML = el.updatedAt.slice(0,10);
+                }else{
+                    _td5.innerHTML = el.updatedAt.slice(11,19);
+                }
+
+                _td6.innerHTML = el.postViews;
+
+                _tr.onclick = async()=>{
+                    await API.post('/post/detail',{
+                        headers : {
+                            'Content-Type' : "application/json"
+                        },
+                        data : el.id
+                    }).then((e)=>{
+                        location.href = e.data;
+                    }).catch((err)=>{
+                        console.log(err);
+                    })
+                }
+
+                _tr.append(_td1,_td2,_td3,_td4,_td5,_td6);
+                post_list.append(_tr);
+            });
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+thirdSelect.onchange = async(e)=>{
+    addressValue = `${firstSelect.value} ${secondSelect.value} ${e.target.value}`;
+    SelectLocal(0);
+}

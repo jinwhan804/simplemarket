@@ -382,7 +382,7 @@ async function GetAPI(currentPage) {
 
             const _data = data.slice(pageGroup, pageGroup + pageOffset);
 
-            _data.forEach((el, index) => {
+            _data.forEach(async(el,index) => {
                 let date = new Date();
                 let year = date.getFullYear();
                 let month = date.getMonth() + 1;
@@ -405,6 +405,16 @@ async function GetAPI(currentPage) {
 
                 let createDate = Number(el.createdAt.slice(0, 10).split('-').join(''));
                 let updateDate = Number(el.updatedAt.slice(0, 10).split('-').join(''));
+
+                // 조회수 계산
+                const stat = await API.post('/viewcheck',{
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    data : el.id
+                })
+
+                console.log('불러온거',stat.data)
 
                 let _tr = document.createElement('tr');
                 let _td1 = document.createElement('td');
@@ -429,7 +439,7 @@ async function GetAPI(currentPage) {
                     _td5.innerHTML = el.updatedAt.slice(11, 19);
                 }
 
-                _td6.innerHTML = el.postViews;
+                _td6.innerHTML = stat.data.length;
 
                 _tr.onclick = async () => {
                     await API.post('/post/detail', {

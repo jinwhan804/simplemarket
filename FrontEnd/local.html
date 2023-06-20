@@ -7,8 +7,8 @@
     <title>Document</title>
     <script src="http://localhost:8080/socket.io/socket.io.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script src="./js/index.js"></script>
-    <link rel="stylesheet" href="./css/local.css">
+    <script src="/js/index.js"></script>
+    <link rel="stylesheet" href="/css/local.css">
 </head>
 <body>
     <!-- 헤더 영역 -->
@@ -33,6 +33,15 @@
         <div id="text-container">
             <h1>동네 중고 장터</h1>
             <a id="inInsert">내 물건 팔기</a>
+            <select name="" id="first-select">
+                <option value="">시/도</option>
+            </select>
+            <select name="" id="second-select">
+                <option value="">구/군</option>
+            </select>
+            <select name="" id="third-select">
+                <option value="">동/면</option>
+            </select>
             <table id="post_list">
                 
             </table>
@@ -77,5 +86,5 @@
         </div>
     </div>
 </body>
-<script src="./js/local.js"></script>
+<script src="/js/local.js"></script>
 </html>

@@ -5,6 +5,7 @@ const Post = require('./posts');
 const Chat = require('./chatting');
 const Reply = require('./replys');
 const Rereply = require('./rereplys');
+const Stat = require('./stats');
 
 const sequelize = new Sequelize(
     config.dev.database,
@@ -21,17 +22,20 @@ db.Post = Post;
 db.Chat = Chat;
 db.Reply = Reply;
 db.Rereply = Rereply;
+db.Stat = Stat;
 
 User.init(sequelize);
 Chat.init(sequelize);
 Post.init(sequelize);
 Reply.init(sequelize);
 Rereply.init(sequelize);
+Stat.init(sequelize);
 
 User.associate(db);
 Chat.associate(db);
 Post.associate(db);
 Reply.associate(db);
 Rereply.associate(db);
+Stat.associate(db);
 
 module.exports = db;

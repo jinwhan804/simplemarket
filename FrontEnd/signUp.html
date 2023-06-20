@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script src="./js/index.js"></script>
+    <script src="/js/index.js"></script>
 </head>
 <style>
   body {
@@ -98,11 +98,17 @@
         <label for="female">여자</label>
       </div>
         <label for="">주소</label>
-        <input type="text" name="address" id="address" placeholder="ex-XX시 XX구 XX동" required>
+        <input type="text" name="address" id="address" placeholder="아래 도시 선택" required>
       <div class="address-select">
-            <select id="citySelect" onchange="updateGus(); updateAddress();"></select>
-            <select id="guSelect" onchange="updateDongs(); updateAddress();"></select>
-            <select id="dongSelect" onchange="updateAddress();"></select>
+            <select id="citySelect" onchange="updateGus(); updateAddress();">
+              <option value="">시/도</option>
+            </select>
+            <select id="guSelect" onchange="updateDongs(); updateAddress();">
+              <option value="">구/군</option>
+            </select>
+            <select id="dongSelect" onchange="updateAddress();">
+              <option value="">동/면</option>
+            </select>
       </div>
         <button id="singupBtn">회원가입</button>
     </form>
@@ -135,23 +141,19 @@
 
   signUpForm.action = `${serverUrl}/signUp`;
 
-     // 주소 값에 들어가는 데이터
-    const data = {
-      "서울특별시": {
-        "강남구": ["논현동", "삼성동", "청담동"],
-        "서초구": ["반포동", "양재동", "신사동"],
-      },
-      "부산광역시": {
-          "해운대구": ["우동", "중동", "재송동"],
-          "남구": ["대연동", "용호동", "문현동"],
-        },
-    };
-   
+
     window.onload = function() {
       const citySelect = document.getElementById("citySelect");
-      for (const city in data) {
+
+      const defaultOption = document.createElement("option");
+      defaultOption.text = "-";
+      defaultOption.value = "";
+      citySelect.add(defaultOption);
+
+      for (const city in regionData) {
         const option = document.createElement("option");
         option.text = city;
+        option.value = city
         citySelect.add(option);
       }
   
@@ -167,7 +169,7 @@
       guSelect.innerHTML = "";
       dongSelect.innerHTML = "";
       
-      const gus = data[selectedCity] || {};
+      const gus = regionData[selectedCity] || {};
       for (const gu in gus) {
           const option = document.createElement("option");
           option.text = gu;
@@ -186,7 +188,7 @@
       
       dongSelect.innerHTML = "";
       
-      const dongs = (data[selectedCity] && data[selectedCity][selectedGu]) || [];
+      const dongs = (regionData[selectedCity] && regionData[selectedCity][selectedGu]) || [];
       for (const dong of dongs) {
           const option = document.createElement("option");
           option.text = dong;
