@@ -278,11 +278,10 @@ async function GetAPI(){
                 "Content-Type" : "application/json"
             }
         }) 
-        console.log("프로필 있니?",data.posts.User.profile_img);
         title.value = data.posts.title;
         nickname.value = data.posts.User.nickname;
         contentArea.innerHTML = data.posts.content;
-        document.getElementById('userImg').src = data.posts.User.profile_img;
+        document.getElementById('userImg').src = data.posts.User.profile_img; // 이미지 추가
         
         if(data.posts.postLikes != null && data.posts.postLikes != 'null'){
             likeNum = data.posts.postLikes.split(',');

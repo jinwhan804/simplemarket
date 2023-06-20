@@ -403,7 +403,7 @@ box-shadow: inset 0px 0px 0.26vw white;
 
 .border-container #toPost, .border-container #toImageBtn {
     display: block;
-    width: 98%;
+    width: 100%;
     text-decoration: none;
     color: #333;
     text-align: center;
