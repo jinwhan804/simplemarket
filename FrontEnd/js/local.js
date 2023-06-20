@@ -609,7 +609,7 @@ async function SelectLocal (currentPage){
                     btn.className = 'pageBtn';
                     btn.onclick = ()=>{
                         pageNum = index;
-                        GetAPI(index / pageOffset);
+                        SelectLocal(index / pageOffset);
                     }
                     btns.append(btn);
                 }
