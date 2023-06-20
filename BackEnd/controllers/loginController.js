@@ -25,7 +25,7 @@ exports.Login = async (req, res) => {
             res.send('관리자 계정이 생성되었습니다.');
         } else if (user) {
             const same = bcrypt.compareSync(user_pw, user.user_pw);
-            const { id, name, age, grade, nickname } = user;
+            const { id, name, age, grade, nickname, address } = user;
             const data = {msg : '', token : null}
             if (same) {
                 let token = jwt.sign({
@@ -33,7 +33,8 @@ exports.Login = async (req, res) => {
                     name,
                     age,
                     grade,
-                    nickname
+                    nickname,
+                    address
                 }, process.env.ACCESS_TOKEN_KEY, {
                     expiresIn: '60m'
                 });
@@ -47,6 +48,9 @@ exports.Login = async (req, res) => {
                     data.token = token;
                     req.session.access_token = token;
                 }
+
+                console.log('login : ',data.token);
+
                 res.send(data);
             } else {
                 res.send('비번 틀림');

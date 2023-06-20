@@ -38,7 +38,8 @@ header {
     background-color: #0056b3;
 }
 
-.used-market {
+.used-market,
+.local-market{
     text-decoration: none;
     color: #ffffff;
     background-color: #007bff;
@@ -47,7 +48,8 @@ header {
     border-radius: 40px;
     cursor: pointer;
 }
-.used-market:hover {
+.used-market:hover, 
+.local-market:hover{
     background-color: #0056b3;
 }
 

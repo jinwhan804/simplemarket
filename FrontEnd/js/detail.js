@@ -2,7 +2,7 @@
 const mypageBtn = document.getElementById('mypage-btn');
 
 async function mypageHide() {
-    const { data } = await API.get('./login/view', {
+    const { data } = await API.get('/login/view', {
         withCredentials : true
     })
     if(!data.name){
@@ -27,7 +27,7 @@ popupLoginBtn.addEventListener('click', () => {
 const loginBtn = document.getElementById('loginBtn');
 
 async function loginBtnHide() {
-    const { data } = await API.get('./login/view',{
+    const { data } = await API.get('/login/view',{
         withCredentials : true
     })
     if(data.name) {
@@ -35,22 +35,44 @@ async function loginBtnHide() {
     }
 }
 
+// 쿠키 생성
+const setCookie = (cname, cvalue, cexpire) => {
+  
+    // 만료일 생성 -> 현재에서 30일간으로 생성 -> setDate() 메서드 사용
+    let expiration = new Date();
+    expiration.setDate(expiration.getDate() + parseInt(cexpire)); // Number()로 처리 가능
+  
+    // 쿠키 생성하기
+    let cookie = '';
+    cookie = `${cname}=${cvalue}; path=/;expires=${expiration.toUTCString()};`;
+    // console.log(cookie);
+  
+    // 쿠키 저장하기
+    document.cookie = cookie;
+};
+
+const delCookie = (cname) => {
+    setCookie(cname, '', 0);
+};
+
 // 로그아웃 기능
 const Logout = document.getElementById('logout');
 
 Logout.addEventListener('click', async () => {
     try {
-        const { data } = await API.get("./logout", {
+        const { data } = await API.get("/logout", {
             withCredentials: true,
         });
-        if (data == "메인 페이지") {
-            location.href = `./${mainUrl}`;
-            alert("로그아웃 되었습니다.")
-        } 
+        if (data.msg == "메인 페이지") {
+            delCookie('login');
+            window.location.href = `./${mainUrl}`;
+            alert("로그아웃 되었습니다.");
+        }
     } catch (error) {
         console.log(error);
     }
 })
+
 // 로그아웃 버튼 로그인 안되어 있을 때는 안보이게
 async function logoutBtnHide() {
     const { data } = await API.get('/login/view', {
@@ -77,7 +99,7 @@ const timeString = `${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
 
 // 채팅 목록과 채팅 팝업창 함수
 async function popup() {
-    const { data } = await API.get("./login/view", {
+    const { data } = await API.get("/login/view", {
         withCredentials: true
     });
     document.body.classList.toggle('active');
@@ -100,7 +122,7 @@ chatBoxClose.forEach(btn => {
 // 관리자 계정의 유저 채팅 목록 창
 async function selectUserChat() {
     try {
-        const response = await API.get('./login/viewAll', {
+        const response = await API.get('/login/viewAll', {
             withCredentials: true
         });
         console.log(response);
@@ -128,7 +150,7 @@ function openChatBox(userNickname) {
 
 // 채팅 소켓
 async function userInfo() {
-    const response = await API.get('./login/view', {
+    const response = await API.get('/login/view', {
         withCredentials: true
     });
     console.log(response);
@@ -144,7 +166,7 @@ window.onload = async () => {
     try {
         const { nickname, profileImg, userId, user_info } = await userInfo();
         // 유저의 채팅 리스트
-        const getChatData = await API.get('./chat/all_chats', {
+        const getChatData = await API.get('/chat/all_chats', {
             withCredentials: true
         });
         console.log(getChatData);
@@ -216,7 +238,7 @@ window.onload = async () => {
                 userInfo: user_info
             }
             socket.emit('message', messageData);
-            API.post('./chat/chat_insert', messageData, {
+            API.post('/chat/chat_insert', messageData, {
                 withCredentials: true
             })
         }
@@ -247,13 +269,16 @@ let posts = {};
 let users = {};
 let replys = [];
 let likeNum = [];
+
+const updateBtn = document.getElementById('update_btn');
 async function GetAPI(){
     try {
-        const {data} = await API.get('./post/detail',{
+        const {data} = await API.get('/post/detail',{
             headers : {
                 "Content-Type" : "application/json"
             }
         }) 
+        console.log(data)
         title.value = data.posts.title;
         nickname.value = data.posts.User.nickname;
         contentArea.innerHTML = data.posts.content;
@@ -268,15 +293,13 @@ async function GetAPI(){
         posts = data.posts;
         users = data.users;
 
-        console.log(posts);
-
         if(data.users.id != data.posts.userId){
             updateBtn.classList.add('unable');
         }else{
             updateBtn.classList.remove('unable');
         }
         
-        await API.post('./reply',{
+        await API.post('/reply',{
             headers : {
                 "Content-Type" : "application/json"
             },
@@ -326,7 +349,7 @@ async function GetAPI(){
 
                 nowdate = Number(nowdate);
 
-                e.data.forEach((el,index) => {
+                e.data.forEach(async(el,index) => {
                     let updateDate = Number(el.updatedAt.slice(0,10).split('-').join(''));
 
                     let _li1 = document.createElement('li');
@@ -334,6 +357,10 @@ async function GetAPI(){
                     let _div6 = document.createElement('div');
                     let _div7 = document.createElement('div');
                     let _div8 = document.createElement('div');
+                    let btn1 = document.createElement('button');
+                    
+                    _li1.style.position = 'relative';
+                    _li1.className = 'replyLi';
                     _div5.className = 'reply1';
                     _div6.className = 'reply2';
                     _div7.className = 'reply3';
@@ -342,6 +369,7 @@ async function GetAPI(){
                     _div5.innerHTML = index + 1;
                     _div6.innerHTML = el.content;
                     _div7.innerHTML = el.User.nickname;
+                    btn1.innerHTML = "댓글";
                     
                     if(nowdate > updateDate){
                         _div8.innerHTML = el.updatedAt.slice(0,10);
@@ -349,34 +377,73 @@ async function GetAPI(){
                         _div8.innerHTML = el.updatedAt.slice(11,19);
                     }
 
-                    _li1.append(_div5,_div6,_div7,_div8);
+                    _li1.append(_div5,_div6,_div7,_div8,btn1);
                     
+                    btn1.onclick = ()=>{
+                        let rediv = document.createElement('span');
+                        let recontentdiv = document.createElement('span');
+                        let rerebtn1 = document.createElement('button');
+                        let rerebtn2 = document.createElement('button');
+                        
+                        rediv.className = 'rereply_area';
+                        rediv.style.border = '1px solid';
+                        recontentdiv.className = 'rereply_content';
+                        recontentdiv.style.border = '1px solid';
+                        recontentdiv.contentEditable = true;
+
+                        rerebtn1.innerHTML = '등록';
+                        rerebtn2.innerHTML = '취소';
+
+                        rediv.append(recontentdiv,rerebtn1,rerebtn2);
+                        
+                        rerebtn1.onclick = async()=>{
+                            const form = new FormData();
+
+                            form.append('content',recontentdiv.innerHTML);
+                            form.append('userId',users.id);
+                            form.append('replyId',el.id);
+                            
+                            _li1.removeChild(rediv);
+                            await API.post('/rereply/insert',form).then((e)=>{
+                                location.href = e.data;
+                            }).catch((err)=>{
+                                console.log(err);
+                            })
+                        }
+
+                        rerebtn2.onclick = ()=>{
+                            _li1.removeChild(rediv);
+                        }
+
+                        _li1.append(rediv);
+                    }
+
                     if(users.id == el.User.id){
-                        let btn1 = document.createElement('button');
                         let btn2 = document.createElement('button');
                         let btn3 = document.createElement('button');
                         let btn4 = document.createElement('button');
+                        let btn5 = document.createElement('button');
 
-                        btn1.innerHTML = '수정';
-                        btn2.innerHTML = '삭제';
+                        btn2.innerHTML = '수정';
+                        btn3.innerHTML = '삭제';
 
-                        btn3.innerHTML = '수정';
-                        btn4.innerHTML = '취소';
+                        btn4.innerHTML = '수정';
+                        btn5.innerHTML = '취소';
 
                         
-                        btn1.onclick = ()=>{
+                        btn2.onclick = ()=>{
                             _div6.contentEditable = true;
 
-                            btn1.classList.add('unable');
                             btn2.classList.add('unable');
-                            btn3.classList.remove('unable');
+                            btn3.classList.add('unable');
                             btn4.classList.remove('unable');
+                            btn5.classList.remove('unable');
                         }
                         
-                        btn2.onclick = async()=>{
+                        btn3.onclick = async()=>{
                             try {
                                 if(confirm('정말 삭제하시겠습니까?')){
-                                    await API.post('./reply/delete',{
+                                    await API.post('/reply/delete',{
                                         data : el.id
                                     }).then((e)=>{
                                         location.href = e.data;
@@ -389,45 +456,224 @@ async function GetAPI(){
                             }
                         }
 
-                        btn3.onclick = async()=>{
+                        btn4.onclick = async()=>{
                             _div6.contentEditable = false;
 
-                            btn1.classList.remove('unable');
                             btn2.classList.remove('unable');
-                            btn3.classList.add('unable');
+                            btn3.classList.remove('unable');
                             btn4.classList.add('unable');
+                            btn5.classList.add('unable');
 
                             const form = new FormData();
 
                             form.append('id', el.id);
                             form.append('content',_div6.innerHTML);
 
-                            await API.post('./reply/update',form).then((e)=>{
+                            await API.post('/reply/update',form).then((e)=>{
                                 location.href = e.data;
                             }).catch((err)=>{
                                 console.log(err);
                             })
                         }
                         
-                        btn4.onclick = ()=>{
+                        btn5.onclick = ()=>{
                             _div6.contentEditable = false;
 
                             _div6.innerHTML = el.content;
 
-                            btn1.classList.remove('unable');
                             btn2.classList.remove('unable');
-                            btn3.classList.add('unable');
+                            btn3.classList.remove('unable');
                             btn4.classList.add('unable');
+                            btn5.classList.add('unable');
                         }
 
-                        btn3.classList.add('unable');
                         btn4.classList.add('unable');
+                        btn5.classList.add('unable');
 
 
-                        _li1.append(btn1,btn2,btn3,btn4);
+                        _li1.append(btn2,btn3,btn4,btn5);
                     }
 
                     reply_list.append(_li1);
+
+                    await API.post('/rereply',{
+                        data : el.id
+                    }).then((e)=>{
+                        if(e.data == null){
+                            return;
+                        }else{
+                            let date = new Date();
+                            let year = date.getFullYear();
+                            let month = date.getMonth() + 1;
+                            let day = date.getDate();
+                            let nowdate = year.toString();
+                            
+                            if(month >= 10){
+                                nowdate += month;
+                            }else{
+                                nowdate += '0' + month;
+                            }
+                
+                            if(day >= 10){
+                                nowdate += day;
+                            }else{
+                                nowdate += '0' + day;
+                            }
+                
+                            nowdate = Number(nowdate);
+                            
+                            e.data.forEach((el,index) => {
+                                
+                                let updateDate = Number(el.updatedAt.slice(0,10).split('-').join(''));
+        
+                                let _li2 = document.createElement('li');
+                                let _rediv1 = document.createElement('div');
+                                let _rediv2 = document.createElement('div');
+                                let _rediv3 = document.createElement('div');
+                                let _rediv4 = document.createElement('div');
+                                let rebtn1 = document.createElement('button');
+                                
+                                _li2.className = 'rereplyLi';
+                                _rediv1.className = 'reply1';
+                                _rediv2.className = 'reply2';
+                                _rediv3.className = 'reply3';
+                                _rediv4.className = 'reply4';
+                
+                                _rediv1.innerHTML = index + 1;
+                                _rediv2.innerHTML = ">RE : " + el.content;
+                                _rediv3.innerHTML = el.User.nickname;
+                                rebtn1.innerHTML = "댓글";
+                                
+                                if(nowdate > updateDate){
+                                    _rediv4.innerHTML = el.updatedAt.slice(0,10);
+                                }else{
+                                    _rediv4.innerHTML = el.updatedAt.slice(11,19);
+                                }
+                
+                                _li2.append(_rediv1,_rediv2,_rediv3,_rediv4,rebtn1);
+
+                                rebtn1.onclick = ()=>{
+                                    let rediv = document.createElement('span');
+                                    let recontentdiv = document.createElement('span');
+                                    let rerebtn1 = document.createElement('button');
+                                    let rerebtn2 = document.createElement('button');
+                                    
+                                    rediv.className = 'rereply_area';
+                                    rediv.style.border = '1px solid';
+                                    recontentdiv.className = 'rereply_content';
+                                    recontentdiv.style.border = '1px solid';
+                                    recontentdiv.contentEditable = true;
+            
+                                    rerebtn1.innerHTML = '등록';
+                                    rerebtn2.innerHTML = '취소';
+            
+                                    rediv.append(recontentdiv,rerebtn1,rerebtn2);
+                                    
+                                    rerebtn1.onclick = async()=>{
+                                        const form = new FormData();
+            
+                                        form.append('content',recontentdiv.innerHTML);
+                                        form.append('userId',users.id);
+                                        form.append('replyId',el.id);
+                                        
+                                        _li2.removeChild(rediv);
+                                        await API.post('/rereply/insert',form).then((e)=>{
+                                            location.href = e.data;
+                                        }).catch((err)=>{
+                                            console.log(err);
+                                        })
+                                    }
+            
+                                    rerebtn2.onclick = ()=>{
+                                        _li2.removeChild(rediv);
+                                    }
+            
+                                    _li2.append(rediv);
+                                }
+                                
+                                if(users.id == el.User.id){
+                                    let rebtn2 = document.createElement('button');
+                                    let rebtn3 = document.createElement('button');
+                                    let rebtn4 = document.createElement('button');
+                                    let rebtn5 = document.createElement('button');
+                
+                                    rebtn2.innerHTML = '수정';
+                                    rebtn3.innerHTML = '삭제';
+                
+                                    rebtn4.innerHTML = '수정';
+                                    rebtn5.innerHTML = '취소';
+                
+                                    
+                                    rebtn2.onclick = ()=>{
+                                        _rediv2.contentEditable = true;
+                
+                                        rebtn2.classList.add('unable');
+                                        rebtn3.classList.add('unable');
+                                        rebtn4.classList.remove('unable');
+                                        rebtn5.classList.remove('unable');
+                                    }
+                                    
+                                    rebtn3.onclick = async()=>{
+                                        try {
+                                            if(confirm('정말 삭제하시겠습니까?')){
+                                                await API.post('/rereply/delete',{
+                                                    data : el.id
+                                                }).then((e)=>{
+                                                    location.href = e.data;
+                                                }).catch((err)=>{
+                                                    console.log(err);
+                                                })
+                                            }
+                                        } catch (error) {
+                                            console.log(error);
+                                        }
+                                    }
+                
+                                    rebtn4.onclick = async()=>{
+                                        _rediv2.contentEditable = false;
+                
+                                        rebtn2.classList.remove('unable');
+                                        rebtn3.classList.remove('unable');
+                                        rebtn4.classList.add('unable');
+                                        rebtn5.classList.add('unable');
+                
+                                        const form = new FormData();
+                
+                                        form.append('id', el.id);
+                                        form.append('content',_rediv2.innerHTML);
+                
+                                        await API.post('/rereply/update',form).then((e)=>{
+                                            location.href = e.data;
+                                        }).catch((err)=>{
+                                            console.log(err);
+                                        })
+                                    }
+                                    
+                                    rebtn5.onclick = ()=>{
+                                        _rediv2.contentEditable = false;
+                
+                                        _rediv2.innerHTML = el.content;
+                
+                                        rebtn2.classList.remove('unable');
+                                        rebtn3.classList.remove('unable');
+                                        rebtn4.classList.add('unable');
+                                        rebtn5.classList.add('unable');
+                                    }
+                
+                                    rebtn4.classList.add('unable');
+                                    rebtn5.classList.add('unable');
+                
+                
+                                    _li2.append(rebtn2,rebtn3,rebtn4,rebtn5);
+                                }
+                
+                                _li1.append(_li2);
+                                
+                            });
+                        }
+                    }).catch((err)=>{
+                        console.log(err);
+                    })
                 });
             }
         }).catch((err)=>{
@@ -438,11 +684,17 @@ async function GetAPI(){
     }
 }
 
-GetAPI();    
+async function RereplyView (){
+    
+}
+
+GetAPI();
+
+RereplyView();
 
 toUpdate.onclick = async()=>{
     try {
-        await API.post('./post/updateview',{
+        await API.post('/post/updateview',{
             headers : {
                 "Content-Type" : "application/json"
             },
@@ -460,7 +712,7 @@ toUpdate.onclick = async()=>{
 toDelete.onclick = async()=>{
     try {
         if(confirm('정말 삭제하시겠습니까?')){
-            await API.post('./post/delete',{
+            await API.post('/post/delete',{
                 headers : {
                     "Content-Type" : "application/json"
                 },
@@ -507,7 +759,8 @@ likeBtn.onclick = async()=>{
             form.append('id',posts.id);
             form.append('postLikes',posts.postLikes);
             
-            await API.post('./post/likes',form,{
+
+            await API.post('/post/likes',form,{
                 headers : {
                     "Content-Type" : "application/json"
                 }
@@ -518,6 +771,7 @@ likeBtn.onclick = async()=>{
     }
 }
 
+// 댓글 달기
 reply_on.onclick = async()=>{
     try {
         const form = new FormData();
@@ -526,7 +780,7 @@ reply_on.onclick = async()=>{
         form.append('userId', users.id);
         form.append('postId', posts.id);
 
-        await API.post('./reply/insert',form).then((e)=>{
+        await API.post('/reply/insert',form).then((e)=>{
             location.href = e.data;
         }).catch((err)=>{
             console.log(err);
@@ -538,4 +792,18 @@ reply_on.onclick = async()=>{
 
 toPost.onclick = ()=>{
     location.href = `./${mainUrl}`;
+}
+
+// 전체 글 목록 페이지로 이동 = 메인 페이지
+const usedMarket = document.querySelector('.used-market');
+
+usedMarket.onclick= ()=>{
+    location.href = `./${mainUrl}`;
+}
+
+// 동네 장터 이동
+const localMarket = document.querySelector('.local-market');
+
+localMarket.onclick = ()=>{
+    location.href = `./local${urlEnd}`;
 }

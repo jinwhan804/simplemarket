@@ -1,31 +1,60 @@
-        // 관리자 게시판 기능 (유저만 안보이게)
-        async function checkAdmin() {
-            const adminHide = document.getElementById('admin-hide');
-            const {data} = await API.get("./login/view", {
-            withCredentials : true
-            });
-            if(data && data.grade == "3"){
-                adminHide.style.display = "block";
-            }else{
-                adminHide.style.display = "none"
-            }
-        }
-        // 로그아웃 기능 
-        const Logout = document.getElementById('logout');
+// 관리자 게시판 기능 (유저만 안보이게)
+async function checkAdmin() {
+    const adminHide = document.getElementById('admin-hide');
+    const {data} = await API.get("./login/view", {
+    withCredentials : true
+    });
+    if(data && data.grade == "3"){
+        adminHide.style.display = "block";
+    }else{
+        adminHide.style.display = "none"
+    }
+}
+// 쿠키 생성
+const setCookie = (cname, cvalue, cexpire) => {
+  
+    // 만료일 생성 -> 현재에서 30일간으로 생성 -> setDate() 메서드 사용
+    let expiration = new Date();
+    expiration.setDate(expiration.getDate() + parseInt(cexpire)); // Number()로 처리 가능
+  
+    // 쿠키 생성하기
+    let cookie = '';
+    cookie = `${cname}=${cvalue}; expires=${expiration.toUTCString()};`;
+    // console.log(cookie);
+  
+    // 쿠키 저장하기
+    document.cookie = cookie;
+};
 
-Logout.addEventListener('click', async ()=> {
+const delCookie = (cname) => {
+    setCookie(cname, '', 0);
+};
+    // 로그아웃 기능 
+    const Logout = document.getElementById('logout');
+
+Logout.addEventListener('click', async () => {
     try {
-        const {data} = await API.get("./logout",{
-            withCredentials : true,
+        const { data } = await API.get("/logout", {
+            withCredentials: true,
         });
-        if(data == "메인 페이지"){
+        if (data.msg == "메인 페이지") {
+            delCookie('login');
             window.location.href = `./${mainUrl}`;
-            alert("로그아웃 되었습니다.")
+            alert("로그아웃 되었습니다.");
         }
     } catch (error) {
         console.log(error);
     }
 })
+// 로그아웃 버튼 로그인 안되어 있을 때는 안보이게
+async function logoutBtnHide() {
+    const { data } = await API.get('/login/view', {
+        withCredentials: true
+    })
+    if (!data.name) {
+        Logout.style.display = "none";
+    }
+}
 
 // 로고 클릭 시 main으로 돌아가기
 const logo = document.querySelector('.logo');
@@ -69,7 +98,7 @@ document.getElementById("nickname-update-button").addEventListener("click", asyn
     const newNickname = prompt("새로운 별명을 입력해주세요.");
     if (newNickname) {
         try {
-            const response = await API.post("./mypage", {
+            const response = await API.post("/mypage", {
                 nickname: newNickname
             }, {
                 withCredentials: true
@@ -83,7 +112,7 @@ document.getElementById("nickname-update-button").addEventListener("click", asyn
 
     async function getAPI() {
         try {
-            const {data} = await API.get("./login/view",{
+            const {data} = await API.get("/login/view",{
                 withCredentials : true,
             });
             // console.log(data);
@@ -115,10 +144,10 @@ document.getElementById("nickname-update-button").addEventListener("click", asyn
 
 async function getUserPost(){
     try {
-        const { data: posts } = await API.get("./post",{
+        const { data: posts } = await API.get("/post",{
             withCredentials : true,
         });
-        const { data: userInfo } = await API.get("./login/view",{
+        const { data: userInfo } = await API.get("/login/view",{
             withCredentials : true,
         });
         
@@ -133,7 +162,7 @@ async function getUserPost(){
         }
         listItem.style.cursor = "pointer";
         listItem.addEventListener('click', async () => {
-            const { data } = await API.post(`./mypage/detail`,{
+            const { data } = await API.post(`/mypage/detail`,{
                 data : post.id
             },{withCredentials : true,})
             window.location.href = data;
@@ -153,4 +182,11 @@ const usedMarket = document.querySelector('.used-market');
 
 usedMarket.onclick= ()=>{
     location.href = `./${mainUrl}`;
+}
+
+// 동네 장터 이동
+const localMarket = document.querySelector('.local-market');
+
+localMarket.onclick = ()=>{
+    location.href = `./local${urlEnd}`;
 }

@@ -1,4 +1,4 @@
-const { Post, User } = require('../models');
+const { Post, User,Reply,Rereply } = require('../models');
 
 exports.PostViewAll = async (req, res) => {
     try {
@@ -31,11 +31,71 @@ exports.PostViewSelect = (req, res) => {
 
 exports.PostViewOne = async (req, res) => {
     try {
-        const id = req.session.pageId;
         const {access_decoded} = req;
 
+        function findKeyByToken(obj, pageId) {
+            for (let key in obj) {
+                if (typeof obj[key] === "string") {
+                    let parsedObj;
+                    try {
+                        // JSON 문자열을 파싱하여 객체로 변환합니다.
+                        parsedObj = JSON.parse(obj[key]);
+                    } catch (err) {
+                        // 파싱 실패 시에는 다음 키로 이동합니다.
+                        continue;
+                    }
+                    if (parsedObj.pageId === pageId) {
+                        // 원하는 값을 찾았다면, 해당 키를 반환합니다.
+                        return key;
+                    }
+                } else if (typeof obj[key] === "object" && obj[key] !== null) {
+                        // 값이 객체일 경우, 재귀적으로 함수를 호출하여 탐색을 계속합니다.
+                        const result = findKeyByToken(obj[key], pageId);
+                    if (result) {
+                        return result;
+                    }
+                }
+            }
+            return null;
+        }
+
+        let th;
+        for (const key in req.sessionStore.sessions) {
+            const json = JSON.parse(`${req.sessionStore.sessions[key]}`);
+            th = json.pageId;
+        }
+
+        console.log(th)
+
+        const ta = req.sessionStore.sessions;
+        const nowsessioid = findKeyByToken(ta, th); 
+
+        req.sessionStore.all((err, sessions) => {
+            if (err) {
+            return res.sendStatus(500);
+            }
+      
+            const sessionIds = Object.keys(sessions);
+
+            // Delete each session by ID
+            sessionIds.forEach((el) => {
+                console.log(el);
+                console.log(nowsessioid);
+                if (el == nowsessioid) {
+                    req.sessionStore.destroy(nowsessioid, (err) => {
+                        if (err) {
+                            console.error("Error destroying session:", err);
+                        } else {
+                            console.log("Session destroyed successfully:", nowsessioid);
+                            console.log(ta);
+                        }
+                    });
+                }
+            });
+        })
+
         const post = await Post.findOne({
-            where : {id},
+            where : {id : th},
             include : {
                 model : User
             }
@@ -77,7 +137,7 @@ exports.PostInsert = async (req, res) => {
             userId
         })
 
-        res.send(`${process.env.FRONT}/post${process.env.END}`);
+        res.send(`${process.env.FRONT}/${process.env.MAIN}`);
     } catch (error) {
         console.log('포스트 컨트롤러에서 글 추가하다가 에러남');
         console.log(error);
@@ -115,16 +175,23 @@ exports.PostUpdate = async(req,res)=>{
     }
 }
 
-exports.PostDelete = async(req,res)=>{
+exports.PostDelete = async(req,res,next)=>{
     try {
         const id = req.body.data;
-        console.log(req.body)
+
+        const reply = await Reply.findAll({where : {postId : id}});
+
+        reply.forEach(async(el)=>{
+            await Rereply.destroy({where : {replyId : el.id}});
+        })
+
+        await Reply.destroy({where : {postId : id}})
 
         await Post.destroy({
             where : {id}
-        })
-
-        res.send(`${process.env.FRONT}/post${process.env.END}`);
+        });
+        
+        res.send(`${process.env.FRONT}/${process.env.MAIN}`);
     } catch (error) {
         console.log('포스트 컨트롤러에서 글 지우다 에러남');
         console.log(error);
@@ -140,6 +207,8 @@ exports.PostLikes = async(req,res)=>{
         },{
             where : {id}
         })
+
+        req.session.pageId = id;
 
         res.send(`${process.env.FRONT}/detail${process.env.END}`);
     } catch (error) {
