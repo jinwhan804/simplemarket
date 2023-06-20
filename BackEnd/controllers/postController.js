@@ -40,37 +40,35 @@ exports.PostViewAll = async (req, res) => {
                 const json = JSON.parse(`${req.sessionStore.sessions[key]}`);
                 if(json.pageId != null){
                     th = json.pageId;
-                }
-            }
-    
-            console.log(th)
-    
-            const ta = req.sessionStore.sessions;
-            const nowsessioid = findKeyByToken(ta, th); 
-    
-            req.sessionStore.all((err, sessions) => {
-                if (err) {
-                return res.sendStatus(500);
-                }
-          
-                const sessionIds = Object.keys(sessions);
-    
-                // Delete each session by ID
-                sessionIds.forEach((el) => {
-                    console.log(el);
-                    console.log(nowsessioid);
-                    if (el == nowsessioid) {
-                        req.sessionStore.destroy(nowsessioid, (err) => {
-                            if (err) {
-                                console.error("Error destroying session:", err);
-                            } else {
-                                console.log("Session destroyed successfully:", nowsessioid);
-                                console.log(ta);
+                    const ta = req.sessionStore.sessions;
+                    const nowsessioid = findKeyByToken(ta, th); 
+            
+                    req.sessionStore.all((err, sessions) => {
+                        if (err) {
+                        return res.sendStatus(500);
+                        }
+                
+                        const sessionIds = Object.keys(sessions);
+            
+                        // Delete each session by ID
+                        sessionIds.forEach((el) => {
+                            console.log(el);
+                            console.log(nowsessioid);
+                            if (el == nowsessioid) {
+                                req.sessionStore.destroy(nowsessioid, (err) => {
+                                    if (err) {
+                                        console.error("Error destroying session:", err);
+                                    } else {
+                                        console.log("Session destroyed successfully:", nowsessioid);
+                                        console.log(ta);
+                                    }
+                                });
                             }
                         });
-                    }
-                });
-            })
+                    })
+                }
+            }
+            
             res.send(e);
         }).catch((err) => {
             console.log(err);
