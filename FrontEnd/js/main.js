@@ -117,10 +117,7 @@ const chatBoxClose = document.querySelectorAll('.close_chatBox');
 const chatContent = document.querySelector('.chat_content');
 const back = document.querySelector('.back');
 
-const now = new Date();
-const hours = now.getHours();
-const minutes = now.getMinutes();
-const timeString = `${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
+
 
 // 채팅 목록과 채팅 팝업창 함수
 async function popup() {
@@ -148,82 +145,139 @@ chatBoxClose.forEach(btn => {
     });
 });
 
-// 유저와의 채팅 목록을 나타내는 이벤트(관리자만 볼 수 있음)
-async function selectUserChat() {
-    try {
-        console.log(userChatList);
-        const chatMessages = document.querySelectorAll(`.chat_message`);
-        chatMessages.forEach((e) => {
-            e.addEventListener('dblclick', () => {
-                const userNickname = e.getAttribute('data_nickname');
-                openChatBox(userNickname);
-                console.log(userNickname);
-            })
-        })
-    } catch (error) {
-        console.error(error);
-    }
-}
-
-function openChatBox(userNickname) {
-    chatBox.classList.add('active');
-}
-
 window.onload = async () => {
     const { data } = await axios.get('http://127.0.0.1:8080/login/view', {
         withCredentials: true
     });
-    console.log(data);
-    const nickname = data.nickname;
-    const room = data.id;
-    console.log(nickname, room);
-
 
     const socket = io.connect(serverUrl);
-    socket.emit('joinRoom', room, nickname);
+    const nickname = data.nickname;
+    let room = data.id;
 
+    if (data.grade === '2') {
+        const chatImg = document.querySelector('.chatImg');
+        chatImg.addEventListener('click', () => {
+            socket.emit('joinRoom', nickname, { id: data.id, nickname: data.nickname });
+        })
+    }
 
-    const getChatData = await axios.get(`http://127.0.0.1:8080/chat/all_chats`, {
+    const users = await axios.get('http://127.0.0.1:8080/login/viewAll', {
         withCredentials: true
     });
-    console.log(getChatData);
-    const chatData = getChatData.data;
-    console.log(chatData);
+    const userData = users.data;
+    const admin = userData[0];
+    console.log(admin);
 
-    // 유저 채팅 목록들을 나타내는 코드
-    chatData.forEach(data => {
-        if (data.nickname === '심플관리자') {
-            return;
+    socket.on('joinRoom', (room, user, userList) => {
+        const now = new Date();
+        const hours = now.getHours();
+        const minutes = now.getMinutes();
+        const timeString = `${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
+
+        if (user.id !== admin.id) {
+            const welcomeMessage = `
+            <div class="content other-message">
+                <img src="${admin.profile_img}">
+                <div class="message-display">
+                    <p class="nickname">${admin.nickname}</p>
+                    <p class="message ballon">환영합니다!</p>
+                    <p class="date">${timeString}</p>
+                </div>
+            </div>
+            `
+            chatContent.innerHTML += welcomeMessage;
         }
+    })
 
-        const userInList = userChatList.querySelector(`.chat_message[data_nickname="${data.nickname}"]`);
-        console.log(data);
-        if (userInList) {
-            // 채팅 목록에서 해당 유저가 있으면 목록에 추가하지 않고 메시지만 업데이트
-            userInList.querySelector('.message_content').textContent = data.message;
-        } else {
-            // 리스트에 없으면 추가
-            let createdAt = new Date(data.createdAt);
+
+    // 유저들의 채팅 목록을 나타내는 이벤트(관리자만 보임)
+    try {
+        const response = await axios.get('http://127.0.0.1:8080/chat/all_chats', {
+            withCredentials: true
+        });
+        const chats = response.data;
+        console.log(chats);
+
+        chats.forEach(chat => {
+            chatUser = chat.User;
+
+            if (chatUser.grade === '3') {
+                return;
+            }
+
+            let createdAt = new Date(chatUser.createdAt);
             let hours = createdAt.getHours();
             let minutes = createdAt.getMinutes();
 
-            let newMessageHTML = `
-            <div class="chat_message" data_nickname="${data.nickname}">
-                <img src="${data.profile_img}">
-                <p>${data.nickname}: <span class="message_content">${data.message}</span></p>
-                <p>${hours}:${minutes < 10 ? '0' + minutes : minutes}</p>
-            </div>
-            `;
-            userChatList.innerHTML += newMessageHTML;
-        }
+            const userInList = userChatList.querySelector(`.chat_message[data_nickname="${chatUser.nickname}"]`);
+
+            if (userInList) {
+                // 채팅 목록에서 해당 유저가 있으면 목록에 추가하지 않고 메시지만 업데이트
+                userInList.querySelector('.message_content').textContent = chatUser.message;
+            } else {
+                // 리스트에 없으면 추가
+                let newMessageHTML = `
+                <div class="chat_message" data_nickname="${chatUser.nickname}">
+                    <img src="${chatUser.profile_img}">
+                    <p>${chatUser.nickname}: <span class="message_content">${chatUser.message}</span></p>
+                    <p>${hours}:${minutes < 10 ? '0' + minutes : minutes}</p>
+                </div>
+                `;
+                userChatList.innerHTML += newMessageHTML;
+            }
+        })
+    } catch (error) {
+        console.log(error);
+    }
+
+    let receiverUser = null;
+    userChatList.querySelectorAll('.chat_message').forEach(item => {
+        item.addEventListener('dblclick', () => {
+            const nickname = item.getAttribute('data_nickname');
+            chatBox.classList.add('active');
+            chatList.classList.remove('active');
+            console.log(`${nickname}방 입장`);
+            receiverUser = nickname;
+
+            if (data.grade === '3') {
+                // room = nickname;
+                socket.emit('joinRoom', nickname, { id: data.id, nickname: data.nickname });
+            }
+
+        });
     });
 
-    selectUserChat();
 
+    btn.onclick = async () => {
+        try {
+            const messageData = {
+                nickname: data.nickname,
+                message: msg.value,
+                sender: data.id,
+                profile_img: data.profile_img,
+                receiver: data.grade === '2' ? admin.nickname : receiverUser
+            }
+            if (data.grade === '3') {
+                socket.emit('chat', receiverUser, messageData);
+            } else
+                socket.emit('chat', nickname, messageData);
+            msg.value = '';
+            await axios.post('http://127.0.0.1:8080/chat/chat_insert', messageData, {
+                withCredentials: true
+            })
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
-    // 채팅방에 표시되는 메시지 형태
-    socket.on('message', (data) => {
+    socket.on('chat', (data) => {
         console.log(data);
+
+        const now = new Date();
+        const hours = now.getHours();
+        const minutes = now.getMinutes();
+        const timeString = `${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
+
         let el;
         if (data.nickname === nickname) {
             el = `
@@ -247,19 +301,6 @@ window.onload = async () => {
         chatContent.innerHTML += el;
     })
 
-    btn.onclick = async () => {
-        const messageData = {
-            message: msg.value,
-            sender: data.id,
-            // receiver
-        }
-        socket.emit('message', nickname, room, messageData);
-        msg.value = '';
-        await axios.post('http://127.0.0.1:8080/chat/chat_insert', messageData, {
-            withCredentials: true
-        })
-    }
-
     // chatBox 창의 뒤로가기 버튼(관리자만 보임)
     try {
         if (data.grade === '3') {
@@ -268,14 +309,24 @@ window.onload = async () => {
             back.style.display = 'none';
         }
     } catch (error) {
-        console.error(error);
+        console.log(error);
     }
 
     // chatBox에서 chatList로 가는 버튼
-    back.addEventListener('click', () => {
-        chatList.classList.add('active');
-        chatBox.classList.remove('active');
-    });
+    try {
+        back.addEventListener('click', () => {
+            chatList.classList.add('active');
+            chatBox.classList.remove('active');
+            socket.emit('leaveRoom', receiverUser, { id: data.id, nickname: data.nickname });
+        });
+
+        socket.on('leaveRoom', (room, user) => {
+            console.log(`${user.nickname} left room ${room}`);
+        })
+    } catch (error) {
+        console.log(error);
+    }
+
 }
 
 
