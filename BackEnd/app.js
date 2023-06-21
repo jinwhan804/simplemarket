@@ -118,10 +118,14 @@ io.sockets.on('connection', (socket) => {
 
     socket.on('leaveRoom', (room, user) => {
         socket.leave(room);
+        console.log('ddd', user)
         console.log(io.sockets.adapter.rooms);
-        userList = userList.filter((value) => value.id != user.id);
-        console.log(userList);
+
+        console.log('before', userList);
+
         io.to(room).emit('leaveRoom', room, user)
+        userList = userList.filter((value) => value.user.nickname != user.nickname);
+        console.log(userList);
     })
 
     // 닉네임 : 메시지를 보내는 사용자의 닉네임
