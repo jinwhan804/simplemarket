@@ -56,6 +56,11 @@ app.get('/local',(req,res)=>{
    res.send(page);
 })
 
+app.get('/statistic',(req,res)=>{
+   const page = fs.readFileSync('./statistic.html','utf-8');
+   res.send(page);
+})
+
 app.listen(3000,()=>{
    console.log('front server on');
 })

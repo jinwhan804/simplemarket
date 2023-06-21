@@ -518,6 +518,13 @@ localMarket.onclick = ()=>{
     location.href = `./local${urlEnd}`;
 }
 
+// 통계 페이지 이동
+const postStat = document.querySelector('.post-stat');
+
+postStat.onclick = ()=>{
+    location.href = `./statistic${urlEnd}`;
+}
+
 // 지역 선택 함수
 
 const firstSelect = document.getElementById('first-select');

@@ -190,3 +190,10 @@ const localMarket = document.querySelector('.local-market');
 localMarket.onclick = ()=>{
     location.href = `./local${urlEnd}`;
 }
+
+// 통계 페이지 이동
+const postStat = document.querySelector('.post-stat');
+
+postStat.onclick = ()=>{
+    location.href = `./statistic${urlEnd}`;
+}

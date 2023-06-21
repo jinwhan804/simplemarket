@@ -296,6 +296,27 @@ mypageBtn.addEventListener('click', () => {
     location.href = `./mypage${urlEnd}`;
 })
 
+// 전체 글 목록 페이지로 이동 = 메인 페이지
+const usedMarket = document.querySelector('.used-market');
+
+usedMarket.onclick = () => {
+    location.href = `./${mainUrl}`;
+}
+
+// 동네 장터 이동
+const localMarket = document.querySelector('.local-market');
+
+localMarket.onclick = () => {
+    location.href = `./local${urlEnd}`;
+}
+
+// 통계 페이지 이동
+const postStat = document.querySelector('.post-stat');
+
+postStat.onclick = ()=>{
+    location.href = `./statistic${urlEnd}`;
+}
+
 ////////////////////////// 통계 영역 ///////////////////////////
 let posts;
 let views;
@@ -499,6 +520,7 @@ async function PostStatData (id){
 // 선택 상자 변경 시 차트 변경
 selectBtn.onchange = async(e)=>{
     const select = e.target.value;
+    console.log()
 
     if(views != null){
         await API.post('/statistic',{
@@ -576,7 +598,7 @@ selectBtn.onchange = async(e)=>{
                 // 현재 시간 확인
                 let today = nowDate.getDate() < 10 ? `0${nowDate.getDate()}` : `${nowDate.getDate()}`;
                 let nowHour = nowDate.getHours() < 10 ? `0${nowDate.getHours()}` : `${nowDate.getHours()}`;
-                let todayDate = Number(`${today}${nowHour}`);
+                let todayDate = Number(nowHour) + 24;
                 
                 let dateArr = [[],[],[],[],[],[],[]];
                 
@@ -584,27 +606,28 @@ selectBtn.onchange = async(e)=>{
                     let viewDate = new Date(el.createdAt);
                     let viewDay = viewDate.getDate() < 10 ? `0${viewDate.getDate()}` : `${viewDate.getDate()}`;
                     let viewHour = viewDate.getHours() < 10 ? `0${viewDate.getHours()}` : `${viewDate.getHours()}`;
-                    let viewDateNum = Number(`${viewDay}${viewHour}`);
+                    let viewDateNum = Number(viewHour);
+                    console.log(todayDate - viewDateNum)
         
-                    if(todayDate - viewDateNum == 0){
+                    if(todayDate - viewDateNum >= 24 && todayDate - viewDateNum < 28){
                         dateArr[0].push(viewDateNum);
-                    }else if(todayDate - viewDateNum == 4){
+                    }else if(todayDate - viewDateNum >= 28 && todayDate - viewDateNum < 32){
                         dateArr[1].push(viewDateNum);
-                    }else if(todayDate - viewDateNum == 8){
+                    }else if(todayDate - viewDateNum >= 32 && todayDate - viewDateNum < 36){
                         dateArr[2].push(viewDateNum);
-                    }else if(todayDate - viewDateNum == 12){
+                    }else if(todayDate - viewDateNum >= 36 && todayDate - viewDateNum < 40){
                         dateArr[3].push(viewDateNum);
-                    }else if(todayDate - viewDateNum == 16){
+                    }else if(todayDate - viewDateNum >= 40 && todayDate - viewDateNum < 44){
                         dateArr[4].push(viewDateNum);
-                    }else if(todayDate - viewDateNum == 20){
+                    }else if(todayDate - viewDateNum >= 44 && todayDate - viewDateNum < 48){
                         dateArr[5].push(viewDateNum);
-                    }else if(todayDate - viewDateNum == 24){
+                    }else if(todayDate - viewDateNum >= 48 && todayDate - viewDateNum < 52){
                         dateArr[6].push(viewDateNum);
                     }
                 })
                 
                 let labeldata = [];
-                for (let i = 0; i <= 24; i += 4) {
+                for (let i = 4; i <= 28; i += 4) {
                     let time;
                     let dayTime;
                     let compareTime = nowDate.getHours();
@@ -622,6 +645,7 @@ selectBtn.onchange = async(e)=>{
                     }
                     
                 }
+                console.log(dateArr)
 
                 config.data.labels = [
                     labeldata[6],
