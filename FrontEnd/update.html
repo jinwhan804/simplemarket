@@ -36,7 +36,10 @@
         <input type="text" id="nickname" disabled><br>
         <label for="">본문</label>
         <div id="contentArea" contenteditable="true"></div>
-        <button id="updateBtn">수정</button><button id="cencelBtn">취소</button>
+        <input type="text" id="imgs" placeholder="선택한 파일이 삽입됩니다." style="display: none;">
+        <input type="file" id="file">
+        <button id="toImageBtn">사진추가</button>
+        <button id="updateBtn">확인</button><button id="cencelBtn">취소</button>
     </div>
     <!-- --------------------------------------실시간 채팅----------------------------------------------------- -->
     <img class="chatImg" onclick="popup()" src="http://localhost:8080/img/bunny-1299162_1280.png">

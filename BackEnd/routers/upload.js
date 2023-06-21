@@ -5,5 +5,6 @@ const { isLogin } = require("../middleware/loginmiddleware");
 
 router.post("/", Upload.single("upload"), isLogin , uploadProfileImage);
 router.post("/postImg", Upload.single("upload"), isLogin , uploadProfileImage2);
+router.post("/updateImg", Upload.single("upload"), isLogin , uploadProfileImage2);
 
 module.exports = router;
