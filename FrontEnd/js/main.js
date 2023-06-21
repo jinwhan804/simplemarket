@@ -333,6 +333,8 @@ mypageBtn.addEventListener('click', () => {
 
 ////////////////////////////// 메인 게시판 영역 ////////////////////////////////////
 
+let posts;
+
 async function GetAPI(currentPage) {
     try {
         post_list.innerHTML = "";
@@ -354,11 +356,10 @@ async function GetAPI(currentPage) {
 
         btns.innerHTML = '';
 
-        const { data } = await API.get('/post', {
-            headers: {
-                'Content-Type': "application/json"
-            }
-        });
+        const { data } = await API.get('/post');
+
+        posts = data;
+        console.log(posts);
 
         let pageOffset = 10;
         let pageGroup = currentPage * pageOffset;
@@ -382,7 +383,7 @@ async function GetAPI(currentPage) {
 
             const _data = data.slice(pageGroup, pageGroup + pageOffset);
 
-            _data.forEach(async(el,index) => {
+            _data.forEach((el,index) => {
                 let date = new Date();
                 let year = date.getFullYear();
                 let month = date.getMonth() + 1;
@@ -406,23 +407,13 @@ async function GetAPI(currentPage) {
                 let createDate = Number(el.createdAt.slice(0, 10).split('-').join(''));
                 let updateDate = Number(el.updatedAt.slice(0, 10).split('-').join(''));
 
-                // 조회수 계산
-                const stat = await API.post('/viewcheck',{
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    data : el.id
-                })
-
-                console.log('불러온거',stat.data)
-
                 let _tr = document.createElement('tr');
                 let _td1 = document.createElement('td');
                 let _td2 = document.createElement('td');
                 let _td3 = document.createElement('td');
                 let _td4 = document.createElement('td');
                 let _td5 = document.createElement('td');
-                let _td6 = document.createElement('td');
+                _tr.className = 'postTr';
                 _td1.innerHTML = index + 1;
                 _td2.innerHTML = el.title;
                 _td3.innerHTML = el.User.nickname;
@@ -439,8 +430,6 @@ async function GetAPI(currentPage) {
                     _td5.innerHTML = el.updatedAt.slice(11, 19);
                 }
 
-                _td6.innerHTML = stat.data.length;
-
                 _tr.onclick = async () => {
                     await API.post('/post/detail', {
                         headers: {
@@ -454,9 +443,12 @@ async function GetAPI(currentPage) {
                     })
                 }
 
-                _tr.append(_td1, _td2, _td3, _td4, _td5, _td6);
+                _tr.append(_td1, _td2, _td3, _td4, _td5);
                 post_list.append(_tr);
             });
+
+            // 조회수 계산
+            CalculateViews();
         }
     } catch (error) {
         console.log(error);
@@ -464,6 +456,21 @@ async function GetAPI(currentPage) {
 }
 
 GetAPI(0);
+
+// 조회수 계산 함수
+function CalculateViews (){
+    const postTrs = document.querySelectorAll('.postTr');
+    posts.forEach(async(el,index)=>{
+        await API.post('/viewcheck',{
+            data : el.id
+        }).then((e)=>{
+            const viewTd = document.createElement('td');
+            viewTd.innerHTML = e.data.length;
+
+            postTrs[index].append(viewTd);
+        })
+    })
+}
 
 // 전체 글 목록 페이지로 이동 = 메인 페이지
 const usedMarket = document.querySelector('.used-market');
@@ -483,4 +490,11 @@ const localMarket = document.querySelector('.local-market');
 
 localMarket.onclick = () => {
     location.href = `./local${urlEnd}`;
+}
+
+// 통계 페이지 이동
+const postStat = document.querySelector('.post-stat');
+
+postStat.onclick = ()=>{
+    location.href = `./statistic${urlEnd}`;
 }

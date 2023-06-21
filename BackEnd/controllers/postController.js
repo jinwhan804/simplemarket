@@ -8,66 +8,66 @@ exports.PostViewAll = async (req, res) => {
             },
             order: [['createdAt', 'DESC']]
         }).then((e) => {
-            // 생성되었던 pageId 제거
-            function findKeyByToken(obj, pageId) {
-                for (let key in obj) {
-                    if (typeof obj[key] === "string") {
-                        let parsedObj;
-                        try {
-                            // JSON 문자열을 파싱하여 객체로 변환합니다.
-                            parsedObj = JSON.parse(obj[key]);
-                        } catch (err) {
-                            // 파싱 실패 시에는 다음 키로 이동합니다.
-                            continue;
-                        }
-                        if (parsedObj.pageId === pageId) {
-                            // 원하는 값을 찾았다면, 해당 키를 반환합니다.
-                            return key;
-                        }
-                    } else if (typeof obj[key] === "object" && obj[key] !== null) {
-                            // 값이 객체일 경우, 재귀적으로 함수를 호출하여 탐색을 계속합니다.
-                            const result = findKeyByToken(obj[key], pageId);
-                        if (result) {
-                            return result;
-                        }
-                    }
-                }
-                return null;
-            }
+            // // 생성되었던 pageId 제거
+            // function findKeyByToken(obj, pageId) {
+            //     for (let key in obj) {
+            //         if (typeof obj[key] === "string") {
+            //             let parsedObj;
+            //             try {
+            //                 // JSON 문자열을 파싱하여 객체로 변환합니다.
+            //                 parsedObj = JSON.parse(obj[key]);
+            //             } catch (err) {
+            //                 // 파싱 실패 시에는 다음 키로 이동합니다.
+            //                 continue;
+            //             }
+            //             if (parsedObj.pageId === pageId) {
+            //                 // 원하는 값을 찾았다면, 해당 키를 반환합니다.
+            //                 return key;
+            //             }
+            //         } else if (typeof obj[key] === "object" && obj[key] !== null) {
+            //                 // 값이 객체일 경우, 재귀적으로 함수를 호출하여 탐색을 계속합니다.
+            //                 const result = findKeyByToken(obj[key], pageId);
+            //             if (result) {
+            //                 return result;
+            //             }
+            //         }
+            //     }
+            //     return null;
+            // }
     
-            let th;
-            for (const key in req.sessionStore.sessions) {
-                const json = JSON.parse(`${req.sessionStore.sessions[key]}`);
-                if(json.pageId != null){
-                    th = json.pageId;
-                    const ta = req.sessionStore.sessions;
-                    const nowsessioid = findKeyByToken(ta, th);            
+            // let th;
+            // for (const key in req.sessionStore.sessions) {
+            //     const json = JSON.parse(`${req.sessionStore.sessions[key]}`);
+            //     if(json.pageId != null){
+            //         th = json.pageId;
+            //         const ta = req.sessionStore.sessions;
+            //         const nowsessioid = findKeyByToken(ta, th);            
                     
-                        req.sessionStore.all((err, sessions) => {
-                            if (err) {
-                            return res.sendStatus(500);
-                            }
+            //             req.sessionStore.all((err, sessions) => {
+            //                 if (err) {
+            //                 return res.sendStatus(500);
+            //                 }
                     
-                            const sessionIds = Object.keys(sessions);
+            //                 const sessionIds = Object.keys(sessions);
                 
-                            // Delete each session by ID
-                            sessionIds.forEach((el) => {
-                                console.log(el);
-                                console.log(nowsessioid);
-                                if (el == nowsessioid) {
-                                    req.sessionStore.destroy(nowsessioid, (err) => {
-                                        if (err) {
-                                            console.error("Error destroying session:", err);
-                                        } else {
-                                            console.log("Session destroyed successfully:", nowsessioid);
-                                            console.log(ta);
-                                        }
-                                    });
-                                }
-                            });
-                        })
-                }
-            }
+            //                 // Delete each session by ID
+            //                 sessionIds.forEach((el) => {
+            //                     console.log(el);
+            //                     console.log(nowsessioid);
+            //                     if (el == nowsessioid) {
+            //                         req.sessionStore.destroy(nowsessioid, (err) => {
+            //                             if (err) {
+            //                                 console.error("Error destroying session:", err);
+            //                             } else {
+            //                                 console.log("Session destroyed successfully:", nowsessioid);
+            //                                 console.log(ta);
+            //                             }
+            //                         });
+            //                     }
+            //                 });
+            //             })
+            //     }
+            // }
         
             
             res.send(e);

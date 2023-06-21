@@ -24,6 +24,7 @@ const rereplyRouter = require('./routers/rereply');
 const localpostRouter = require('./routers/localpost');
 const viewcheckRouter = require('./routers/viewCheck');
 const likecheckRouter = require('./routers/likecheck');
+const statisticRouter = require('./routers/statistic');
 
 const app = express();
 
@@ -71,6 +72,7 @@ app.use('/rereply', rereplyRouter);
 app.use('/localpost',localpostRouter);
 app.use('/viewcheck',viewcheckRouter);
 app.use('/likecheck',likecheckRouter);
+app.use('/statistic',statisticRouter);
 
 const server = app.listen(8080, () => {
     console.log("8080 Server Open");

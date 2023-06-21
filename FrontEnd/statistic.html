@@ -2,13 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <script src="http://localhost:8080/socket.io/socket.io.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="./js/index.js"></script>
-    <link rel="stylesheet" href="./css/main.css">
+    <link rel="stylesheet" href="./css/statistic.css">
 </head>
 <body>
     <!-- 헤더 영역 -->
@@ -18,7 +17,7 @@
             <ul>
                 <li><a class="used-market">중고장터</a></li>
                 <li><a class="local-market">동네장터</a></li>
-                <li><a class="post-stat">신고장터</a></li>
+                <li>신고장터</li>
             </ul>
         </div>
         <!-- 헤더에 가장 오른쪽 버튼 영역 -->
@@ -28,30 +27,33 @@
             <button id="logout">Logout</button>
         </div>
     </header>
-    <!-- 메인 페이지(게시판) 영역 -->
-    <div class="profile-info">
-        <div id="text-container">
-            <h1>전체 중고 장터</h1>
-            <a id="inInsert">내 물건 팔기</a>
-            <table id="post_list">
-                
-            </table>
-            <div id="btns">        
+    <!-- 통계 표시 영역 -->
+    <div class="border-container">
+        <div class="left-side">
+            <div class="img-container">
+                <h1>글 목록</h1>
+                <table id="list_up">
+
+                </table>
+                <div id="btns">        
+                </div>
             </div>
         </div>
-    </div>
-    <!-- 로그인 팝업 -->
-    <div class="loginPopup">
-        <form id="loginForm">
-            <label for="">ID</label>
-            <input type="text" id="user_id">
-            <label for="">Password</label>
-            <input type="password" id="user_pw">
-            <button type="button" id="loginBtn">Login</button>
-            <div class="links">
-                <a id="toSignUp">SignUp</a>
+        <div class="right-side">
+            <div class="text-container">
+                <h1>정보</h1>    
+                <div>                     
+                    조회 수 : <span class="view_count"></span>
+                </div>
+                <div>                     
+                    좋아요 : <span class="like_count"></span>
+                </div>
+                <select id="selectRange">
+                    <option value="">기간</option>
+                </select>
+                <canvas id="view_graph"></canvas>
             </div>
-        </form>
+        </div>
     </div>
     <!-- --------------------------------------실시간 채팅----------------------------------------------------- -->
     <img class="chatImg" onclick="popup()" src="http://localhost:8080/img/bunny-1299162_1280.png">
@@ -72,10 +74,10 @@
         <div class="line"></div>
         <div class="chat_content"></div>
         <div class="message_box">
-            <input type="text" id="msg">
+            <input type="text" id="message">
             <button id="btn">send</button>
         </div>
     </div>
 </body>
-<script src="./js/main.js"></script>
+<script src="./js/statistic.js"></script>
 </html>
