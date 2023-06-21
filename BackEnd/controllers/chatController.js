@@ -16,12 +16,12 @@ exports.ChatInsert = async (req, res) => {
 exports.ViewAllChats = async (req, res) => {
     try {
         const chats = await Chat.findAll({
-            include: [
-                {
-                    model: User,
-                    attributes: ['id', 'nickname', 'profile_img']
-                }
-            ]
+            include:
+            {
+                model: User,
+                // attributes: ['id', 'nickname', 'profile_img']
+            }
+
         });
         res.json(chats);
     } catch (error) {

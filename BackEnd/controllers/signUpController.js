@@ -19,6 +19,7 @@ exports.SignUp = async (req, res) => {
             grade,
             address
         })
+        // 로컬에서 사용할때 FRONT 뒤에 _SERVER 제거
         res.redirect(`${process.env.FRONT}/${process.env.MAIN}`);
     } catch (error) {
         console.log(error);
