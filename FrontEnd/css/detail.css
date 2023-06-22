@@ -40,7 +40,8 @@ header {
 }
 
 .used-market,
-.local-market{
+.local-market,
+.post-stat{
     text-decoration: none;
     color: #ffffff;
     background-color: #007bff;
@@ -49,7 +50,8 @@ header {
     border-radius: 40px;
 }
 .used-market:hover, 
-.local-market:hover{
+.local-market:hover,
+.post-stat:hover{
     background-color: #0056b3;
 }
 
@@ -61,6 +63,11 @@ img {
     border-radius: 5%;
     box-shadow: 0px 3px 15px rgba(0,0,0,0.1);
     object-fit: contain;
+    border-radius: 50%;
+}
+
+a{
+    cursor: pointer;
 }
 
 .header_div {
@@ -500,20 +507,21 @@ box-shadow: inset 0px 0px 0.26vw white;
     text-overflow: clip;
 }
 .reply3 {
-    width: 10%;
+    width: 13%;
     white-space: nowrap;
     overflow: auto;
     text-overflow: clip;
 } 
 .reply4 {
-    width: 13%;
+    width: 10%;
     white-space: nowrap;
     overflow: auto;
     text-overflow: clip;
 }
 .replyLi {
     margin: 10px;
-    border-top: 1px solid;
+    /* border-top: 1px solid; */
+    background-color: beige;
 }
 
 .replyLi button {
@@ -527,36 +535,58 @@ box-shadow: inset 0px 0px 0.26vw white;
 
 .rereply_content {
     border: 1px solid;
+    width: 100%;
+    min-height: 100px;
+    display: block;
 }
 
 .btnsDiv {
-    width: 20px;
-    height: 20px;
-    background-color: #09ec91;
-    margin: 2px;
-    cursor: pointer;
+    /* width: 5px; */
+    /* height: 5px; */
+    /* background-color: black; */
+    /* margin: 2px; */
     position : absolute;
+    cursor: pointer;
     top : 0;
     right : 0;
+    display: flex;
+}
+.btnsDiv .dot {
+    background-color: #007bff;
+    width: 5px;
+    height: 5px;
+    margin: 2px;
 }
 
 .rereplyLi{
     margin: 10px;
-    border-top: 1px solid;
+    /* border-top: 1px solid; */
     width: 100%;
+    background-color: bisque;
 }
 
 .rebtnsDiv {
-    width: 20px;
-    height: 20px;
-    background-color: #09ec91;
-    margin: 2px;
-    cursor: pointer;
+    /* width: 20px; */
+    /* height: 20px; */
+    /* background-color: #09ec91; */
+    /* margin: 2px; */
     position : absolute;
+    cursor: pointer;
     top : 0;
     right : 0;
+    display: flex;
 }
 
+.rebtnsDiv .dot {
+    background-color: black;
+    width: 5px;
+    height: 5px;
+    margin: 2px;
+}
+.rereply_area button {
+    width: 100%;
+    justify-content: center;
+}
 
 
 

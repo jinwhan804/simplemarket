@@ -18,13 +18,16 @@ exports.ViewCount = async(req,res)=>{
 
 exports.ViewUserAdd = async(req,res)=>{
     try {
-        const {postId, userId} = req.body;        
+        const {postId, userId} = req.body;
+        
+        if(userId != 1){
+            await Stat.create({
+                stat_type,
+                postId,
+                userId
+            })
+        }
 
-        await Stat.create({
-            stat_type,
-            postId,
-            userId
-        })
         res.send();
     } catch (error) {
         console.log('뷰 체크 컨트롤러에서 조회수 추가하다 에러남');

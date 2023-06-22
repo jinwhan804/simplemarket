@@ -46,10 +46,7 @@ exports.Login = async (req, res) => {
                 } else {
                     data.msg = '로그인 성공';
                     data.token = token;
-                    req.session.access_token = token;
                 }
-
-                console.log('login : ',data.token);
 
                 res.send(data);
             } else {
