@@ -152,12 +152,14 @@ window.onload = async () => {
 
     const socket = io.connect(serverUrl);
     const nickname = data.nickname;
-    let room = data.id;
 
     if (data.grade === '2') {
         const chatImg = document.querySelector('.chatImg');
         chatImg.addEventListener('click', () => {
             socket.emit('joinRoom', nickname, { id: data.id, nickname: data.nickname });
+            // if (sessionStorage.getItem(`${data.nickname}_joined`) === null) {
+            //     sessionStorage.setItem(`${data.nickname}_joined`, 'false');
+            // }
         })
     }
 
@@ -168,25 +170,30 @@ window.onload = async () => {
     const admin = userData[0];
     console.log(admin);
 
+    sessionStorage.setItem('joined', 'false');
+
     socket.on('joinRoom', (room, user, userList) => {
         const now = new Date();
         const hours = now.getHours();
         const minutes = now.getMinutes();
         const timeString = `${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
 
-        if (user.id !== admin.id) {
-            const welcomeMessage = `
-            <div class="content other-message">
-                <img src="${admin.profile_img}">
-                <div class="message-display">
-                    <p class="nickname">${admin.nickname}</p>
-                    <p class="message ballon">환영합니다!</p>
-                    <p class="date">${timeString}</p>
+        if (sessionStorage.getItem('joined') === 'false') {
+            if (user.id !== admin.id) {
+                const welcomeMessage = `
+                <div class="content other-message">
+                    <img src="${admin.profile_img}">
+                    <div class="message-display">
+                        <p class="nickname">${admin.nickname}</p>
+                        <p class="message ballon">안녕하세요! 심플마켓입니다. 문의를 남겨주시면 신속하게 답변 드리겠습니다😊</p>
+                        <p class="date">${timeString}</p>
+                    </div>
                 </div>
-            </div>
-            `
-            chatContent.innerHTML += welcomeMessage;
+                `
+                chatContent.innerHTML += welcomeMessage;
+            }
         }
+        sessionStorage.setItem('joined', 'true');
     })
 
 
@@ -219,8 +226,13 @@ window.onload = async () => {
                 let newMessageHTML = `
                 <div class="chat_message" data_nickname="${chatUser.nickname}">
                     <img src="${chatUser.profile_img}">
-                    <p>${chatUser.nickname}: <span class="message_content">${chatUser.message}</span></p>
-                    <p>${hours}:${minutes < 10 ? '0' + minutes : minutes}</p>
+                    <div class="user_chatPart">
+                        <div class="user_nick_date">
+                            <p class="user_nickname">${chatUser.nickname}</p>
+                            <p class="user_time">${hours}:${minutes < 10 ? '0' + minutes : minutes}</p>
+                        </div>
+                        <p class="message_content">${chatUser.message}</p>
+                    </div>
                 </div>
                 `;
                 userChatList.innerHTML += newMessageHTML;
@@ -247,9 +259,14 @@ window.onload = async () => {
         });
     });
 
+    // 메시지 보내는 이벤트
+    const msg = document.getElementById('msg');
+    const btn = document.getElementById('btn');
 
-    btn.onclick = async () => {
+    const sendMessage = async () => {
         try {
+            if (msg.value.trim() === '') return;
+
             const messageData = {
                 nickname: data.nickname,
                 message: msg.value,
@@ -269,6 +286,23 @@ window.onload = async () => {
             console.log(error);
         }
     }
+
+    btn.onclick = sendMessage;
+    msg.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            sendMessage();
+        }
+    })
+
+    msg.addEventListener('input', () => {
+        if (msg.value.trim() === '') {
+            btn.style.backgroundColor = '#e2e1e1';
+        } else {
+            btn.style.backgroundColor = '#abc8f8';
+        }
+    });
+
 
     socket.on('chat', (data) => {
         console.log(data);
@@ -304,9 +338,11 @@ window.onload = async () => {
     // chatBox 창의 뒤로가기 버튼(관리자만 보임)
     try {
         if (data.grade === '3') {
-            back.style.display = 'block';
+            back.style.backgroundImage = "url('../../BackEnd/uploads/back-removebg-preview.png')";
+            back.style.cursor = 'pointer';
         } else {
-            back.style.display = 'none';
+            back.style.backgroundImage = 'none';
+            back.style.cursor = 'default';
         }
     } catch (error) {
         console.log(error);
@@ -321,6 +357,7 @@ window.onload = async () => {
         });
 
         socket.on('leaveRoom', (room, user) => {
+            console.log(user);
             console.log(`${user.nickname} left room ${room}`);
         })
     } catch (error) {
@@ -382,6 +419,8 @@ mypageBtn.addEventListener('click', () => {
 
 ////////////////////////////// 메인 게시판 영역 ////////////////////////////////////
 
+let posts;
+
 async function GetAPI(currentPage) {
     try {
         post_list.innerHTML = "";
@@ -403,11 +442,10 @@ async function GetAPI(currentPage) {
 
         btns.innerHTML = '';
 
-        const { data } = await API.get('/post', {
-            headers: {
-                'Content-Type': "application/json"
-            }
-        });
+        const { data } = await API.get('/post');
+
+        posts = data;
+        console.log(posts);
 
         let pageOffset = 10;
         let pageGroup = currentPage * pageOffset;
@@ -431,7 +469,7 @@ async function GetAPI(currentPage) {
 
             const _data = data.slice(pageGroup, pageGroup + pageOffset);
 
-            _data.forEach(async (el, index) => {
+            _data.forEach((el, index) => {
                 let date = new Date();
                 let year = date.getFullYear();
                 let month = date.getMonth() + 1;
@@ -455,23 +493,13 @@ async function GetAPI(currentPage) {
                 let createDate = Number(el.createdAt.slice(0, 10).split('-').join(''));
                 let updateDate = Number(el.updatedAt.slice(0, 10).split('-').join(''));
 
-                // 조회수 계산
-                const stat = await API.post('/viewcheck', {
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    data: el.id
-                })
-
-                console.log('불러온거', stat.data)
-
                 let _tr = document.createElement('tr');
                 let _td1 = document.createElement('td');
                 let _td2 = document.createElement('td');
                 let _td3 = document.createElement('td');
                 let _td4 = document.createElement('td');
                 let _td5 = document.createElement('td');
-                let _td6 = document.createElement('td');
+                _tr.className = 'postTr';
                 _td1.innerHTML = index + 1;
                 _td2.innerHTML = el.title;
                 _td3.innerHTML = el.User.nickname;
@@ -488,8 +516,6 @@ async function GetAPI(currentPage) {
                     _td5.innerHTML = el.updatedAt.slice(11, 19);
                 }
 
-                _td6.innerHTML = stat.data.length;
-
                 _tr.onclick = async () => {
                     await API.post('/post/detail', {
                         headers: {
@@ -503,9 +529,12 @@ async function GetAPI(currentPage) {
                     })
                 }
 
-                _tr.append(_td1, _td2, _td3, _td4, _td5, _td6);
+                _tr.append(_td1, _td2, _td3, _td4, _td5);
                 post_list.append(_tr);
             });
+
+            // 조회수 계산
+            CalculateViews();
         }
     } catch (error) {
         console.log(error);
@@ -513,6 +542,21 @@ async function GetAPI(currentPage) {
 }
 
 GetAPI(0);
+
+// 조회수 계산 함수
+function CalculateViews() {
+    const postTrs = document.querySelectorAll('.postTr');
+    posts.forEach(async (el, index) => {
+        await API.post('/viewcheck', {
+            data: el.id
+        }).then((e) => {
+            const viewTd = document.createElement('td');
+            viewTd.innerHTML = e.data.length;
+
+            postTrs[index].append(viewTd);
+        })
+    })
+}
 
 // 전체 글 목록 페이지로 이동 = 메인 페이지
 const usedMarket = document.querySelector('.used-market');
@@ -532,4 +576,11 @@ const localMarket = document.querySelector('.local-market');
 
 localMarket.onclick = () => {
     location.href = `./local${urlEnd}`;
+}
+
+// 통계 페이지 이동
+const postStat = document.querySelector('.post-stat');
+
+postStat.onclick = () => {
+    location.href = `./statistic${urlEnd}`;
 }

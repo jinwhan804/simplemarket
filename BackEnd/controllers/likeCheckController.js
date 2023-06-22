@@ -1,14 +1,12 @@
-const {Post,Reply,Rereply,User,Stat}= require('../models');
+const {Stat}= require('../models');
 const stat_type = 'postLike';
 
 exports.PostLikeCount = async(req,res)=>{
     try {
         const id = req.body.data;
-        console.log('잘 들어오나',req.body)        
 
         const stat = await Stat.findAll({where : {stat_type,postId : id}});
 
-        console.log('이거도 되나?',stat)
         res.send(stat);
     } catch (error) {
         console.log('라이크 컨트롤러에서 본문 좋아요 카운팅하다 오류남');
@@ -34,6 +32,7 @@ exports.PostLikeUpdate = async(req,res)=>{
 
         res.send(`${process.env.FRONT}/detail${process.env.END}`);
     } catch (error) {
-        
+        console.log('라이크 컨트롤러에서 본문 좋아요 업데이트하다 오류남');
+        console.log(error);
     }
 }

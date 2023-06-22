@@ -327,10 +327,10 @@ async function GetAPI(){
             _div3.className = 'reply3';
             _div4.className = 'reply4';
 
-            _div1.innerHTML = "No.";
-            _div2.innerHTML = "내용";
-            _div3.innerHTML = "작성자";
-            _div4.innerHTML = "시간";
+            // _div1.innerHTML = "No.";
+            // _div2.innerHTML = "내용";
+            // _div3.innerHTML = "작성자";
+            // _div4.innerHTML = "시간";
             _li.append(_div1,_div2,_div3,_div4);
             reply_list.append(_li);
 
@@ -427,17 +427,39 @@ async function GetAPI(){
                     }
 
                     if(users.id == el.User.id){
+                        let btnsDiv = document.createElement('div');
+                        btnsDiv.className = 'btnsDiv';
+                        btnsDiv.innerHTML = `
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                        `;
+
                         let btn2 = document.createElement('button');
                         let btn3 = document.createElement('button');
                         let btn4 = document.createElement('button');
                         let btn5 = document.createElement('button');
 
-                        btn2.innerHTML = '수정';
-                        btn3.innerHTML = '삭제';
+                        btn2.style.display = 'none';
+                        btn3.style.display = 'none';
+                        btn4.style.display = 'none';
+                        btn5.style.display = 'none';
+                        
+                        btnsDiv.append(btn2, btn3, btn4, btn5);
 
-                        btn4.innerHTML = '수정';
-                        btn5.innerHTML = '취소';
-
+                        btnsDiv.onclick = () => {
+                            const buttons = [btn2, btn3, btn4, btn5];
+                            buttons.forEach(btn => {
+                                btn.innerHTML = btn === btn2 ? '수정' :
+                                                btn === btn3 ? '삭제' :
+                                                btn === btn4 ? '수정확인' : 
+                                                '수정취소';
+                        
+                                btn.style.display = btn.style.display === 'none' ? 'inline-block' : 'none';
+                            });
+                        };
+                        
+                       
                         
                         btn2.onclick = ()=>{
                             _div6.contentEditable = true;
@@ -499,10 +521,12 @@ async function GetAPI(){
                         btn5.classList.add('unable');
 
 
-                        _li1.append(btn2,btn3,btn4,btn5);
+                        _li1.append(btn3,btn2,btn4,btn5,btnsDiv);
                     }
-
                     reply_list.append(_li1);
+
+                    _li1.style.position = 'relative'; // _li1 요소에 position: relative; 추가
+                    
 
                     await API.post('/rereply',{
                         data : el.id
@@ -533,7 +557,7 @@ async function GetAPI(){
                             e.data.forEach((el,index) => {
                                 
                                 let updateDate = Number(el.updatedAt.slice(0,10).split('-').join(''));
-        
+                                
                                 let _li2 = document.createElement('li');
                                 let _rediv1 = document.createElement('div');
                                 let _rediv2 = document.createElement('div');
@@ -542,12 +566,11 @@ async function GetAPI(){
                                 let rebtn1 = document.createElement('button');
                                 
                                 _li2.className = 'rereplyLi';
-                                _rediv1.className = 'reply1';
                                 _rediv2.className = 'reply2';
                                 _rediv3.className = 'reply3';
                                 _rediv4.className = 'reply4';
                 
-                                _rediv1.innerHTML = index + 1;
+                                // _rediv1.innerHTML = index + 1;
                                 _rediv2.innerHTML = ">RE : " + el.content;
                                 _rediv3.innerHTML = el.User.nickname;
                                 rebtn1.innerHTML = "댓글";
@@ -600,16 +623,44 @@ async function GetAPI(){
                                 }
                                 
                                 if(users.id == el.User.id){
+                                    let rebtnsDiv = document.createElement('div');
+                                    rebtnsDiv.className = 'rebtnsDiv';
+                                    rebtnsDiv.innerHTML = `
+                                    <div class="dot"></div>
+                                    <div class="dot"></div>
+                                    <div class="dot"></div>
+                                    `;
+
                                     let rebtn2 = document.createElement('button');
                                     let rebtn3 = document.createElement('button');
                                     let rebtn4 = document.createElement('button');
                                     let rebtn5 = document.createElement('button');
+
+                                    rebtn2.style.display = 'none';
+                                    rebtn3.style.display = 'none';
+                                    rebtn4.style.display = 'none';
+                                    rebtn5.style.display = 'none';
+
+                                    rebtnsDiv.append(rebtn2,rebtn3,rebtn4,rebtn5);
+
+                                    rebtnsDiv.onclick = () => {
+                                        const buttons = [rebtn2, rebtn3, rebtn4, rebtn5];
+                                        buttons.forEach(rebtn => {
+                                            btn.innerHTML = rebtn === rebtn2 ? '수정':
+                                                            rebtn === rebtn3 ? '삭제':
+                                                            rebtn === rebtn4 ? '수정확인':
+                                                            '수정취소';
+                                                            
+                                            rebtn.style.display = rebtn.style.display === 'none' ? 'inline-block' : 'none';
+                                        });
+                                    };
+                                
                 
                                     rebtn2.innerHTML = '수정';
                                     rebtn3.innerHTML = '삭제';
                 
-                                    rebtn4.innerHTML = '수정';
-                                    rebtn5.innerHTML = '취소';
+                                    rebtn4.innerHTML = '수정확인';
+                                    rebtn5.innerHTML = '수정취소';
                 
                                     
                                     rebtn2.onclick = ()=>{
@@ -672,10 +723,15 @@ async function GetAPI(){
                                     rebtn5.classList.add('unable');
                 
                 
-                                    _li2.append(rebtn2,rebtn3,rebtn4,rebtn5);
+                                    _li2.append(rebtn3,rebtn2,rebtn4,rebtn5,rebtnsDiv);
+                                    
                                 }
-                
+                                
                                 _li1.append(_li2);
+
+                                _li2.style.position = 'relative'
+                                
+                                
                                 
                             });
                         }
@@ -786,4 +842,11 @@ const localMarket = document.querySelector('.local-market');
 
 localMarket.onclick = ()=>{
     location.href = `./local${urlEnd}`;
+}
+
+// 통계 페이지 이동
+const postStat = document.querySelector('.post-stat');
+
+postStat.onclick = ()=>{
+    location.href = `./statistic${urlEnd}`;
 }

@@ -64,6 +64,10 @@ img {
     border-radius: 50%;
 }
 
+a{
+    cursor: pointer;
+}
+
 .header_div {
     width: 100%;
     max-width: 1000px;

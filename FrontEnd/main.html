@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <script src="/socket.io/socket.io.js"></script>
+    <script src="http://localhost:8080/socket.io/socket.io.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="./js/index.js"></script>
     <link rel="stylesheet" href="./css/main.css">
@@ -18,13 +18,13 @@
             <ul>
                 <li><a class="used-market">중고장터</a></li>
                 <li><a class="local-market">동네장터</a></li>
-                <li>신고장터</li>
+                <li><a class="post-stat">신고장터</a></li>
             </ul>
         </div>
         <!-- 헤더에 가장 오른쪽 버튼 영역 -->
         <div class="header-btns">
             <button id="popup-login">Login</button>
-            <button id="mypage-btn">Mypage</button>
+            <button id="mypage-btn"></button>
             <button id="logout">Logout</button>
         </div>
     </header>
@@ -61,7 +61,9 @@
             <button class="close_chatBox">X</button>
         </div>
         <div class="line"></div>
-        <div class="user_chat_list"></div>
+        <div class="listBox">
+            <div class="user_chat_list"></div>
+        </div>
     </div>
     <div class="chatBox">
         <div class="chat_box_title">
@@ -73,7 +75,7 @@
         <div class="chat_content"></div>
         <div class="message_box">
             <input type="text" id="msg">
-            <button id="btn">send</button>
+            <button id="btn">전송</button>
         </div>
     </div>
 </body>
