@@ -6,6 +6,7 @@ const mypageBtn = document.getElementById('mypage-btn');
 
 async function mypageHide() {
     let cookie = document.cookie
+    console.log(cookie)
     const { data } = await API.get('/login/view', {
         withCredentials: true,
         cookie : cookie
