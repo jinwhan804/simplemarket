@@ -9,7 +9,7 @@ exports.LocalPostView = async(req,res)=>{
                 include : {
                     model : User
                 },
-                order : [['createAt', 'DESC']]
+                order : [['createdAt', 'DESC']]
             }).then((e) => {
                 res.send(e);
             }).catch((err) => {
