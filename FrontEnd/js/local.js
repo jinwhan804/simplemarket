@@ -475,6 +475,13 @@ async function GetAPI(currentPage){
                 _td6.innerHTML = el.postViews;
 
                 _tr.onclick = async()=>{
+                    const form = new FormData();
+
+                    form.append('postId',el.id);
+                    form.append('userId',users.id);
+                    // 조회수 추가
+                    await API.post('/viewcheck/add',form);
+                    
                     await API.post('/post/detail',{
                         headers : {
                             'Content-Type' : "application/json"

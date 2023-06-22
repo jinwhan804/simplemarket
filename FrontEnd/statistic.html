@@ -42,17 +42,21 @@
         <div class="right-side">
             <div class="text-container">
                 <h1>정보</h1>    
-                <div>                     
+                <div class="count_area">                     
                     좋아요 : <span class="like_count"></span>
                 </div>
-                <div>                     
-                    조회 수 : <span class="view_count"></span>
+                <div class="count_area">                     
+                    조회수 : <span class="view_count"></span>
                 </div>
-                <select id="selectRange">
-                    <option value="">기간</option>
-                </select>
-                <canvas id="gender_rate"></canvas>
-                <canvas id="view_graph"></canvas>
+                <div id="view_graph_area">
+                    <select id="selectRange">
+                        <option value="">기간</option>
+                    </select>
+                    <canvas id="view_graph"></canvas>
+                </div>
+                <div id="gender_graph_area">
+                    <canvas id="gender_rate"></canvas>
+                </div>
             </div>
         </div>
     </div>

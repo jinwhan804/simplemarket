@@ -2,74 +2,76 @@ const { Post, User,Reply,Rereply } = require('../models');
 
 exports.PostViewAll = async (req, res) => {
     try {
+        const {access_decoded} = req;
+
         await Post.findAll({
             include : {
                 model : User
             },
             order: [['createdAt', 'DESC']]
         }).then((e) => {
-            // // 생성되었던 pageId 제거
-            // function findKeyByToken(obj, pageId) {
-            //     for (let key in obj) {
-            //         if (typeof obj[key] === "string") {
-            //             let parsedObj;
-            //             try {
-            //                 // JSON 문자열을 파싱하여 객체로 변환합니다.
-            //                 parsedObj = JSON.parse(obj[key]);
-            //             } catch (err) {
-            //                 // 파싱 실패 시에는 다음 키로 이동합니다.
-            //                 continue;
-            //             }
-            //             if (parsedObj.pageId === pageId) {
-            //                 // 원하는 값을 찾았다면, 해당 키를 반환합니다.
-            //                 return key;
-            //             }
-            //         } else if (typeof obj[key] === "object" && obj[key] !== null) {
-            //                 // 값이 객체일 경우, 재귀적으로 함수를 호출하여 탐색을 계속합니다.
-            //                 const result = findKeyByToken(obj[key], pageId);
-            //             if (result) {
-            //                 return result;
-            //             }
-            //         }
-            //     }
-            //     return null;
-            // }
-    
-            // let th;
-            // for (const key in req.sessionStore.sessions) {
-            //     const json = JSON.parse(`${req.sessionStore.sessions[key]}`);
-            //     if(json.pageId != null){
-            //         th = json.pageId;
-            //         const ta = req.sessionStore.sessions;
-            //         const nowsessioid = findKeyByToken(ta, th);            
-                    
-            //             req.sessionStore.all((err, sessions) => {
-            //                 if (err) {
-            //                 return res.sendStatus(500);
-            //                 }
-                    
-            //                 const sessionIds = Object.keys(sessions);
-                
-            //                 // Delete each session by ID
-            //                 sessionIds.forEach((el) => {
-            //                     console.log(el);
-            //                     console.log(nowsessioid);
-            //                     if (el == nowsessioid) {
-            //                         req.sessionStore.destroy(nowsessioid, (err) => {
-            //                             if (err) {
-            //                                 console.error("Error destroying session:", err);
-            //                             } else {
-            //                                 console.log("Session destroyed successfully:", nowsessioid);
-            //                                 console.log(ta);
-            //                             }
-            //                         });
-            //                     }
-            //                 });
-            //             })
-            //     }
-            // }
-        
+            console.log(req.sessionStore.sessions);
             
+            // 생성되었던 pageId 제거
+            function findKeyByToken(obj, pageId) {
+                for (let key in obj) {
+                    if (typeof obj[key] === "string") {
+                        let parsedObj;
+                        try {
+                            // JSON 문자열을 파싱하여 객체로 변환합니다.
+                            parsedObj = JSON.parse(obj[key]);
+                        } catch (err) {
+                            // 파싱 실패 시에는 다음 키로 이동합니다.
+                            continue;
+                        }
+                        if (parsedObj.pageId === pageId) {
+                            // 원하는 값을 찾았다면, 해당 키를 반환합니다.
+                            return key;
+                        }
+                    } else if (typeof obj[key] === "object" && obj[key] !== null) {
+                            // 값이 객체일 경우, 재귀적으로 함수를 호출하여 탐색을 계속합니다.
+                            const result = findKeyByToken(obj[key], pageId);
+                        if (result) {
+                            return result;
+                        }
+                    }
+                }
+                return null;
+            }
+
+            let th;
+            for (const key in req.sessionStore.sessions) {
+                const json = JSON.parse(`${req.sessionStore.sessions[key]}`);
+    
+                if(access_decoded.id == json.pageInfo.user.id){
+                    th = json.pageInfo;
+                }
+            }
+
+            const ta = req.sessionStore.sessions;
+            const nowsessioid = findKeyByToken(ta, th); 
+
+            req.sessionStore.all((err, sessions) => {
+                if (err) {
+                return res.sendStatus(500);
+                }
+        
+                const sessionIds = Object.keys(sessions);
+
+                // Delete each session by ID
+                sessionIds.forEach((el) => {
+                    if (el == nowsessioid) {
+                        req.sessionStore.destroy(nowsessioid, (err) => {
+                            if (err) {
+                                console.error("Error destroying session:", err);
+                            } else {
+                                console.log("Session destroyed successfully:", nowsessioid);
+                                console.log(ta);
+                            }
+                        });
+                    }
+                });                
+            });
             res.send(e);
         }).catch((err) => {
             console.log(err);
@@ -83,7 +85,11 @@ exports.PostViewAll = async (req, res) => {
 exports.PostViewSelect = (req, res) => {
     try {
         const id = req.body.data;
-        req.session.pageId = id;
+        const {access_decoded} = req;
+        const userMoveInfo = {user : access_decoded, pageId : id};
+
+        req.session.pageInfo = userMoveInfo;
+
         res.send(`${process.env.FRONT}/detail${process.env.END}`)
     } catch (error) {
         console.log('포스트 컨트롤러에서 글 하나 보여주다 에러남 1');
@@ -94,7 +100,15 @@ exports.PostViewSelect = (req, res) => {
 exports.PostViewOne = async (req, res) => {
     try {
         const {access_decoded} = req;
-        const id = req.pageId;        
+        let id;
+
+        for (const key in req.sessionStore.sessions) {
+            const json = JSON.parse(`${req.sessionStore.sessions[key]}`);
+
+            if(access_decoded.id == json.pageInfo.user.id){
+                id = json.pageInfo.pageId;
+            }
+        }
 
         const post = await Post.findOne({
             where : {id},
@@ -102,7 +116,6 @@ exports.PostViewOne = async (req, res) => {
                 model : User
             }
         })
-
 
         const data = {posts : post, users : access_decoded};
 

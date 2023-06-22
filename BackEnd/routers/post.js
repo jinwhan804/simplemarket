@@ -2,7 +2,7 @@ const router = require('express').Router();
 const {PostViewAll,PostInsert,PostInsertView,PostViewOne,PostViewSelect,PostUpdateSelect,PostUpdate,PostDelete,PostLikes} = require('../controllers/postController');
 const {isLogin} = require('../middleware/loginmiddleware');
 
-router.get('/',PostViewAll);
+router.get('/',isLogin,PostViewAll);
 
 router.get('/insert',isLogin,PostInsertView);
 

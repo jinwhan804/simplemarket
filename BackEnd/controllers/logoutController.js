@@ -3,9 +3,10 @@ const { User } = require("../models");
 exports.logout = (req, res) => {
     console.log("로그아웃 컨트롤러에 들어오니>");
     try {
-        let data = {msg : '', token : null};
+        const {access_decoded} = req;
+        let data = '';
         // 특정 값을 갖는 키를 찾는 함수를 정의합니다.
-        function findKeyByToken(obj, token) {
+        function findKeyByToken(obj, pageId) {
             for (let key in obj) {
                 if (typeof obj[key] === "string") {
                     let parsedObj;
@@ -16,13 +17,13 @@ exports.logout = (req, res) => {
                         // 파싱 실패 시에는 다음 키로 이동합니다.
                         continue;
                     }
-                    if (parsedObj.access_token === token) {
+                    if (parsedObj.pageId === pageId) {
                         // 원하는 값을 찾았다면, 해당 키를 반환합니다.
                         return key;
                     }
                 } else if (typeof obj[key] === "object" && obj[key] !== null) {
                         // 값이 객체일 경우, 재귀적으로 함수를 호출하여 탐색을 계속합니다.
-                        const result = findKeyByToken(obj[key], token);
+                        const result = findKeyByToken(obj[key], pageId);
                     if (result) {
                         return result;
                     }
@@ -34,10 +35,12 @@ exports.logout = (req, res) => {
         let th;
         for (const key in req.sessionStore.sessions) {
             const json = JSON.parse(`${req.sessionStore.sessions[key]}`);
-            th = json.access_token;
+
+            if(access_decoded.id == json.pageInfo.user.id){
+                th = json.pageInfo;
+            }
         }
 
-        data.token = th;
 
         const ta = req.sessionStore.sessions;
         const nowsessioid = findKeyByToken(ta, th); 
@@ -65,7 +68,7 @@ exports.logout = (req, res) => {
                 }
             });
             
-            data.msg = '메인 페이지';
+            data = '메인 페이지';
             res.send(data);
         });
     } catch (error) {

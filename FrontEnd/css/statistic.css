@@ -371,6 +371,7 @@ box-shadow: inset 0px 0px 0.26vw white;
 }
 
 .left-side {
+    position: relative;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -411,16 +412,11 @@ box-shadow: inset 0px 0px 0.26vw white;
     border-radius: 50px;
     overflow: auto;
     position: relative;
-}
-.img-container #toDelete {
     display: flex;
-    position: fixed;
-    right: 0;
+    flex-direction: column;
+    align-items: center;
 }
-.img-container #toUpdate {
-    display: flex;
-    position: fixed;
-}
+
 .img-container button {
     /* background-color: #007bff; */
     /* color: #ffffff; */
@@ -436,6 +432,79 @@ box-shadow: inset 0px 0px 0.26vw white;
     font-size: 100%;
     top: 50%;
 }
-.img-container button:hover{
-    color: black;
+
+#list_up{
+    margin-top: 20px;
+    width: 90%;
+    /* 표의 테두리와 셀의 테두리 간격 없앰 */
+    border-collapse: collapse; 
+}
+
+#list_up th{
+    background-color: #0079C2;
+    color: white;
+    padding: 10px;
+}
+
+#list_up td{
+    padding: 10px;
+    border-top: 10px solid #e0e0e0;
+    text-align: center;
+}
+
+#list_up tr:hover{
+    background-color: #f2f2f2;
+    cursor: pointer;
+}
+
+.pageBtn {
+    padding: 10px 30px;
+    background-color: #09ec91;
+    color: white;
+    border: 3px solid;
+    border-radius: 50px;
+    cursor: pointer;
+}
+
+.pageBtn:hover {
+    background-color: #0056b3;
+}
+
+#btns {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.count_area{
+    width: 100px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#view_graph_area{
+    width: 500px;
+    height: 350px;
+    position: relative;
+}
+
+#view_graph_area select{
+    width: 80px;
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translate(-50%,0);
+}
+
+#view_graph_area canvas{
+    position: absolute;
+    bottom: 10px;
+}
+
+#gender_graph_area{
+    width: 500px;
+    height: 350px;
 }

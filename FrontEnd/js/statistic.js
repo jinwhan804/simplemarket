@@ -327,43 +327,56 @@ let config1 = {
     type : 'bar',
     data : {
         labels : [
-            '남','여'
+            '남성', '여성'
         ],
         datasets : [
             {
-                label : '성비',
-                fill : false,
+                label : '',
                 data : [
-                    '남','여'
+                    'male',
+                    'female'
                 ],
                 backgroundColor:[
                     '#82beff',
                     '#ffaff2'
-                ]
+                ],
             }
         ]
     },
-    options :{
-        responsive : false,
-        legend : {
-            display : true,
-        },
-        title : {
-            display : true,
-            text : '남여 성비 그래프'
+    options :{     
+        plugins: {
+            title : {
+                display : true,
+                text : '남여 성비 (조회수)',
+                font : {
+                    size : 13
+                }
+            },
+            legend: {
+                display: false 
+            }
         },
         scales: {
-            xAxes: [{
-                ticks:{
-                    fontSize : 10
+            y: {
+                ticks: {
+                    font: {
+                        size: 13 
+                    }
                 }
-            }]
+            },
+            x: {
+                ticks: {
+                    font: {
+                        size: 13 
+                    }
+                }
+            }
         }
     }
 };
 
 // 차트 작성 기본 데이터
-let config2 = {            
+let config2 = {
     type : 'bar',
     data : {
         labels : [
@@ -383,9 +396,34 @@ let config2 = {
         ]
     },
     options :{
-        title : {
-            display : true,
-            text : '조회수 그래프'
+        plugins :{
+            title : {
+                display : true,
+                text : '기간별 조회수',
+                font : {
+                    size : 13
+                }
+                
+            },
+            legend: {
+                display: false 
+            }
+        },
+        scales: {
+            y: {
+                ticks: {
+                    font: {
+                        size: 13 
+                    }
+                }
+            },
+            x: {
+                ticks: {
+                    font: {
+                        size: 13 
+                    }
+                }
+            }
         }
     }
 };
@@ -398,9 +436,9 @@ async function GetStat(currentPage){
     postList.innerHTML = '';
 
     let _tr = document.createElement('tr');
-    let _th1 = document.createElement('td');
-    let _th2 = document.createElement('td');
-    let _th3 = document.createElement('td');
+    let _th1 = document.createElement('th');
+    let _th2 = document.createElement('th');
+    let _th3 = document.createElement('th');
 
     _th1.innerHTML = 'No.';
     _th2.innerHTML = '제목';
@@ -466,14 +504,15 @@ async function PostStatData (id){
     await API.post('/statistic',{
         data : id
     }).then((e)=>{
-        const graphArea = document.querySelector('.text-container');
+        const graphArea = document.getElementById('view_graph_area');
+        const genderArea = document.getElementById('gender_graph_area');
         const viewCount = document.querySelector('.view_count');
         const likeCount = document.querySelector('.like_count');
         const viewGraph = document.getElementById('view_graph');
         const genderRate = document.getElementById('gender_rate');
 
         graphArea.removeChild(viewGraph);
-        graphArea.removeChild(genderRate);
+        genderArea.removeChild(genderRate);
         
         
         const _canvas1 = document.createElement('canvas');
@@ -503,11 +542,11 @@ async function PostStatData (id){
         config1.data.datasets[0].data = [
             genderArr[0].length,
             genderArr[1].length
-        ]
+        ];
 
         let chart1 = new Chart(_canvas1,config1);
 
-        graphArea.append(_canvas1);
+        genderArea.append(_canvas1);
 
         // 현재 시간 확인
         let nowDate = new Date();
@@ -594,7 +633,7 @@ selectBtn.onchange = async(e)=>{
         await API.post('/statistic',{
             data : views[0].postId
         }).then((e)=>{
-            const graphArea = document.querySelector('.text-container');            
+            const graphArea = document.getElementById('view_graph_area');          
             const viewGraph = document.getElementById('view_graph');
     
             graphArea.removeChild(viewGraph);
