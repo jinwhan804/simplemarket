@@ -285,14 +285,6 @@ async function GetAPI(){
                 
         posts = data.posts;
         users = data.users;
-        
-        const form = new FormData();
-
-        form.append('postId', posts.id);
-        form.append('userId',users.id);
-
-        // 조회수 추가
-        await API.post('/viewcheck/add',form);
 
         // if(data.users.id != data.posts.userId){
         //     updateBtn.classList.add('unable');
@@ -605,7 +597,7 @@ async function GetAPI(){
             
                                         form.append('content',recontentdiv.innerHTML);
                                         form.append('userId',users.id);
-                                        form.append('replyId',el.id);
+                                        form.append('replyId',el.replyId);
                                         
                                         _li2.removeChild(rediv);
                                         await API.post('/rereply/insert',form).then((e)=>{

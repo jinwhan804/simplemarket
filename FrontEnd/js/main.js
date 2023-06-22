@@ -1,3 +1,6 @@
+// 로그인 유저 확인용 변수
+let users;
+
 // 마이페이지 버튼 로그인 됐을때만 보이게
 const mypageBtn = document.getElementById('mypage-btn');
 
@@ -93,6 +96,7 @@ async function getAPI_popup() {
         });
 
         if (data.name) {
+            users = data;
             loginPopup.style.display = "none";
             postArea.style.display = 'block';
         } else {
@@ -479,11 +483,15 @@ async function GetAPI(currentPage) {
                     _td5.innerHTML = el.updatedAt.slice(11, 19);
                 }
 
-                _tr.onclick = async () => {
+                _tr.onclick = async () => {         
+                    const form = new FormData();
+
+                    form.append('postId',el.id);
+                    form.append('userId',users.id);
+                    // 조회수 추가
+                    await API.post('/viewcheck/add',form);
+
                     await API.post('/post/detail', {
-                        headers: {
-                            'Content-Type': "application/json"
-                        },
                         data: el.id
                     }).then((e) => {
                         location.href = e.data;

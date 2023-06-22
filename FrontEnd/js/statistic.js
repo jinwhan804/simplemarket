@@ -322,8 +322,48 @@ let posts;
 let views;
 let likes;
 
+// 성비 차트
+let config1 = {            
+    type : 'bar',
+    data : {
+        labels : [
+            '남','여'
+        ],
+        datasets : [
+            {
+                label : '성비',
+                fill : false,
+                data : [
+                    '남','여'
+                ],
+                backgroundColor:[
+                    '#82beff',
+                    '#ffaff2'
+                ]
+            }
+        ]
+    },
+    options :{
+        responsive : false,
+        legend : {
+            display : true,
+        },
+        title : {
+            display : true,
+            text : '남여 성비 그래프'
+        },
+        scales: {
+            xAxes: [{
+                ticks:{
+                    fontSize : 10
+                }
+            }]
+        }
+    }
+};
+
 // 차트 작성 기본 데이터
-let config = {            
+let config2 = {            
     type : 'bar',
     data : {
         labels : [
@@ -364,7 +404,7 @@ async function GetStat(currentPage){
 
     _th1.innerHTML = 'No.';
     _th2.innerHTML = '제목';
-    _th3.innerHTML = '작성자';
+    _th3.innerHTML = '작성자';    
 
     _tr.append(_th1,_th2,_th3);
     postList.append(_tr);
@@ -405,6 +445,7 @@ async function GetStat(currentPage){
             _td1.innerHTML = index + 1;
             _td2.innerHTML = el.title;
             _td3.innerHTML = el.User.nickname;
+            _tr1.style.cursor = 'pointer';
 
             _tr1.append(_td1,_td2,_td3);
 
@@ -429,17 +470,44 @@ async function PostStatData (id){
         const viewCount = document.querySelector('.view_count');
         const likeCount = document.querySelector('.like_count');
         const viewGraph = document.getElementById('view_graph');
+        const genderRate = document.getElementById('gender_rate');
 
         graphArea.removeChild(viewGraph);
+        graphArea.removeChild(genderRate);
+        
+        
+        const _canvas1 = document.createElement('canvas');
+        const _canvas2 = document.createElement('canvas');
+        _canvas1.id = 'gender_rate';
+        _canvas2.id = 'view_graph';
 
-        const _canvas = document.createElement('canvas');
-        _canvas.id = 'view_graph';
+        _canvas1.style = 'width : 400px; height : 200px;';
 
         views = e.data.views;
         likes = e.data.likes;
 
         viewCount.innerHTML = e.data.views.length;
         likeCount.innerHTML = e.data.likes.length;
+
+        // 성별 구분
+        let genderArr = [[],[]];
+
+        views.forEach((el)=>{
+            if(el.User.gender == 'male'){
+                genderArr[0].push(el);
+            }else if(el.User.gender == 'female'){
+                genderArr[1].push(el);
+            }
+        })
+
+        config1.data.datasets[0].data = [
+            genderArr[0].length,
+            genderArr[1].length
+        ]
+
+        let chart1 = new Chart(_canvas1,config1);
+
+        graphArea.append(_canvas1);
 
         // 현재 시간 확인
         let nowDate = new Date();
@@ -489,7 +557,7 @@ async function PostStatData (id){
             labeldata.push(nowMonth + '/' + date);
         }
 
-        config.data.labels = [
+        config2.data.labels = [
             labeldata[6],
             labeldata[5],
             labeldata[4],
@@ -499,7 +567,7 @@ async function PostStatData (id){
             labeldata[0]
         ];
 
-        config.data.datasets[0].data = [
+        config2.data.datasets[0].data = [
             dateArr[6].length,
             dateArr[5].length,
             dateArr[4].length,
@@ -509,9 +577,9 @@ async function PostStatData (id){
             dateArr[0].length
         ];
 
-        let chart = new Chart(_canvas,config);
+        let chart2 = new Chart(_canvas2,config2);
 
-        graphArea.append(_canvas);
+        graphArea.append(_canvas2);
     }).catch((err)=>{
         console.log(err);
     })
@@ -531,8 +599,8 @@ selectBtn.onchange = async(e)=>{
     
             graphArea.removeChild(viewGraph);
             
-            const _canvas = document.createElement('canvas');
-            _canvas.id = 'view_graph';
+            const _canvas2 = document.createElement('canvas');
+            _canvas2.id = 'view_graph';
 
             let nowDate = new Date();
             
@@ -574,7 +642,7 @@ selectBtn.onchange = async(e)=>{
                     labeldata.push(nowMonth + '/' + date);
                 }
 
-                config.data.labels = [
+                config2.data.labels = [
                     labeldata[6],
                     labeldata[5],
                     labeldata[4],
@@ -584,7 +652,7 @@ selectBtn.onchange = async(e)=>{
                     labeldata[0]
                 ];
         
-                config.data.datasets[0].data = [
+                config2.data.datasets[0].data = [
                     dateArr[6].length,
                     dateArr[5].length,
                     dateArr[4].length,
@@ -603,25 +671,30 @@ selectBtn.onchange = async(e)=>{
                 let dateArr = [[],[],[],[],[],[],[]];
                 
                 e.data.views.forEach((el)=>{
+                    // 조회 수 시간
                     let viewDate = new Date(el.createdAt);
                     let viewDay = viewDate.getDate() < 10 ? `0${viewDate.getDate()}` : `${viewDate.getDate()}`;
                     let viewHour = viewDate.getHours() < 10 ? `0${viewDate.getHours()}` : `${viewDate.getHours()}`;
-                    let viewDateNum = Number(viewHour);
-                    console.log(todayDate - viewDateNum)
+                    let viewDateNum;
+                    if(viewDay == today){
+                        viewDateNum = Number(viewHour) + 24;
+                    }else{
+                        viewDateNum = Number(viewHour);
+                    }
         
-                    if(todayDate - viewDateNum >= 24 && todayDate - viewDateNum < 28){
+                    if(todayDate - viewDateNum >= 0 && todayDate - viewDateNum < 4){
                         dateArr[0].push(viewDateNum);
-                    }else if(todayDate - viewDateNum >= 28 && todayDate - viewDateNum < 32){
+                    }else if(todayDate - viewDateNum >= 4 && todayDate - viewDateNum < 8){
                         dateArr[1].push(viewDateNum);
-                    }else if(todayDate - viewDateNum >= 32 && todayDate - viewDateNum < 36){
+                    }else if(todayDate - viewDateNum >= 8 && todayDate - viewDateNum < 12){
                         dateArr[2].push(viewDateNum);
-                    }else if(todayDate - viewDateNum >= 36 && todayDate - viewDateNum < 40){
+                    }else if(todayDate - viewDateNum >= 12 && todayDate - viewDateNum < 16){
                         dateArr[3].push(viewDateNum);
-                    }else if(todayDate - viewDateNum >= 40 && todayDate - viewDateNum < 44){
+                    }else if(todayDate - viewDateNum >= 16 && todayDate - viewDateNum < 20){
                         dateArr[4].push(viewDateNum);
-                    }else if(todayDate - viewDateNum >= 44 && todayDate - viewDateNum < 48){
+                    }else if(todayDate - viewDateNum >= 20 && todayDate - viewDateNum < 24){
                         dateArr[5].push(viewDateNum);
-                    }else if(todayDate - viewDateNum >= 48 && todayDate - viewDateNum < 52){
+                    }else if(todayDate - viewDateNum >= 24 && todayDate - viewDateNum < 28){
                         dateArr[6].push(viewDateNum);
                     }
                 })
@@ -647,7 +720,7 @@ selectBtn.onchange = async(e)=>{
                 }
                 console.log(dateArr)
 
-                config.data.labels = [
+                config2.data.labels = [
                     labeldata[6],
                     labeldata[5],
                     labeldata[4],
@@ -657,7 +730,7 @@ selectBtn.onchange = async(e)=>{
                     labeldata[0]
                 ];
         
-                config.data.datasets[0].data = [
+                config2.data.datasets[0].data = [
                     dateArr[6].length,
                     dateArr[5].length,
                     dateArr[4].length,
@@ -668,9 +741,9 @@ selectBtn.onchange = async(e)=>{
                 ];
             }
         
-            let chart = new Chart(_canvas,config);
+            let chart = new Chart(_canvas2,config2);
     
-            graphArea.append(_canvas);
+            graphArea.append(_canvas2);
     
         }).catch((err)=>{
             console.log(err);

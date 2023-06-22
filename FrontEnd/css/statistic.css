@@ -399,6 +399,9 @@ box-shadow: inset 0px 0px 0.26vw white;
     height: 95%;
     border-radius: 50px;
     overflow: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .img-container {
