@@ -186,7 +186,7 @@ exports.PostUpdate = async(req,res)=>{
     }
 }
 
-exports.PostDelete = async(req,res,next)=>{
+exports.PostDelete = async(req,res)=>{
     try {
         const id = req.body.data;
 
