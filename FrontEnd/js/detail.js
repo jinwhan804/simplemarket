@@ -393,10 +393,14 @@ async function GetAPI(){
 
                         rerebtn1.innerHTML = '등록';
                         rerebtn2.innerHTML = '취소';
-
-                        rediv.append(recontentdiv,rerebtn1,rerebtn2);
                         
+                        rediv.append(recontentdiv,rerebtn1,rerebtn2);
+                                                
+                        btn1.disabled = true; // 댓글 버튼 같은것 2번이상 안눌리게
+
                         rerebtn1.onclick = async()=>{
+
+                            btn1.disabled = false;
                             const form = new FormData();
 
                             form.append('content',recontentdiv.innerHTML);
@@ -413,9 +417,11 @@ async function GetAPI(){
 
                         rerebtn2.onclick = ()=>{
                             _li1.removeChild(rediv);
+                            btn1.disabled = false;                        
                         }
 
                         _li1.append(rediv);
+                        recontentdiv.focus();
                     }
 
                     if(users.id == el.User.id){
@@ -448,18 +454,28 @@ async function GetAPI(){
                                                 '수정취소';
                         
                                 btn.style.display = btn.style.display === 'none' ? 'inline-block' : 'none';
+                                btn.style.margin = '5px';
+                                btn4.style.display = 'none';
+                                btn5.style.display = 'none';
                             });
                         };
                         
                        
                         
                         btn2.onclick = ()=>{
-                            _div6.contentEditable = true;
+                            alert('글을 수정하세요.')
+
+                            btn4.style.display = 'inline-block';
+                            btn5.style.display = 'inline-block';
+
+                            _div6.contentEditable = true;                
 
                             btn2.classList.add('unable');
                             btn3.classList.add('unable');
                             btn4.classList.remove('unable');
                             btn5.classList.remove('unable');
+                            
+                            
                         }
                         
                         btn3.onclick = async()=>{
@@ -498,8 +514,9 @@ async function GetAPI(){
                             })
                         }
                         
-                        btn5.onclick = ()=>{
+                        btn5.onclick = async ()=>{
                             _div6.contentEditable = false;
+                            alert('수정이 취소되었습니다.');
 
                             _div6.innerHTML = el.content;
 
@@ -563,7 +580,7 @@ async function GetAPI(){
                                 _rediv4.className = 'reply4';
                 
                                 // _rediv1.innerHTML = index + 1;
-                                _rediv2.innerHTML = ">RE : " + el.content;
+                                _rediv2.innerHTML =  el.content;
                                 _rediv3.innerHTML = el.User.nickname;
                                 rebtn1.innerHTML = "댓글";
                                 
@@ -591,8 +608,10 @@ async function GetAPI(){
                                     rerebtn2.innerHTML = '취소';
             
                                     rediv.append(recontentdiv,rerebtn1,rerebtn2);
-                                    
+                                    rebtn1.disabled = true;
+
                                     rerebtn1.onclick = async()=>{
+                                        rebtn1.disabled = false;
                                         const form = new FormData();
             
                                         form.append('content',recontentdiv.innerHTML);
@@ -609,9 +628,12 @@ async function GetAPI(){
             
                                     rerebtn2.onclick = ()=>{
                                         _li2.removeChild(rediv);
+                                        rebtn1.disabled = false;
                                     }
             
-                                    _li2.append(rediv);
+                                    _li2.append(rediv);   
+                                    recontentdiv.focus();
+
                                 }
                                 
                                 if(users.id == el.User.id){
@@ -644,6 +666,9 @@ async function GetAPI(){
                                                             '수정취소';
                                                             
                                             rebtn.style.display = rebtn.style.display === 'none' ? 'inline-block' : 'none';
+                                            rebtn.style.margin = '5px';
+                                            rebtn4.style.display = 'none';
+                                            rebtn5.style.display = 'none';
                                         });
                                     };
                                 
@@ -656,12 +681,16 @@ async function GetAPI(){
                 
                                     
                                     rebtn2.onclick = ()=>{
+                                        alert('글을 수정하세요.');
                                         _rediv2.contentEditable = true;
                 
                                         rebtn2.classList.add('unable');
                                         rebtn3.classList.add('unable');
                                         rebtn4.classList.remove('unable');
                                         rebtn5.classList.remove('unable');
+
+                                        rebtn4.style.display = 'inline-block';
+                                        rebtn5.style.display = 'inline-block';
                                     }
                                     
                                     rebtn3.onclick = async()=>{
@@ -701,6 +730,7 @@ async function GetAPI(){
                                     }
                                     
                                     rebtn5.onclick = ()=>{
+                                        alert('수정이 취소되었습니다.')
                                         _rediv2.contentEditable = false;
                 
                                         _rediv2.innerHTML = el.content;
