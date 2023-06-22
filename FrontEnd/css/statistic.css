@@ -40,7 +40,8 @@ header {
 }
 
 .used-market,
-.local-market{
+.local-market,
+.post-stat{
     text-decoration: none;
     color: #ffffff;
     background-color: #007bff;
@@ -49,7 +50,8 @@ header {
     border-radius: 40px;
 }
 .used-market:hover, 
-.local-market:hover{
+.local-market:hover,
+.post-stat:hover{
     background-color: #0056b3;
 }
 

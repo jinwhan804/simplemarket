@@ -41,17 +41,18 @@ header {
 }
 
 .used-market,
-.local-market{
+.local-market,
+.post-stat{
     text-decoration: none;
     color: #ffffff;
     background-color: #007bff;
     margin: 10px;
     padding: 10px 20px;
     border-radius: 40px;
-    cursor: pointer;
 }
 .used-market:hover, 
-.local-market:hover{
+.local-market:hover,
+.post-stat:hover{
     background-color: #0056b3;
 }
 
@@ -63,6 +64,11 @@ img {
     border-radius: 5%;
     box-shadow: 0px 3px 15px rgba(0,0,0,0.1);
     object-fit: contain;
+    border-radius: 50%;
+}
+
+a{
+    cursor: pointer;
 }
 
 
