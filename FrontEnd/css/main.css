@@ -5,11 +5,18 @@ body {
     background-color: #f0f0f0;
     color: #333;
 }
+
+@font-face {
+    font-family: 'Dovemayo_gothic';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2302@1.1/Dovemayo_gothic.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
 /*  헤더  */
 header {
     width: 100%;
-    max-width: 100%;
-    height: 64px;
+    min-width: 950px;
     position: fixed;
     background-color: #007bff;
     top: 0;
@@ -43,8 +50,6 @@ header {
 .local-market,
 .post-stat{
     text-decoration: none;
-    color: #ffffff;
-    background-color: #007bff;
     margin: 10px;
     padding: 10px 20px;
     border-radius: 40px;
@@ -75,21 +80,23 @@ a{
     max-width: 52.083vw;
     height: 100%;
     position: absolute;
-    left: 350px;
+    left: 400px;
 }
 .header_div ul {
     display: flex;
-    height: 65%;
-    align-items: center;
+    list-style: none;
+    justify-content: space-around;
+    /* height: 65%;
+    align-items: center; */
 }
 .header_div ul li{
-    list-style-type: none;
+    /* list-style-type: none;
     margin-right: -100px;
     margin-left: 40px;
     border: 0px;
     height: 100%;
-    width: 100%;
-    margin-top: -12px;
+    width: 400px;
+    margin-top: -12px; */
 }
 
 /* 마지막 li 우측 마진 없앰 */
@@ -100,7 +107,16 @@ a{
  /* 헤더에 버튼들 */ 
 .header-btns {
     position: absolute;
-    left: 1250px;
+    right: 10%;
+}
+
+#mypage-btn {
+    background-image: url('../../BackEnd/uploads/그림1-removebg-preview.png');
+    width: 40px;
+    height: 40px;
+    background-size: cover;
+    background-position: center;
+    cursor: pointer;
 }
 /* 가운데 게시판 css */
 
@@ -199,13 +215,13 @@ form {
 }
 
 label {
-    margin-bottom: 10px;
+    margin-bottom: 0.521vw;
     font-weight: bold;
 }
 
 input {
-    margin-bottom: 20px;
-    padding: 10px;
+    margin-bottom: 1.042vw;
+    padding: 0.26vw;
     border: 1px solid #ccc;
     border-radius: 5px;
 }
@@ -248,63 +264,95 @@ input {
     bottom: 5%;
     cursor: pointer;
     position: fixed;
+    background-color: white;
 }
 
 /* 유저 채팅 리스트 */
 
-.chat_message img {
-    width: 2.083vw;
-    height: 2.083vw;
+.chat_message {
+    display: flex;
+    align-items: center;
+    width: 17.708vw;
+    height: 3.646vw;
+
+}
+
+.user_nickname,
+.user_time,
+.message_content {
     margin: 0;
 }
 
+.chat_message img {
+    width: 2.604vw;
+    height: 2.604vw;
+    margin: 0;
+    margin-right: 0.781vw;
+}
 
+.user_nick_date {
+    display: flex;
+    align-items: center;
+}
 
-
-
+.user_nickname {
+    font-weight: 600;
+}
 
 .chatBox  {
     position: absolute;
-    background-color: rgb(142, 239, 205);
+    position: fixed;
+    background-color: #abc8f8;
     width: 18.75vw;
-    height: 34.375vw;
+    min-height: 34.375vw;
     right: 6%;
     bottom: 15%;
     border-radius: 1.042vw;
+    box-shadow: 5px 5px 5px rgba(128, 128, 128, 0.495);
     display: none;
 }
 
 .chatList {
     position: absolute;
-    background-color: rgb(142, 239, 205);
+    position: fixed;
+    background-color: #abc8f8;
     width: 18.75vw;
     height: 34.375vw;
     right: 6%;
     bottom: 15%;
     border-radius: 1.042vw;
+    box-shadow: 0.26vw 0.26vw 0.26vw rgba(128, 128, 128, 0.495);
     display: none;
 }
 
 .chatBox.active{
     position: absolute;
-    background-color: rgb(142, 239, 205);
+    position: fixed;
+    background-color: #abc8f8;
     width: 18.75vw;
     height: 34.375vw;
     right: 6%;
     bottom: 15%;
     border-radius: 1.042vw;
+    box-shadow: 0.26vw 0.26vw 0.26vw rgba(128, 128, 128, 0.495);
     display: block;
 }
 
 .chatList.active {
     position: absolute;
-    background-color: rgb(142, 239, 205);
+    position: fixed;
+    background-color: #abc8f8;
     width: 18.75vw;
     height: 34.375vw;
     right: 6%;
     bottom: 15%;
     border-radius: 1.042vw;
+    box-shadow: 0.26vw 0.26vw 0.26vw rgba(128, 128, 128, 0.495);
     display: block;
+}
+
+.listBox {
+    padding: 10px;
 }
 
 .chat_list_title,
@@ -314,6 +362,7 @@ input {
     align-items: center;
 }
 
+
 .back {
     background-image: url('../../BackEnd/uploads/back-removebg-preview.png');
     width: 1.563vw;
@@ -322,11 +371,11 @@ input {
     background-position: center;
     background-origin: content-box;
     cursor: pointer;
-    display: block;
 }
 
 .title{
-    font-size: 0.833vw;
+    position: relative;
+    font-size: 1.042vw;
     font-weight: bold;
     color: rgb(9, 9, 9);
     margin-top: 0.521vw;
@@ -334,9 +383,13 @@ input {
     margin-left: 0.521vw;
 }
 
+.chat_list_title .title {
+    left: 25%;
+}
+
 .close_chatBox{
     font-size: 1.042vw;
-    background-color: rgb(142, 239, 205);
+    background-color: #abc8f8;
     border: none;
     cursor: pointer;
     font-weight: bolder;
@@ -345,7 +398,7 @@ input {
 }
 
 .line{
-    border: 0.052vw solid;
+    border: 0.052vw solid rgba(0, 0, 0, 0.321);
     margin-top: 1.042vw;
 }
 
@@ -393,12 +446,22 @@ box-shadow: inset 0px 0px 0.26vw white;
     position: absolute;
     padding-left: 0.521vw;
     padding-right: 3.646vw;
+    font-family: 'Dovemayo_gothic';
+
 }
 
 .message_box button {
+    background-color: #e2e1e1;
+    border: none;
+    border-radius: 10%;
+    width: 50px;
+    height: 30px;
     z-index: 10;
     position: absolute;
     right: 1.563vw;
+    bottom: 0.9vw;
+    cursor: pointer;
+    font-family: 'Dovemayo_gothic';
 }
 
 .content .nickname,
@@ -409,7 +472,7 @@ box-shadow: inset 0px 0px 0.26vw white;
 }
 
 .my-message {
-    text-align: left;
+    text-align: right;
 }
 
 .my-message .ballon {
@@ -419,26 +482,28 @@ box-shadow: inset 0px 0px 0.26vw white;
     width: auto;
     max-width: 11.979vw;
     height: auto;
-    background:#d5d0d0;
+    background:#f5f4f4;
     border-radius: 0.521vw;
     padding: 0.521vw;
     word-wrap: break-word;
     right: 0.521vw;
+    font-family: 'Dovemayo_gothic';
+
 }
 
 .my-message .ballon::after {
-    border-top:0.781vw solid #d5d0d0;
+    border-top:0.781vw solid #f5f4f4;
     border-left: 0px solid transparent;
-    border-right: 0.781vw solid transparent;
+    border-right: 0.9vw solid transparent;
     border-bottom: 0px solid transparent;
     content:"";
     position:absolute;
-    top:0.521vw;
+    top:0.3vw;
     right: -0.729vw;
 }
 
 .my-message .date {
-    text-align: left;
+    text-align: right;
     font-size: 0.677vw;
 }
 
@@ -455,6 +520,7 @@ box-shadow: inset 0px 0px 0.26vw white;
     margin-right: 0.781vw;
     background-color: white;
     border-radius: 50%;
+    
 }
 
 .other-message .ballon {
@@ -463,20 +529,22 @@ box-shadow: inset 0px 0px 0.26vw white;
     width: auto;
     max-width: 11.979vw;
     height: auto;
-    background:#d5d0d0;
+    background:#f5f4f4;
     border-radius: 0.521vw;
     padding: 0.521vw;
     word-wrap: break-word;
+    font-family: 'Dovemayo_gothic';
+
 }
 
 .other-message .ballon::after {
-    border-top:0.781vw solid #d5d0d0;
-    border-left: 0.781vw solid transparent;
+    border-top:0.781vw solid #f5f4f4;
+    border-left: 0.9vw solid transparent;
     border-right: 0px solid transparent;
     border-bottom: 0px solid transparent;
     content:"";
     position:absolute;
-    top:0.521vw;
+    top:0.3vw;
     left:-0.781vw;
 }
 
@@ -487,6 +555,7 @@ box-shadow: inset 0px 0px 0.26vw white;
 
 .other-message .nickname {
     font-size: 0.781vw;
+    font-weight: 600;
 }
 
 .other-message .date {

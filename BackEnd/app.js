@@ -70,10 +70,10 @@ app.use('/signUpList', boardRouter);
 app.use('/chat', chatRouter);
 app.use('/reply', replyRouter);
 app.use('/rereply', rereplyRouter);
-app.use('/localpost',localpostRouter);
-app.use('/viewcheck',viewcheckRouter);
-app.use('/likecheck',likecheckRouter);
-app.use('/statistic',statisticRouter);
+app.use('/localpost', localpostRouter);
+app.use('/viewcheck', viewcheckRouter);
+app.use('/likecheck', likecheckRouter);
+app.use('/statistic', statisticRouter);
 
 const server = app.listen(8080, () => {
     console.log("8080 Server Open");
@@ -87,13 +87,10 @@ const io = socketIo(server, {
 });
 
 
-// let list = [{ user_id: '', socketId: '' }];
-// let temp = list.filter((e) => e.user_id == "1");
-// console.log(temp.socketId);
 let userId = [];
 let users = {};
 let userList = []; // 방에 있는 유저
-
+let userJoinStatus = new Map();
 
 io.sockets.on('connection', (socket) => {
 
@@ -128,11 +125,6 @@ io.sockets.on('connection', (socket) => {
         userList = userList.filter((value) => value.user.nickname != user.nickname);
         console.log(userList);
     })
-
-    // 닉네임 : 메시지를 보내는 사용자의 닉네임
-    // socket.on('message', (nickname, room, messageData) => {
-    //     io.to(room).emit('message', nickname, messageData);
-    // })
 
     socket.on('disconnect', () => {
         console.log('유저 나감');
