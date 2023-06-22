@@ -75,8 +75,8 @@ app.use('/viewcheck', viewcheckRouter);
 app.use('/likecheck', likecheckRouter);
 app.use('/statistic', statisticRouter);
 
-const server = app.listen(8080, () => {
-    console.log("8080 Server Open");
+const server = app.listen(3030, () => {
+    console.log("3030 Server Open");
 });
 
 const io = socketIo(server, {
