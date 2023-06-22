@@ -31,8 +31,10 @@ popupLoginBtn.addEventListener('click', () => {
 const loginBtn = document.getElementById('loginBtn');
 
 async function loginBtnHide() {
+    let cookie = document.cookie
     const { data } = await API.get('/login/view', {
-        withCredentials: true
+        withCredentials: true,
+        cookie : cookie
     })
     if (data.name) {
         popupLoginBtn.style.display = "none";
