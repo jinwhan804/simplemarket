@@ -44,7 +44,7 @@ exports.viewOneChat = async (req, res) => {
 
         console.log(comeChat[0])
 
-        res.send(comeChat);
+        res.send(comeChat[0]);
     } catch (error) {
         console.error(error);
     }
