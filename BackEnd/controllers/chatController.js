@@ -42,6 +42,8 @@ exports.viewOneChat = async (req, res) => {
             order : [['createdAt','DESC']]
         });
 
+        console.log(comeChat)
+
         res.send(comeChat);
     } catch (error) {
         console.error(error);
