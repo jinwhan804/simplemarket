@@ -362,7 +362,7 @@ window.onload = async () => {
                 message: msg.value,
                 sender: data.id,
                 profile_img: data.profile_img,
-                receiver: data.grade === '2' ? admin.nickname : receiverUser[0],
+                receiver: data.grade === '2' ? admin.nickname : receiverUser[0].nickname,
                 cookie : _cookie
             }
             if (data.grade === '3') {
