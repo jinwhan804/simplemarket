@@ -1,5 +1,6 @@
 const { Post, User,Reply,Rereply } = require('../models');
-
+const fs = require("fs");
+const path = require("path");
 exports.PostViewAll = async (req, res) => {
     try {
         await Post.findAll({
@@ -106,7 +107,8 @@ exports.PostViewOne = async (req, res) => {
             let likeAdd = post.postViews + 1;
             Post.update({postViews : likeAdd},{where : {id}});
         }
-        
+        const content = fs.readFileSync(post.content,"utf8");
+        post.content = content;
         const data = {posts : post, users : access_decoded};
 
         res.json(data);
@@ -132,9 +134,11 @@ exports.PostInsertView = async (req, res) => {
 exports.PostInsert = async (req, res) => {
     try {
         const {title, content, userId} = req.body;
+        const pathName = path.join(__dirname, "..","up", Date.now().toString());
+        fs.writeFileSync(pathName, content);
         await Post.create({
             title,
-            content,
+            content : pathName,
             userId
         })
 
@@ -159,10 +163,11 @@ exports.PostUpdateSelect = (req,res)=>{
 exports.PostUpdate = async(req,res)=>{
     try {
         const {title, content, id} = req.body;
-        
+        const pathName = path.join(__dirname, "..", "up", Date.now().toString());
+        fs.writeFileSync(pathName, content);
         await Post.update({            
             title,
-            content
+            content : pathName
         },{
             where : {id}
         })

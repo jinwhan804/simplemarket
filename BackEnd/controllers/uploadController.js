@@ -1,6 +1,6 @@
 const { User } = require('../models'); // User 모델을 가져옵니다.
 const AWS = require('aws-sdk'); // 이미지 업로드할 클라우드 
-const uuid = require('uuid'); // 이미지 파일 이름 줄여주는 패키지
+const uuid = require('uuid');
 
 // AWS SDK를 이용해서 S3 객체 생성
 const s3 = new AWS.S3({
@@ -48,8 +48,6 @@ exports.uploadProfileImage = async (req, res) => {
 exports.uploadProfileImage2 = async (req, res) => {
     const file = req.file;
     const filename = uuid.v4();
-    console.log(filename);
-    console.log(uuid.v4());
     if (!req.file) {
         return res.status(400).send('파일 업로드 자체가 안됐음');
     }

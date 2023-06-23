@@ -290,7 +290,7 @@ document.getElementById('toImageBtn').addEventListener('click', async () => {
         form.append('imgs', imgs.value);
         form.append('upload', file.files[0]);
         form.append('userId', 'user_id');
-        await API.post('./upload/postImg', form,{
+        await API.post('/upload/postImg', form,{
             headers : { "content-Type" : "multipart/form-data" },
             withCredentials : true
         });
