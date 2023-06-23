@@ -3,14 +3,14 @@ let users;
 
 // cookie 값 설정
 let _cookie = document.cookie;
-_cookie = _cookie.replace("login=","");
+_cookie = _cookie.replace("login=", "");
 
 // 마이페이지 버튼 로그인 됐을때만 보이게
 const mypageBtn = document.getElementById('mypage-btn');
 
 async function mypageHide() {
     const { data } = await API.post('/login/view', {
-        cookie :_cookie
+        cookie: _cookie
     })
     if (!data.name) {
         mypageBtn.style.display = "none";
@@ -36,7 +36,7 @@ const loginBtn = document.getElementById('loginBtn');
 
 async function loginBtnHide() {
     const { data } = await API.post('/login/view', {
-        cookie :_cookie
+        cookie: _cookie
     })
     if (data.name) {
         popupLoginBtn.style.display = "none";
@@ -70,7 +70,7 @@ const Logout = document.getElementById('logout');
 Logout.addEventListener('click', async () => {
     try {
         const { data } = await API.post("/logout", {
-            cookie : _cookie
+            cookie: _cookie
         });
         if (data == "메인 페이지") {
             delCookie('login');
@@ -85,7 +85,7 @@ Logout.addEventListener('click', async () => {
 // 로그아웃 버튼 로그인 안되어 있을 때는 안보이게
 async function logoutBtnHide() {
     const { data } = await API.post('/login/view', {
-        cookie :_cookie
+        cookie: _cookie
     })
     if (!data.name) {
         Logout.style.display = "none";
@@ -96,7 +96,7 @@ async function logoutBtnHide() {
 async function getAPI_popup() {
     try {
         const { data } = await API.post('/login/view', {
-            cookie :_cookie
+            cookie: _cookie
         });
 
         if (data.name) {
@@ -131,7 +131,7 @@ const back = document.querySelector('.back');
 async function popup() {
     try {
         const { data } = await API.post("/login/view", {
-            cookie :_cookie
+            cookie: _cookie
         });
 
         document.body.classList.toggle('active');
@@ -155,7 +155,7 @@ chatBoxClose.forEach(btn => {
 
 window.onload = async () => {
     const { data } = await API.post('/login/view', {
-        cookie :_cookie
+        cookie: _cookie
     });
 
     const socket = io.connect(serverUrl);
@@ -172,7 +172,7 @@ window.onload = async () => {
     }
 
     const users = await API.post('/login/viewAll', {
-        cookie : _cookie
+        cookie: _cookie
     });
     const userData = users.data;
     console.log(userData);
@@ -229,9 +229,9 @@ window.onload = async () => {
             const userInList = userChatList.querySelector(`.chat_message[data_nickname="${chatUser.nickname}"]`);
             console.log(userInList);
             let profileImg;
-            if(chatUser.profile_img == null){
+            if (chatUser.profile_img == null) {
                 profileImg = "https://simplemarket2.s3.ap-northeast-2.amazonaws.com/defaultprofile.png"; // 디폴트 이미지 URL로 대체
-            }else{
+            } else {
                 profileImg = chatUser.profile_img;
             }
 
@@ -261,26 +261,26 @@ window.onload = async () => {
 
     let receiverUser = null;
     userChatList.querySelectorAll('.chat_message').forEach(item => {
-        item.addEventListener('dblclick', async() => {
+        item.addEventListener('dblclick', async () => {
             const nickname = item.getAttribute('data_nickname');
             chatBox.classList.add('active');
             chatList.classList.remove('active');
             console.log(`${nickname}방 입장`);
-            receiverUser = userData.filter((i)=>{
+            receiverUser = userData.filter((i) => {
                 return i.nickname == nickname;
             });
 
             console.log(receiverUser);
 
-            
+
 
             if (data.grade === '3') {
                 // room = nickname;
                 socket.emit('joinRoom', nickname, { id: data.id, nickname: data.nickname });
 
-                const beforeChat = await API.post('/chat/chatStory',{
-                    user : receiverUser,
-                    cookie : _cookie
+                const beforeChat = await API.post('/chat/chatStory', {
+                    user: receiverUser,
+                    cookie: _cookie
                 })
                 const chat = beforeChat.data;
 
@@ -290,9 +290,9 @@ window.onload = async () => {
                 const timeString = `${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
 
                 let profileImg;
-                if(chat.User.profile_img == null){
+                if (chat.User.profile_img == null) {
                     profileImg = "https://simplemarket2.s3.ap-northeast-2.amazonaws.com/defaultprofile.png"; // 디폴트 이미지 URL로 대체
-                }else{
+                } else {
                     profileImg = chatUser.profile_img;
                 }
 
@@ -307,53 +307,10 @@ window.onload = async () => {
                     </div>
                 `;
 
-                chatContent.innerHTML += beforMessage;                
+                chatContent.innerHTML += beforMessage;
             }
         });
     });
-
-
-    // try {
-    //     const response = await axios.get('http://127.0.0.1:8080/chat/all_chats', {
-    //         withCredentials: true
-    //     });
-    //     const chatHistory = response.data;
-    //     console.log(chatHistory);
-
-    //     chatContent.innerHTML = '';
-
-    //     chatHistory.forEach(e => {
-    //         console.log(e);
-    //         const now = new Date(data.createdAt);
-    //         const hours = now.getHours();
-    //         const minutes = now.getMinutes();
-    //         const timeString = `${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
-
-    //         let el;
-    //         if (e.sender === data.id) {
-    //             el = `
-    //             <div class="content my-message">
-    //                 <p class="message ballon">${e.message}</p>
-    //                 <p class="date">${timeString}</p>
-    //             </div>
-    //             `;
-    //         } else {
-    //             el = `
-    //             <div class="content other-message">
-    //                 <img src="${e.User.profile_img}">
-    //                 <div class="message-display">
-    //                     <p class="nickname">${e.User.nickname}</p>
-    //                     <p class="message ballon">${e.message}</p>
-    //                     <p class="date">${timeString}</p>
-    //                 </div>
-    //             </div>
-    //             `;
-    //         }
-    //         chatContent.innerHTML += el;
-    //     })
-    // } catch (error) {
-    //     console.error(error);
-    // }
 
 
     // 메시지 보내는 이벤트
@@ -370,14 +327,14 @@ window.onload = async () => {
                 sender: data.id,
                 profile_img: data.profile_img,
                 receiver: data.grade === '2' ? admin.nickname : receiverUser[0].nickname,
-                cookie : _cookie
+                cookie: _cookie
             }
             if (data.grade === '3') {
                 socket.emit('chat', receiverUser[0].nickname, messageData);
             } else
                 socket.emit('chat', nickname, messageData);
-                msg.value = '';
-                await API.post('/chat/chat_insert', messageData, {
+            msg.value = '';
+            await API.post('/chat/chat_insert', messageData, {
                 withCredentials: true
             })
         } catch (error) {
@@ -411,9 +368,9 @@ window.onload = async () => {
         const minutes = now.getMinutes();
         const timeString = `${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
         let profileImg;
-        if(data.profile_img == null){
+        if (data.profile_img == null) {
             profileImg = "https://simplemarket2.s3.ap-northeast-2.amazonaws.com/defaultprofile.png"; // 디폴트 이미지 URL로 대체
-        }else{
+        } else {
             profileImg = data.profile_img;
         }
 
@@ -548,8 +505,8 @@ async function GetAPI(currentPage) {
 
         btns.innerHTML = '';
 
-        const { data } = await API.post('/post',{
-            cookie : _cookie
+        const { data } = await API.post('/post', {
+            cookie: _cookie
         });
 
         posts = data;
@@ -624,17 +581,17 @@ async function GetAPI(currentPage) {
                     _td5.innerHTML = el.updatedAt.slice(11, 19);
                 }
 
-                _tr.onclick = async () => {         
+                _tr.onclick = async () => {
                     const form = new FormData();
 
-                    form.append('postId',el.id);
-                    form.append('userId',users.id);
+                    form.append('postId', el.id);
+                    form.append('userId', users.id);
                     // 조회수 추가
-                    await API.post('/viewcheck/add',form);
+                    await API.post('/viewcheck/add', form);
 
                     await API.post('/post/detailIn', {
                         data: el.id,
-                        cookie : _cookie
+                        cookie: _cookie
                     }).then((e) => {
                         location.href = e.data;
                     }).catch((err) => {

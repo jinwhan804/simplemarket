@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <script src="http://3.35.211.37/socket.io/socket.io.js"></script>
+    <script src="http://localhost:3030/socket.io/socket.io.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="./js/index.js"></script>
     <link rel="stylesheet" href="./css/detail.css">
@@ -24,7 +24,7 @@
         <!-- 헤더에 가장 오른쪽 버튼 영역 -->
         <div class="header-btns">
             <button id="popup-login">Login</button>
-            <button id="mypage-btn">Mypage</button>
+            <button id="mypage-btn"></button>
             <button id="logout">Logout</button>
         </div>
     </header>    
@@ -32,9 +32,13 @@
     <div class="border-container">
         <div class="left-side">
             <div class="img-container">
-                <h1>물건 정보</h1>
-                <button id="toUpdate">본문수정</button>
-                <button id="toDelete">전체삭제</button>
+                <div class="post-func">
+                    <h1>물건 정보</h1>
+                    <div class="func-btn">
+                        <button id="toUpdate">판매글 수정</button>
+                        <button id="toDelete">판매글 삭제</button>
+                    </div>
+                </div>
                 <div id="contentArea"></div>
             </div>
         </div>
@@ -46,17 +50,19 @@
                         <input type="image" id="userImg">  
                     <div class="info-content">
                         <div class="info-item">
-                            <label for="">판매 물건 : </label>
-                            <input type="text" id="title" disabled>
+                            <label for="">판매 물건</label>
+                            <input type="text" id="title" style="width: 410px;" disabled>
                         </div>
                         <div class="info-item">
-                            <label for="">판매자 : </label>
-                            <input type="text" id="nickname" disabled>
+                            <label for="">판매자</label>
+                            <input type="text" id="nickname" style="width: 410px;" disabled>
                         </div>
                         <div class="info-item">
-                            <label for="">좋아요 : </label>
-                            <input type="text" id="postLikes" disabled>
-                            <button id="likeBtn">Like</button> 
+                            <div class="like-group">
+                                <label for="">좋아요</label>
+                                <button id="likeBtn">Like</button> 
+                            </div>
+                            <input type="text" id="postLikes" style="width: 410px;" disabled>
                         </div>
                     </div>
 
@@ -65,8 +71,10 @@
                     <div id="write_area">
                         <h3>물건 문의</h3>
                         <ul id="reply_list"></ul>
-                        <div id="write_reply" contenteditable="true"></div><button id="reply_on">댓글등록</button>
-                        <button id="toPost">돌아가기</button>
+                        <div class="reply-write-on">
+                            <div id="write_reply" contenteditable="true"></div>
+                            <button id="reply_on">등록</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -91,7 +99,7 @@
         <div class="line"></div>
         <div class="chat_content"></div>
         <div class="message_box">
-            <input type="text" id="message">
+            <input type="text" id="msg">
             <button id="btn">send</button>
         </div>
     </div>        

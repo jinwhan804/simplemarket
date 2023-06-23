@@ -94,18 +94,7 @@ a{
     display: flex;
     list-style: none;
     justify-content: space-around;
-    /* height: 65%;
-    align-items: center; */
 }
-/* .header_div li{
-    list-style-type: none;
-    margin-right: -100px;
-    margin-left: 40px;
-    border: 0px;
-    height: 100%;
-    width: 400px;
-    margin-top: -12px;
-} */
 
 /* 마지막 li 우측 마진 없앰 */
 .header_div ul li:last-child {
