@@ -273,7 +273,7 @@ mypageBtn.addEventListener('click', () => {
 let user_data = {};
 
 window.onload = async()=>{
-    const {data} = await API.post('/post/insert',{
+    const {data} = await API.post('/post/insertIn',{
         headers : {
             "Content-Type" : "application/json"
         },
