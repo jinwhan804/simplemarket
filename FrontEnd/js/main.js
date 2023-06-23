@@ -8,7 +8,7 @@ async function mypageHide() {
     let _cookie = document.cookie;
     const { data } = await API.post('/login/view', {
         withCredentials: true,
-        data : {cookie :_cookie }
+        cookie :_cookie
     })
     if (!data.name) {
         mypageBtn.style.display = "none";
