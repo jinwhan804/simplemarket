@@ -291,9 +291,9 @@ window.onload = async () => {
 
                 let beforMessage = `
                     <div class="content other-message">
-                        <img src="${data.profile_img}">
+                        <img src="${chat.User.profile_img}">
                         <div class="message-display">
-                            <p class="nickname">${data.nickname}</p>
+                            <p class="nickname">${chat.User.nickname}</p>
                             <p class="message ballon">${chat.message}</p>
                             <p class="date">${timeString}</p>
                         </div>
@@ -402,6 +402,12 @@ window.onload = async () => {
         const hours = now.getHours();
         const minutes = now.getMinutes();
         const timeString = `${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
+        let profileImg;
+            if(data.profile_img == null){
+                profileImg = "https://simplemarket2.s3.ap-northeast-2.amazonaws.com/defaultprofile.png"; // 디폴트 이미지 URL로 대체
+            }else{
+                profileImg = chatUser.profile_img;
+            }
 
         let el;
         if (data.nickname === nickname) {
@@ -414,7 +420,7 @@ window.onload = async () => {
         } else {
             el = `
             <div class="content other-message">
-                <img src="${data.profile_img}">
+                <img src="${profileImg}">
                 <div class="message-display">
                     <p class="nickname">${data.nickname}</p>
                     <p class="message ballon">${data.message}</p>
