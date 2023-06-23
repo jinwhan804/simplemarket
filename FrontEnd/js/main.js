@@ -10,7 +10,7 @@ const mypageBtn = document.getElementById('mypage-btn');
 async function mypageHide() {    
     const { data } = await API.get('/login/view', {
         withCredentials: true,
-        cookie : _cookie
+        cookies : _cookie
     })
     if (!data.name) {
         mypageBtn.style.display = "none";
@@ -38,7 +38,7 @@ async function loginBtnHide() {
     
     const { data } = await API.get('/login/view', {
         withCredentials: true,
-        cookie : _cookie
+        cookies : _cookie
     })
     if (data.name) {
         popupLoginBtn.style.display = "none";
@@ -88,7 +88,7 @@ Logout.addEventListener('click', async () => {
 async function logoutBtnHide() {
     const { data } = await API.get('/login/view', {
         withCredentials: true,
-        cookie : _cookie
+        cookies : _cookie
     })
     if (!data.name) {
         Logout.style.display = "none";
@@ -100,7 +100,7 @@ async function getAPI_popup() {
     try {
         const { data } = await API.get("/login/view", {
             withCredentials: true,
-            cookie : _cookie
+            cookies : _cookie
         });
 
         if (data.name) {
