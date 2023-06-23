@@ -41,8 +41,8 @@ exports.PostViewAll = async (req, res) => {
             for (const key in req.sessionStore.sessions) {
                 const json = JSON.parse(`${req.sessionStore.sessions[key]}`);
     
-                if(access_decoded.id == json.pageInfo.user.id){
-                    th = json.pageInfo;
+                if(!json.pageInfo?.user){
+                    id = json.pageInfo.pageId;
                 }
             }
 
@@ -103,7 +103,6 @@ exports.PostViewOne = async (req, res) => {
         for (const key in req.sessionStore.sessions) {
             const json = JSON.parse(`${req.sessionStore.sessions[key]}`);
 
-            console.log(json)
             if(json.pageInfo?.user){
                 if(access_decoded.id == json.pageInfo.user.id){
                     id = json.pageInfo.pageId;
