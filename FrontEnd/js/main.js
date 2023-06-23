@@ -1,15 +1,16 @@
 // 로그인 유저 확인용 변수
 let users;
 
+// cookie 값 설정
+let _cookie = document.cookie;
+_cookie = _cookie.replace("login=","");
+
 // 마이페이지 버튼 로그인 됐을때만 보이게
 const mypageBtn = document.getElementById('mypage-btn');
 
-async function mypageHide() {    
-    let _cookie = document.cookie;
-    _cookie = _cookie.replace("login=","");
+async function mypageHide() {
     const { data } = await API.post('/login/view', {
-        withCredentials: true,
-        data : {cookie :_cookie }
+        cookie :_cookie
     })
     if (!data.name) {
         mypageBtn.style.display = "none";
@@ -34,10 +35,8 @@ popupLoginBtn.addEventListener('click', () => {
 const loginBtn = document.getElementById('loginBtn');
 
 async function loginBtnHide() {
-    let _cookie = document.cookie;
-    const { data } = await API.get('/login/view', {
-        withCredentials: true,
-        cookie : _cookie
+    const { data } = await API.post('/login/view', {
+        cookie :_cookie
     })
     if (data.name) {
         popupLoginBtn.style.display = "none";
@@ -85,10 +84,8 @@ Logout.addEventListener('click', async () => {
 
 // 로그아웃 버튼 로그인 안되어 있을 때는 안보이게
 async function logoutBtnHide() {
-    let _cookie = document.cookie;
-    const { data } = await API.get('/login/view', {
-        withCredentials: true,
-        cookie : _cookie
+    const { data } = await API.post('/login/view', {
+        cookie :_cookie
     })
     if (!data.name) {
         Logout.style.display = "none";
@@ -98,10 +95,8 @@ async function logoutBtnHide() {
 
 async function getAPI_popup() {
     try {
-        let _cookie = document.cookie;
-        const { data } = await API.get("/login/view", {
-            withCredentials: true,
-            cookie : _cookie
+        const { data } = await API.post('/login/view', {
+            cookie :_cookie
         });
 
         if (data.name) {
@@ -135,8 +130,8 @@ const back = document.querySelector('.back');
 // 채팅 목록과 채팅 팝업창 함수
 async function popup() {
     try {
-        const { data } = await API.get("/login/view", {
-            withCredentials: true
+        const { data } = await API.post("/login/view", {
+            cookie :_cookie
         });
 
         document.body.classList.toggle('active');
@@ -159,8 +154,8 @@ chatBoxClose.forEach(btn => {
 });
 
 window.onload = async () => {
-    const { data } = await API.get('/login/view', {
-        withCredentials: true
+    const { data } = await API.post('/login/view', {
+        cookie :_cookie
     });
 
     const socket = io.connect(serverUrl);
@@ -176,8 +171,8 @@ window.onload = async () => {
         })
     }
 
-    const users = await API.get('/login/viewAll', {
-        withCredentials: true
+    const users = await API.post('/login/viewAll', {
+        cookie : _cookie
     });
     const userData = users.data;
     const admin = userData[0];
@@ -455,7 +450,9 @@ async function GetAPI(currentPage) {
 
         btns.innerHTML = '';
 
-        const { data } = await API.get('/post');
+        const { data } = await API.post('/post',{
+            cookie : _cookie
+        });
 
         posts = data;
         console.log(posts);

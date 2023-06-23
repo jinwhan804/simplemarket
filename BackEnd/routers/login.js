@@ -6,6 +6,6 @@ router.post("/", Login);
 
 router.post("/view", isLogin, viewUser);
 
-router.get('/viewAll', isLogin, viewAll);
+router.post('/viewAll', isLogin, viewAll);
 
 module.exports = router;
