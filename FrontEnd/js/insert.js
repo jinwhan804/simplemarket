@@ -1,9 +1,13 @@
+// cookie 값 설정
+let _cookie = document.cookie;
+_cookie = _cookie.replace("login=","");
+
 // 마이페이지 버튼 로그인 됐을때만 보이게
 const mypageBtn = document.getElementById('mypage-btn');
 
 async function mypageHide() {
-    const { data } = await API.get('/login/view', {
-        withCredentials : true
+    const { data } = await API.post('/login/view', {
+        cookie : _cookie
     })
     if(!data.name){
         mypageBtn.style.display = "none";
@@ -27,34 +31,56 @@ popupLoginBtn.addEventListener('click', () => {
 const loginBtn = document.getElementById('loginBtn');
 
 async function loginBtnHide() {
-    const { data } = await API.get('/login/view',{
-        withCredentials : true
+    const { data } = await API.post('/login/view', {
+        cookie : _cookie
     })
     if(data.name) {
         popupLoginBtn.style.display = "none";
     }
 }
 
+// 쿠키 생성
+const setCookie = (cname, cvalue, cexpire) => {
+  
+    // 만료일 생성 -> 현재에서 30일간으로 생성 -> setDate() 메서드 사용
+    let expiration = new Date();
+    expiration.setDate(expiration.getDate() + parseInt(cexpire)); // Number()로 처리 가능
+  
+    // 쿠키 생성하기
+    let cookie = '';
+    cookie = `${cname}=${cvalue}; path=/;expires=${expiration.toUTCString()};`;
+    // console.log(cookie);
+  
+    // 쿠키 저장하기
+    document.cookie = cookie;
+};
+
+const delCookie = (cname) => {
+    setCookie(cname, '', 0);
+};
+
 // 로그아웃 기능
 const Logout = document.getElementById('logout');
 
 Logout.addEventListener('click', async () => {
     try {
-        const { data } = await API.get("/logout", {
-            withCredentials: true,
+        const { data } = await API.post("/logout", {
+            cookie : _cookie
         });
-        if (data == "메인 페이지") {
-            location.href = `./${mainUrl}`;
-            alert("로그아웃 되었습니다.")
-        } 
+        if (data.msg == "메인 페이지") {
+            delCookie('login');
+            window.location.href = `./${mainUrl}`;
+            alert("로그아웃 되었습니다.");
+        }
     } catch (error) {
         console.log(error);
     }
 })
+
 // 로그아웃 버튼 로그인 안되어 있을 때는 안보이게
 async function logoutBtnHide() {
-    const { data } = await API.get('/login/view', {
-        withCredentials : true
+    const { data } = await API.post('/login/view', {
+        cookie : _cookie
     })
     if(!data.name){
         Logout.style.display = "none";
@@ -77,8 +103,8 @@ const timeString = `${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
 
 // 채팅 목록과 채팅 팝업창 함수
 async function popup() {
-    const { data } = await API.get("/login/view", {
-        withCredentials: true
+    const { data } = await API.post('/login/view', {
+        cookie : _cookie
     });
     document.body.classList.toggle('active');
     if (data.grade === '3') {
@@ -100,8 +126,8 @@ chatBoxClose.forEach(btn => {
 // 관리자 계정의 유저 채팅 목록 창
 async function selectUserChat() {
     try {
-        const response = await API.get('/login/viewAll', {
-            withCredentials: true
+        const response = await API.post('/login/viewAll', {
+            cookie : _cookie
         });
         console.log(response);
         const users = response.data;
@@ -128,8 +154,8 @@ function openChatBox(userNickname) {
 
 // 채팅 소켓
 async function userInfo() {
-    const response = await API.get('/login/view', {
-        withCredentials: true
+    const response = await API.post('/login/view', {
+        cookie : _cookie
     });
     console.log(response);
     return {
@@ -213,7 +239,8 @@ window.onload = async () => {
                 message: message.value,
                 date: timeString,
                 profile_img: profileImg,
-                userInfo: user_info
+                userInfo: user_info,
+                cookie : _cookie
             }
             socket.emit('message', messageData);
             API.post('/chat/chat_insert', messageData, {
@@ -241,14 +268,16 @@ mypageBtn.addEventListener('click', () => {
     location.href = `./mypage${urlEnd}`;
 })
 
+
 ////////////////////////// 게시판 영역 ///////////////////////////
 let user_data = {};
 
 window.onload = async()=>{
-    const {data} = await API.get('/post/insert',{
+    const {data} = await API.post('/post/insert',{
         headers : {
             "Content-Type" : "application/json"
-        }
+        },
+        cookie : _cookie
     })
     
     nickname.value = data.nickname;
@@ -290,7 +319,8 @@ document.getElementById('toImageBtn').addEventListener('click', async () => {
         form.append('imgs', imgs.value);
         form.append('upload', file.files[0]);
         form.append('userId', 'user_id');
-        await API.post('./upload/postImg', form,{
+        form.append('cookie',_cookie);
+        await API.post('/upload/postImg', form,{
             headers : { "content-Type" : "multipart/form-data" },
             withCredentials : true
         });

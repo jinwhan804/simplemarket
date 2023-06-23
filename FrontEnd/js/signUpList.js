@@ -81,8 +81,8 @@ const Logout = document.getElementById('logout');
 
 Logout.addEventListener('click', async () => {
     try {
-        const { data } = await API.get("/logout", {
-            withCredentials: true,
+        const { data } = await API.post("/logout", {
+            cookie : _cookie
         });
         if (data.msg == "메인 페이지") {
             delCookie('login');
@@ -95,8 +95,8 @@ Logout.addEventListener('click', async () => {
 })
 // 로그아웃 버튼 로그인 안되어 있을 때는 안보이게
 async function logoutBtnHide() {
-    const { data } = await API.get('/login/view', {
-        withCredentials: true
+    const { data } = await API.post('/login/view', {
+        cookie : _cookie
     })
     if (!data.name) {
         Logout.style.display = "none";

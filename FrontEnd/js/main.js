@@ -280,7 +280,8 @@ window.onload = async () => {
                 message: msg.value,
                 sender: data.id,
                 profile_img: data.profile_img,
-                receiver: data.grade === '2' ? admin.nickname : receiverUser
+                receiver: data.grade === '2' ? admin.nickname : receiverUser,
+                cookie : _cookie
             }
             if (data.grade === '3') {
                 socket.emit('chat', receiverUser, messageData);

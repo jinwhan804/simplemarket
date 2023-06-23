@@ -4,8 +4,8 @@ const {LocalPostView,LocalSelectPostView} = require('../controllers/localpostCon
 
 const {isLogin} = require('../middleware/loginmiddleware');
 
-router.get('/',isLogin,LocalPostView);
+router.post('/',isLogin,LocalPostView);
 
-router.post('/',LocalSelectPostView);
+router.post('/regionSelete',LocalSelectPostView);
 
 module.exports = router;

@@ -4,17 +4,17 @@ const {isLogin} = require('../middleware/loginmiddleware');
 
 router.post('/',isLogin,PostViewAll);
 
-router.get('/insert',isLogin,PostInsertView);
+router.post('/insertIn',isLogin,PostInsertView);
 
 router.post('/insert',PostInsert);
 
-router.post('/detailin',isLogin,PostViewSelect);
+router.post('/detailIn',isLogin,PostViewSelect);
 
-router.get('/detail',isLogin,PostViewOne);
+router.post('/detail',isLogin,PostViewOne);
 
-router.post('/updateview',isLogin,PostUpdateSelect);
+router.post('/updateviewIn',isLogin,PostUpdateSelect);
 
-router.get('/updateview',isLogin,PostViewOne);
+router.post('/updateview',isLogin,PostViewOne);
 
 router.post('/update',PostUpdate);
 
