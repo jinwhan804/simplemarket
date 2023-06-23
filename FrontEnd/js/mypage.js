@@ -8,9 +8,9 @@ async function checkAdmin() {
     const {data} = await API.post("/login/view", {
         cookie : _cookie
     });
-    if (data && data.grade == "3") {
-        adminHide.style.display = "block";
-    } else {
+    if(data && data.grade == "3"){
+        adminHide.style.display = "";
+    }else{
         adminHide.style.display = "none"
     }
 }
