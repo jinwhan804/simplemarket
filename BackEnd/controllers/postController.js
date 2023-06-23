@@ -44,7 +44,7 @@ exports.PostViewAll = async (req, res) => {
     
                 if(json?.pageInfo){
                     if(!json.pageInfo?.user){
-                        id = json.pageInfo.pageId;
+                        th = json.pageInfo.pageId;
                     }                    
                 }
             }
