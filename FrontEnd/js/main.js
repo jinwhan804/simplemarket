@@ -362,11 +362,11 @@ window.onload = async () => {
                 message: msg.value,
                 sender: data.id,
                 profile_img: data.profile_img,
-                receiver: data.grade === '2' ? admin.nickname : receiverUser,
+                receiver: data.grade === '2' ? admin.nickname : receiverUser[0],
                 cookie : _cookie
             }
             if (data.grade === '3') {
-                socket.emit('chat', receiverUser, messageData);
+                socket.emit('chat', receiverUser[0], messageData);
             } else
                 socket.emit('chat', nickname, messageData);
             msg.value = '';
