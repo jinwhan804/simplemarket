@@ -33,7 +33,7 @@ exports.viewOneChat = async (req, res) => {
     try {
         const {access_decoded} = req;
         const user = req.body;
-        console.log(user)
+        console.log('이거 뭐니',user)
 
         const comeChat = await Chat.findAll({
             where: { sender : user.id, receiver : access_decoded.nickname },
