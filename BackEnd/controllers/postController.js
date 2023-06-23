@@ -100,13 +100,11 @@ exports.PostViewOne = async (req, res) => {
         const {access_decoded} = req;
         let id;
 
-        console.log(access_decoded)
-
         for (const key in req.sessionStore.sessions) {
             const json = JSON.parse(`${req.sessionStore.sessions[key]}`);
 
             console.log(json)
-            if(access_decoded.id == json.pageInfo.user.id){
+            if(access_decoded.id == json.pageInfo.user.id && json.pageInfo.user != null){
                 id = json.pageInfo.pageId;
             }
         }
