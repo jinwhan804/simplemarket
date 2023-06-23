@@ -273,6 +273,8 @@ window.onload = async () => {
                 return i.nickname == nickname;
             });
 
+            console.log(receiverUser);
+
             
 
             if (data.grade === '3') {
