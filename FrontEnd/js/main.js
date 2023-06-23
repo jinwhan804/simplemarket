@@ -366,7 +366,7 @@ window.onload = async () => {
                 cookie : _cookie
             }
             if (data.grade === '3') {
-                socket.emit('chat', receiverUser[0], messageData);
+                socket.emit('chat', receiverUser[0].nickname, messageData);
             } else
                 socket.emit('chat', nickname, messageData);
             msg.value = '';
