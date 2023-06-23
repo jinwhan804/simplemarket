@@ -269,6 +269,7 @@ window.onload = async () => {
             chatBox.classList.add('active');
             chatList.classList.remove('active');
             console.log(`${nickname}방 입장`);
+            console.log(chatUserInfo)
             receiverUser = chatUserInfo.filter((i)=>{
                 return i.nickname == nickname;
             });
