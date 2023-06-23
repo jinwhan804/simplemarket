@@ -174,7 +174,7 @@ window.onload = async () => {
     const users = await API.post('/login/viewAll', {
         cookie : _cookie
     });
-    const userData = users.data;
+    userData = users.data;
     console.log(userData);
     const admin = userData[0];
     console.log(admin);
@@ -205,7 +205,7 @@ window.onload = async () => {
         localStorage.setItem('joined', 'true');
     })
 
-    let chatUserInfo;
+    let userData;
 
     // 유저들의 채팅 목록을 나타내는 이벤트(관리자만 보임)
     try {
@@ -214,7 +214,6 @@ window.onload = async () => {
         });
         const chats = response.data;
         console.log(chats);
-        chatUserInfo = chats.User;
 
         chats.forEach(chat => {
             console.log(chat);
@@ -269,14 +268,11 @@ window.onload = async () => {
             chatBox.classList.add('active');
             chatList.classList.remove('active');
             console.log(`${nickname}방 입장`);
-            console.log(chatUserInfo)
-            receiverUser = chatUserInfo.filter((i)=>{
+            receiverUser = userData.filter((i)=>{
                 return i.nickname == nickname;
             });
 
-            console.log(receiverUser);
-
-            
+            console.log(receiverUser);            
 
             if (data.grade === '3') {
                 // room = nickname;
