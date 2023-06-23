@@ -229,6 +229,12 @@ window.onload = async () => {
 
             const userInList = userChatList.querySelector(`.chat_message[data_nickname="${chatUser.nickname}"]`);
             console.log(userInList);
+            let profileImg;
+            if(chatUser.profile_img == null){
+                profileImg = "https://simplemarket2.s3.ap-northeast-2.amazonaws.com/defaultprofile.png"; // 디폴트 이미지 URL로 대체
+            }else{
+                profileImg = chatUser.profile_img;
+            }
 
             if (userInList) {
                 // 채팅 목록에서 해당 유저가 있으면 목록에 추가하지 않고 메시지만 업데이트
@@ -237,7 +243,7 @@ window.onload = async () => {
                 // 리스트에 없으면 추가
                 let newMessageHTML = `
                 <div class="chat_message" data_nickname="${chatUser.nickname}">
-                    <img src="${chatUser.profile_img}">
+                    <img src="${profileImg}">
                     <div class="user_chatPart">
                         <div class="user_nick_date">
                             <p class="user_nickname">${chatUser.nickname}</p>
