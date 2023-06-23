@@ -280,14 +280,13 @@ async function GetAPI(currentPage){
         let _th3 = document.createElement('th');
         let _th4 = document.createElement('th');
         let _th5 = document.createElement('th');
-        let _th6 = document.createElement('th');
         _th1.innerHTML = "No.";
         _th2.innerHTML = '제목';
         _th3.innerHTML = '작성자';
         _th4.innerHTML = '작성일';
         _th5.innerHTML = '수정일';
         _th6.innerHTML = '조회수';
-        _tr1.append(_th1,_th2,_th3,_th4,_th5,_th6);
+        _tr1.append(_th1,_th2,_th3,_th4,_th5);
         post_list.append(_tr1);
 
         btns.innerHTML = '';
@@ -353,7 +352,6 @@ async function GetAPI(currentPage){
                 let _td3 = document.createElement('td');
                 let _td4 = document.createElement('td');
                 let _td5 = document.createElement('td');
-                let _td6 = document.createElement('td');
                 _tr.className = 'postTr';
                 _td1.innerHTML = index + 1;
                 _td2.innerHTML = el.title;
@@ -370,8 +368,6 @@ async function GetAPI(currentPage){
                 }else{
                     _td5.innerHTML = el.updatedAt.slice(11,19);
                 }
-
-                _td6.innerHTML = el.postViews;
 
                 _tr.onclick = async()=>{
                     const form = new FormData();
@@ -394,7 +390,7 @@ async function GetAPI(currentPage){
                     })
                 }
 
-                _tr.append(_td1,_td2,_td3,_td4,_td5,_td6);
+                _tr.append(_td1,_td2,_td3,_td4,_td5);
                 post_list.append(_tr);
             });
 
@@ -489,14 +485,13 @@ async function SelectLocal (currentPage){
         let _th3 = document.createElement('th');
         let _th4 = document.createElement('th');
         let _th5 = document.createElement('th');
-        let _th6 = document.createElement('th');
         _th1.innerHTML = "No.";
         _th2.innerHTML = '제목';
         _th3.innerHTML = '작성자';
         _th4.innerHTML = '작성일';
         _th5.innerHTML = '수정일';
         _th6.innerHTML = '조회수';
-        _tr1.append(_th1,_th2,_th3,_th4,_th5,_th6);
+        _tr1.append(_th1,_th2,_th3,_th4,_th5);
         post_list.append(_tr1);
 
         btns.innerHTML = '';        
@@ -563,7 +558,6 @@ async function SelectLocal (currentPage){
                 let _td3 = document.createElement('td');
                 let _td4 = document.createElement('td');
                 let _td5 = document.createElement('td');
-                let _td6 = document.createElement('td');
                 _tr.className = 'postTr';
                 _td1.innerHTML = index + 1;
                 _td2.innerHTML = el.title;
@@ -581,8 +575,6 @@ async function SelectLocal (currentPage){
                     _td5.innerHTML = el.updatedAt.slice(11,19);
                 }
 
-                _td6.innerHTML = el.postViews;
-
                 _tr.onclick = async()=>{
                     await API.post('/post/detailIn',{
                         headers : {
@@ -597,7 +589,7 @@ async function SelectLocal (currentPage){
                     })
                 }
 
-                _tr.append(_td1,_td2,_td3,_td4,_td5,_td6);
+                _tr.append(_td1,_td2,_td3,_td4,_td5);
                 post_list.append(_tr);
             });
 
