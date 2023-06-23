@@ -69,8 +69,8 @@ const Logout = document.getElementById('logout');
 
 Logout.addEventListener('click', async () => {
     try {
-        const { data } = await API.get("/logout", {
-            withCredentials: true,
+        const { data } = await API.post("/logout", {
+            cookie : _cookie
         });
         if (data == "메인 페이지") {
             delCookie('login');
