@@ -130,7 +130,7 @@ const back = document.querySelector('.back');
 // 채팅 목록과 채팅 팝업창 함수
 async function popup() {
     try {
-        const { data } = await axios.get("http://127.0.0.1:8080/login/view", {
+        const { data } = await API.get("/login/view", {
             withCredentials: true
         });
 
@@ -154,7 +154,7 @@ chatBoxClose.forEach(btn => {
 });
 
 window.onload = async () => {
-    const { data } = await axios.get('http://127.0.0.1:8080/login/view', {
+    const { data } = await API.get('/login/view', {
         withCredentials: true
     });
 
@@ -171,7 +171,7 @@ window.onload = async () => {
         })
     }
 
-    const users = await axios.get('http://127.0.0.1:8080/login/viewAll', {
+    const users = await API.get('/login/viewAll', {
         withCredentials: true
     });
     const userData = users.data;
@@ -207,7 +207,7 @@ window.onload = async () => {
 
     // 유저들의 채팅 목록을 나타내는 이벤트(관리자만 보임)
     try {
-        const response = await axios.get('http://127.0.0.1:8080/chat/all_chats', {
+        const response = await API.get('/chat/all_chats', {
             withCredentials: true
         });
         const chats = response.data;
@@ -287,7 +287,7 @@ window.onload = async () => {
             } else
                 socket.emit('chat', nickname, messageData);
             msg.value = '';
-            await axios.post('http://127.0.0.1:8080/chat/chat_insert', messageData, {
+            await API.post('/chat/chat_insert', messageData, {
                 withCredentials: true
             })
         } catch (error) {
