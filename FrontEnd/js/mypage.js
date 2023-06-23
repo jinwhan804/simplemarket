@@ -84,6 +84,7 @@ document.getElementById('uploadBtn').addEventListener('click', async () => {
         form.append("imgs", imgs.value);
         form.append("upload", file.files[0]);
         form.append("userId", "user_id");
+        form.append('cookie',_cookie);
         await API.post('/upload', form, {
             headers: { "content-Type": "multipart/form-data" },
             withCredentials: true
