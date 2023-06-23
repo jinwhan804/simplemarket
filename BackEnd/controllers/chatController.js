@@ -36,7 +36,7 @@ exports.viewOneChat = async (req, res) => {
         console.log('이거 뭐니',user)
 
         const comeChat = await Chat.findAll({
-            where: { sender : user.id, receiver : access_decoded.nickname },
+            where: { sender : user[0].id, receiver : access_decoded.nickname },
             include: [{
                 model: User
             }],
@@ -44,7 +44,7 @@ exports.viewOneChat = async (req, res) => {
         });
 
         const goChat = await Chat.findAll({
-            where: { receiver : user.nickname, sender : access_decoded.id },
+            where: { receiver : user[0].nickname, sender : access_decoded.id },
             include: [{
                 model: User
             }],
