@@ -4,11 +4,19 @@ body {
     padding: 0;
     background-color: #f0f0f0;
     color: #333;
+    font-family: 'ONE-Mobile-Title';
 }
 
 @font-face {
     font-family: 'Dovemayo_gothic';
     src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2302@1.1/Dovemayo_gothic.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'ONE-Mobile-Title';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2105_2@1.0/ONE-Mobile-Title.woff') format('woff');
     font-weight: normal;
     font-style: normal;
 }
@@ -87,15 +95,15 @@ a{
     /* height: 65%;
     align-items: center; */
 }
-.header_div ul li{
-    /* list-style-type: none;
+/* .header_div li{
+    list-style-type: none;
     margin-right: -100px;
     margin-left: 40px;
     border: 0px;
     height: 100%;
     width: 400px;
-    margin-top: -12px; */
-}
+    margin-top: -12px;
+} */
 
 /* 마지막 li 우측 마진 없앰 */
 .header_div ul li:last-child {
@@ -106,15 +114,36 @@ a{
 .header-btns {
     position: absolute;
     right: 10%;
+    display: flex;
+}
+
+#popup-login {
+    border: 0;
+    background-color: #007bff;
+    color: #007bff;
 }
 
 #mypage-btn {
-    background-image: url('../../BackEnd/uploads/그림1-removebg-preview.png');
+    background-image: url('../../BackEnd/uploads/my-removebg-preview.png');
     width: 40px;
     height: 40px;
     background-size: cover;
     background-position: center;
+    background-color: #007bff;
+    border: none;
     cursor: pointer;
+    margin-right: 10px;
+}
+
+#logout {
+    background-color: #007bff;
+    border: 0;
+    outline: 0;
+    color: white;
+    font-size: 25px;
+    font-family: 'ONE-Mobile-Title';
+    cursor: pointer;
+
 }
 /* 가운데 게시판 css */
 
@@ -259,7 +288,7 @@ input {
     width: 3.125vw;
     height: 3.125vw;
     right: 5%;
-    bottom: 5%;
+    bottom: 0;
     cursor: pointer;
     position: fixed;
     background-color: white;
@@ -302,9 +331,9 @@ input {
     position: fixed;
     background-color: #abc8f8;
     width: 18.75vw;
-    min-height: 34.375vw;
+    height: 4.375vw;
     right: 6%;
-    bottom: 15%;
+    bottom: 11%;
     border-radius: 1.042vw;
     box-shadow: 5px 5px 5px rgba(128, 128, 128, 0.495);
     display: none;
@@ -317,7 +346,7 @@ input {
     width: 18.75vw;
     height: 34.375vw;
     right: 6%;
-    bottom: 15%;
+    bottom: 11%;
     border-radius: 1.042vw;
     box-shadow: 0.26vw 0.26vw 0.26vw rgba(128, 128, 128, 0.495);
     display: none;
@@ -330,7 +359,7 @@ input {
     width: 18.75vw;
     height: 34.375vw;
     right: 6%;
-    bottom: 15%;
+    bottom: 11%;
     border-radius: 1.042vw;
     box-shadow: 0.26vw 0.26vw 0.26vw rgba(128, 128, 128, 0.495);
     display: block;
@@ -343,7 +372,7 @@ input {
     width: 18.75vw;
     height: 34.375vw;
     right: 6%;
-    bottom: 15%;
+    bottom: 11%;
     border-radius: 1.042vw;
     box-shadow: 0.26vw 0.26vw 0.26vw rgba(128, 128, 128, 0.495);
     display: block;
@@ -452,12 +481,12 @@ box-shadow: inset 0px 0px 0.26vw white;
     background-color: #e2e1e1;
     border: none;
     border-radius: 10%;
-    width: 50px;
-    height: 30px;
+    width: 2.604vw;
+    height: 1.563vw;
     z-index: 10;
     position: absolute;
     right: 1.563vw;
-    bottom: 0.9vw;
+    bottom: 1.1vw;
     cursor: pointer;
     font-family: 'Dovemayo_gothic';
 }

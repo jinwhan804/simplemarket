@@ -167,10 +167,11 @@ window.onload = async () => {
         withCredentials: true
     });
     const userData = users.data;
+    console.log(userData);
     const admin = userData[0];
     console.log(admin);
 
-    sessionStorage.setItem('joined', 'false');
+    localStorage.setItem('joined', 'false');
 
     socket.on('joinRoom', (room, user, userList) => {
         const now = new Date();
@@ -178,7 +179,7 @@ window.onload = async () => {
         const minutes = now.getMinutes();
         const timeString = `${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
 
-        if (sessionStorage.getItem('joined') === 'false') {
+        if (localStorage.getItem('joined') === 'false') {
             if (user.id !== admin.id) {
                 const welcomeMessage = `
                 <div class="content other-message">
@@ -193,7 +194,7 @@ window.onload = async () => {
                 chatContent.innerHTML += welcomeMessage;
             }
         }
-        sessionStorage.setItem('joined', 'true');
+        localStorage.setItem('joined', 'true');
     })
 
 
@@ -206,7 +207,9 @@ window.onload = async () => {
         console.log(chats);
 
         chats.forEach(chat => {
+            console.log(chat);
             chatUser = chat.User;
+            console.log(chatUser);
 
             if (chatUser.grade === '3') {
                 return;
@@ -217,6 +220,7 @@ window.onload = async () => {
             let minutes = createdAt.getMinutes();
 
             const userInList = userChatList.querySelector(`.chat_message[data_nickname="${chatUser.nickname}"]`);
+            console.log(userInList);
 
             if (userInList) {
                 // 채팅 목록에서 해당 유저가 있으면 목록에 추가하지 않고 메시지만 업데이트
@@ -231,7 +235,7 @@ window.onload = async () => {
                             <p class="user_nickname">${chatUser.nickname}</p>
                             <p class="user_time">${hours}:${minutes < 10 ? '0' + minutes : minutes}</p>
                         </div>
-                        <p class="message_content">${chatUser.message}</p>
+                        <p class="message_content">${chat.message}</p>
                     </div>
                 </div>
                 `;
@@ -251,13 +255,57 @@ window.onload = async () => {
             console.log(`${nickname}방 입장`);
             receiverUser = nickname;
 
+
             if (data.grade === '3') {
                 // room = nickname;
                 socket.emit('joinRoom', nickname, { id: data.id, nickname: data.nickname });
             }
-
         });
     });
+
+
+    // try {
+    //     const response = await axios.get('http://127.0.0.1:8080/chat/all_chats', {
+    //         withCredentials: true
+    //     });
+    //     const chatHistory = response.data;
+    //     console.log(chatHistory);
+
+    //     chatContent.innerHTML = '';
+
+    //     chatHistory.forEach(e => {
+    //         console.log(e);
+    //         const now = new Date(data.createdAt);
+    //         const hours = now.getHours();
+    //         const minutes = now.getMinutes();
+    //         const timeString = `${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
+
+    //         let el;
+    //         if (e.sender === data.id) {
+    //             el = `
+    //             <div class="content my-message">
+    //                 <p class="message ballon">${e.message}</p>
+    //                 <p class="date">${timeString}</p>
+    //             </div>
+    //             `;
+    //         } else {
+    //             el = `
+    //             <div class="content other-message">
+    //                 <img src="${e.User.profile_img}">
+    //                 <div class="message-display">
+    //                     <p class="nickname">${e.User.nickname}</p>
+    //                     <p class="message ballon">${e.message}</p>
+    //                     <p class="date">${timeString}</p>
+    //                 </div>
+    //             </div>
+    //             `;
+    //         }
+    //         chatContent.innerHTML += el;
+    //     })
+    // } catch (error) {
+    //     console.error(error);
+    // }
+
 
     // 메시지 보내는 이벤트
     const msg = document.getElementById('msg');
@@ -331,6 +379,7 @@ window.onload = async () => {
                 </div>
             </div>
             `;
+
         }
         chatContent.innerHTML += el;
     })
