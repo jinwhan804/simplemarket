@@ -135,6 +135,7 @@ a{
     margin-right: 10px;
 }
 
+
 #logout {
     background-color: #007bff;
     border: 0;
@@ -143,8 +144,18 @@ a{
     font-size: 25px;
     font-family: 'ONE-Mobile-Title';
     cursor: pointer;
-
 }
+
+#logout:hover {
+    background-color: #007bff;
+    border: 0;
+    outline: 0;
+    color: rgb(217, 217, 217);
+    font-size: 25px;
+    font-family: 'ONE-Mobile-Title';
+    cursor: pointer;
+}
+
 /* 가운데 게시판 css */
 
 /* 관계설정 제일 큰 틀 */
@@ -319,11 +330,15 @@ input {
 
 .user_nick_date {
     display: flex;
-    align-items: center;
 }
 
 .user_nickname {
     font-weight: 600;
+}
+
+.user_time {
+    position: absolute;
+    right: 7%;
 }
 
 .chatBox  {
