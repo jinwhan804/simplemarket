@@ -280,13 +280,14 @@ async function GetAPI(currentPage){
         let _th3 = document.createElement('th');
         let _th4 = document.createElement('th');
         let _th5 = document.createElement('th');
+        let _th6 = document.createElement('th');
         _th1.innerHTML = "No.";
         _th2.innerHTML = '제목';
         _th3.innerHTML = '작성자';
         _th4.innerHTML = '작성일';
         _th5.innerHTML = '수정일';
         _th6.innerHTML = '조회수';
-        _tr1.append(_th1,_th2,_th3,_th4,_th5);
+        _tr1.append(_th1,_th2,_th3,_th4,_th5,_th6);
         post_list.append(_tr1);
 
         btns.innerHTML = '';
@@ -485,13 +486,14 @@ async function SelectLocal (currentPage){
         let _th3 = document.createElement('th');
         let _th4 = document.createElement('th');
         let _th5 = document.createElement('th');
+        let _th6 = document.createElement('th');
         _th1.innerHTML = "No.";
         _th2.innerHTML = '제목';
         _th3.innerHTML = '작성자';
         _th4.innerHTML = '작성일';
         _th5.innerHTML = '수정일';
         _th6.innerHTML = '조회수';
-        _tr1.append(_th1,_th2,_th3,_th4,_th5);
+        _tr1.append(_th1,_th2,_th3,_th4,_th5,_th6);
         post_list.append(_tr1);
 
         btns.innerHTML = '';        
