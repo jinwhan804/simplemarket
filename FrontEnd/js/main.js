@@ -1,15 +1,16 @@
 // 로그인 유저 확인용 변수
 let users;
 
+// 백엔드로 쿠키 전달
+let _cookie = document.cookie;
+
 // 마이페이지 버튼 로그인 됐을때만 보이게
 const mypageBtn = document.getElementById('mypage-btn');
 
-async function mypageHide() {
-    let cookie = document.cookie
-    console.log(cookie)
+async function mypageHide() {    
     const { data } = await API.get('/login/view', {
         withCredentials: true,
-        cookie : cookie
+        cookie : _cookie
     })
     if (!data.name) {
         mypageBtn.style.display = "none";
@@ -37,6 +38,7 @@ async function loginBtnHide() {
     
     const { data } = await API.get('/login/view', {
         withCredentials: true,
+        cookie : _cookie
     })
     if (data.name) {
         popupLoginBtn.style.display = "none";
@@ -85,7 +87,8 @@ Logout.addEventListener('click', async () => {
 // 로그아웃 버튼 로그인 안되어 있을 때는 안보이게
 async function logoutBtnHide() {
     const { data } = await API.get('/login/view', {
-        withCredentials: true
+        withCredentials: true,
+        cookie : _cookie
     })
     if (!data.name) {
         Logout.style.display = "none";
@@ -97,6 +100,7 @@ async function getAPI_popup() {
     try {
         const { data } = await API.get("/login/view", {
             withCredentials: true,
+            cookie : _cookie
         });
 
         if (data.name) {
