@@ -126,7 +126,7 @@ a{
 }
 
 #mypage-btn {
-    background-image: url('../../BackEnd/uploads/my-removebg-preview.png');
+    background-image: url('https://simplemarket2.s3.ap-northeast-2.amazonaws.com/2.png');
     width: 40px;
     height: 40px;
     background-size: cover;
