@@ -6,6 +6,6 @@ router.post('/chat_insert', isLogin, ChatInsert);
 
 router.get('/all_chats', ViewAllChats);
 
-router.get('/:nickname', isLogin, viewOneChat);
+router.post('/:nickname', isLogin, viewOneChat);
 
 module.exports = router;

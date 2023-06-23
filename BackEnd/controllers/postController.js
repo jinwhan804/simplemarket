@@ -10,8 +10,6 @@ exports.PostViewAll = async (req, res) => {
             },
             order: [['createdAt', 'DESC']]
         }).then((e) => {
-            console.log(req.sessionStore.sessions);
-            
             // 생성되었던 pageId 제거
             function findKeyByToken(obj, pageId) {
                 for (let key in obj) {
@@ -43,8 +41,10 @@ exports.PostViewAll = async (req, res) => {
             for (const key in req.sessionStore.sessions) {
                 const json = JSON.parse(`${req.sessionStore.sessions[key]}`);
     
-                if(access_decoded.id == json.pageInfo.user.id){
-                    th = json.pageInfo;
+                if(json?.pageInfo){
+                    if(!json.pageInfo?.user){
+                        id = json.pageInfo.pageId;
+                    }                    
                 }
             }
 
@@ -105,8 +105,10 @@ exports.PostViewOne = async (req, res) => {
         for (const key in req.sessionStore.sessions) {
             const json = JSON.parse(`${req.sessionStore.sessions[key]}`);
 
-            if(access_decoded.id == json.pageInfo.user.id){
-                id = json.pageInfo.pageId;
+            if(json.pageInfo?.user){
+                if(access_decoded.id == json.pageInfo.user.id){
+                    id = json.pageInfo.pageId;
+                }
             }
         }
 

@@ -5,8 +5,6 @@ const { isLogin } = require("../middleware/loginmiddleware");
 
 router.post('/',isLogin, nicknameUpdate);
 
-router.post('/detail',isLogin,PostViewSelect);
-
-router.get('/detail',isLogin,PostViewOne);
+router.post('/detailIn',isLogin,PostViewSelect);
 
 module.exports = router;

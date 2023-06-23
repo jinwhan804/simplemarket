@@ -1,9 +1,13 @@
+// cookie 값 설정
+let _cookie = document.cookie;
+_cookie = _cookie.replace("login=","");
+
 // 마이페이지 버튼 로그인 됐을때만 보이게
 const mypageBtn = document.getElementById('mypage-btn');
 
 async function mypageHide() {
-    const { data } = await API.get('/login/view', {
-        withCredentials : true
+    const { data } = await API.post('/login/view', {
+        cookie : _cookie
     })
     if(!data.name){
         mypageBtn.style.display = "none";
@@ -14,12 +18,11 @@ async function mypageHide() {
 const loginPopup = document.querySelector('.loginPopup');
 const popupLoginBtn = document.getElementById('popup-login');
 
-const postArea = document.getElementById('text-container');
 popupLoginBtn.addEventListener('click', () => {
-    if (loginPopup.style.display === "none") {
-        loginPopup.style.display = "flex";
-    } else {
-        loginPopup.style.display = "none";
+    if(loginPopup.style.display === "none"){
+        loginPopup.style.display = "flex"
+    }else{
+        loginPopup.style.display = "none"
     }
     
 })
@@ -28,8 +31,8 @@ popupLoginBtn.addEventListener('click', () => {
 const loginBtn = document.getElementById('loginBtn');
 
 async function loginBtnHide() {
-    const { data } = await API.get('/login/view',{
-        withCredentials : true
+    const { data } = await API.post('/login/view', {
+        cookie : _cookie
     })
     if(data.name) {
         popupLoginBtn.style.display = "none";
@@ -56,16 +59,15 @@ const delCookie = (cname) => {
     setCookie(cname, '', 0);
 };
 
-
 // 로그아웃 기능
 const Logout = document.getElementById('logout');
 
 Logout.addEventListener('click', async () => {
     try {
-        const { data } = await API.get("/logout", {
-            withCredentials: true,
+        const { data } = await API.post("/logout", {
+            cookie : _cookie
         });
-        if (data.msg == "메인 페이지") {
+        if (data == "메인 페이지") {
             delCookie('login');
             window.location.href = `./${mainUrl}`;
             alert("로그아웃 되었습니다.");
@@ -77,34 +79,14 @@ Logout.addEventListener('click', async () => {
 
 // 로그아웃 버튼 로그인 안되어 있을 때는 안보이게
 async function logoutBtnHide() {
-    const { data } = await API.get('/login/view', {
-        withCredentials : true
+    const { data } = await API.post('/login/view', {
+        cookie : _cookie
     })
     if(!data.name){
         Logout.style.display = "none";
     }
 }
 
-
-async function getAPI_popup() {
-    try {
-        const { data } = await API.get("/login/view", {
-            withCredentials: true,
-        });
-
-        if (data.name) {
-            loginPopup.style.display = "none";
-            postArea.style.display = 'block';
-        } else {
-            loginPopup.style.display = "flex";
-            postArea.style.display = 'none';
-        }
-
-    } catch (error) {
-        console.log(error)
-    }
-}
-getAPI_popup();
 mypageHide();
 loginBtnHide();
 logoutBtnHide();
@@ -121,8 +103,8 @@ const timeString = `${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
 
 // 채팅 목록과 채팅 팝업창 함수
 async function popup() {
-    const { data } = await API.get("/login/view", {
-        withCredentials: true
+    const { data } = await API.post('/login/view', {
+        cookie : _cookie
     });
     document.body.classList.toggle('active');
     if (data.grade === '3') {
@@ -144,8 +126,8 @@ chatBoxClose.forEach(btn => {
 // 관리자 계정의 유저 채팅 목록 창
 async function selectUserChat() {
     try {
-        const response = await API.get('/login/viewAll', {
-            withCredentials: true
+        const response = await API.post('/login/viewAll', {
+            cookie : _cookie
         });
         console.log(response);
         const users = response.data;
@@ -172,22 +154,16 @@ function openChatBox(userNickname) {
 
 // 채팅 소켓
 async function userInfo() {
-    try {
-        const { data } = await API.get('/login/view', {
-            withCredentials: true
-        });
-
-        console.log(data);
-        return {
-            nickname: data.nickname,
-            profileImg: data.profile_img,
-            userId: data.user_id,
-            user_info: data.id
-        };
-    } catch (error) {
-        console.log(error);
-    }
-
+    const response = await API.post('/login/view', {
+        cookie : _cookie
+    });
+    console.log(response);
+    return {
+        nickname: response.data.nickname,
+        profileImg: response.data.profile_img,
+        userId: response.data.user_id,
+        user_info: response.data.id
+    };
 }
 
 window.onload = async () => {
@@ -206,57 +182,6 @@ window.onload = async () => {
         // userChatList.innerHTML = chatDataHTML;
 
         const socket = io.connect(serverUrl);
-
-        chatData.forEach(data => {
-            const now = new Date(data.createdAt);
-            const hours = now.getHours();
-            const minutes = now.getMinutes();
-            const time = `${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
-            // console.log(data);
-            let el;
-            if (data.nickname === nickname) {
-                el = `
-                <div class="content my-message">
-                    <p class="message ballon">${data.message}</p>
-                    <p class="date">${time}</p>
-                </div>
-                `;
-            } else {
-                el = `
-                <div class="content other-message">
-                    <img src="${data.profile_img}">
-                    <div class="message-display">
-                        <p class="nickname">${data.nickname}</p>
-                        <p class="message ballon">${data.message}</p>
-                        <p class="date">${time}</p>
-                    </div>
-                </div>
-                `;
-            }
-            chatContent.innerHTML += el;
-        });
-
-        // 관리자만 보이게 하는 뒤로가기 버튼
-        try {
-            const { data } = await API.get("/login/view", {
-                withCredentials: true
-            });
-            if (data.grade === '3') {
-                back.style.display = 'block';
-            } else {
-                back.style.display = 'none';
-            }
-        } catch (error) {
-            console.log(error);
-        }
-
-        // chatBox에서 chatList로 가는 버튼
-        back.addEventListener('click', () => {
-            chatList.classList.add('active');
-            chatBox.classList.remove('active');
-        });
-
-        // 채팅방 채팅 코드
         socket.on('message', (data) => {
             console.log(data);
             let el;
@@ -264,7 +189,7 @@ window.onload = async () => {
                 el = `
                 <div class="content my-message">
                     <p class="message ballon">${data.message}</p>
-                    <p class="date">${timeString}</p>
+                    <p class="date">${data.date}</p>
                 </div>
                 `;
             } else {
@@ -274,7 +199,7 @@ window.onload = async () => {
                     <div class="message-display">
                         <p class="nickname">${data.nickname}</p>
                         <p class="message ballon">${data.message}</p>
-                        <p class="date">${timeString}</p>
+                        <p class="date">${data.date}</p>
                     </div>
                 </div>
                 `;
@@ -314,11 +239,11 @@ window.onload = async () => {
                 message: message.value,
                 date: timeString,
                 profile_img: profileImg,
-                userInfo: user_info
+                userInfo: user_info,
+                cookie : _cookie
             }
-
             socket.emit('message', messageData);
-            API.post('./chat/chat_insert', messageData, {
+            API.post('/chat/chat_insert', messageData, {
                 withCredentials: true
             })
         }
@@ -327,44 +252,13 @@ window.onload = async () => {
     }
 }
 
-
-// 로그인 기능
-    const LoginForm = document.getElementById('loginForm');
-async function Login(user_id, user_pw) {
-    try {
-        const { data } = await API.post('/login', { user_id, user_pw }, {
-            withCredentials: true
-        });
-        console.log(data);
-        if (data == '가입 안한 아이디 입니다.' || data == '비번 틀림') {
-            alert(data);
-        }else if(data.msg == `승인이 거절되었습니다.\n회원가입을 다시 진행해주세요.` || data.msg == '가입 승인 대기중입니다.'){
-            alert(data.msg);
-        } else {
-            setCookie('login',data.token,30);
-            window.location.href = `./${mainUrl}`;            
-        }
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-loginBtn.onclick = function () {
-    Login(user_id.value, user_pw.value);
-}
-
 // 회원가입 클릭, 로고 클릭, 마이페이지 버튼 클릭
 
 // const toInsert = document.getElementById('toInsert');
-const toSignUp = document.getElementById('toSignUp')
 
 // toInsert.addEventListener ('click', () => {
 //     location.href = `./insert${urlEnd}`;
 // })
-
-toSignUp.addEventListener ('click', () => {
-    location.href = `./signUp${urlEnd}`;
-})
 
 const Logo = document.querySelector('.logo').addEventListener('click', () => {
     location.href = `./${mainUrl}`;
@@ -375,6 +269,7 @@ mypageBtn.addEventListener('click', () => {
 })
 
 ////////////////////////////// 메인 게시판 영역 ////////////////////////////////////
+let posts;
 
 async function GetAPI(currentPage){
     try {
@@ -397,11 +292,14 @@ async function GetAPI(currentPage){
 
         btns.innerHTML = '';
         
-        const {data} = await API.get('/localpost',{
+        const {data} = await API.post('/localpost',{
             headers : {
                 'Content-Type' : "application/json"
-            }
+            },
+            cookie : _cookie
         });
+
+        posts = data;
 
         let pageOffset = 10;
         let pageGroup = currentPage * pageOffset;
@@ -455,7 +353,7 @@ async function GetAPI(currentPage){
                 let _td3 = document.createElement('td');
                 let _td4 = document.createElement('td');
                 let _td5 = document.createElement('td');
-                let _td6 = document.createElement('td');
+                _tr.className = 'postTr';
                 _td1.innerHTML = index + 1;
                 _td2.innerHTML = el.title;
                 _td3.innerHTML = el.User.nickname;
@@ -472,8 +370,6 @@ async function GetAPI(currentPage){
                     _td5.innerHTML = el.updatedAt.slice(11,19);
                 }
 
-                _td6.innerHTML = el.postViews;
-
                 _tr.onclick = async()=>{
                     const form = new FormData();
 
@@ -482,11 +378,12 @@ async function GetAPI(currentPage){
                     // 조회수 추가
                     await API.post('/viewcheck/add',form);
                     
-                    await API.post('/post/detail',{
+                    await API.post('/post/detailIn',{
                         headers : {
                             'Content-Type' : "application/json"
                         },
-                        data : el.id
+                        data : el.id,
+                        cookie : _cookie
                     }).then((e)=>{
                         location.href = e.data;
                     }).catch((err)=>{
@@ -494,9 +391,11 @@ async function GetAPI(currentPage){
                     })
                 }
 
-                _tr.append(_td1,_td2,_td3,_td4,_td5,_td6);
+                _tr.append(_td1,_td2,_td3,_td4,_td5);
                 post_list.append(_tr);
             });
+
+            CalculateViews();
         }
     } catch (error) {
         console.log(error);
@@ -603,7 +502,7 @@ async function SelectLocal (currentPage){
 
         form.append('address',addressValue)
         
-        const {data} = await API.post('/localpost',form,{
+        const {data} = await API.post('/localpost/regionSelete',form,{
             headers : {
                 'Content-Type' : "application/json"
             }
@@ -661,7 +560,7 @@ async function SelectLocal (currentPage){
                 let _td3 = document.createElement('td');
                 let _td4 = document.createElement('td');
                 let _td5 = document.createElement('td');
-                let _td6 = document.createElement('td');
+                _tr.className = 'postTr';
                 _td1.innerHTML = index + 1;
                 _td2.innerHTML = el.title;
                 _td3.innerHTML = el.User.nickname;
@@ -678,14 +577,13 @@ async function SelectLocal (currentPage){
                     _td5.innerHTML = el.updatedAt.slice(11,19);
                 }
 
-                _td6.innerHTML = el.postViews;
-
                 _tr.onclick = async()=>{
-                    await API.post('/post/detail',{
+                    await API.post('/post/detailIn',{
                         headers : {
                             'Content-Type' : "application/json"
                         },
-                        data : el.id
+                        data : el.id,
+                        cookie : _cookie
                     }).then((e)=>{
                         location.href = e.data;
                     }).catch((err)=>{
@@ -693,9 +591,11 @@ async function SelectLocal (currentPage){
                     })
                 }
 
-                _tr.append(_td1,_td2,_td3,_td4,_td5,_td6);
+                _tr.append(_td1,_td2,_td3,_td4,_td5);
                 post_list.append(_tr);
             });
+
+            CalculateViews();
         }
     } catch (error) {
         console.log(error);
@@ -705,4 +605,19 @@ async function SelectLocal (currentPage){
 thirdSelect.onchange = async(e)=>{
     addressValue = `${firstSelect.value} ${secondSelect.value} ${e.target.value}`;
     SelectLocal(0);
+}
+
+// 조회수 계산 함수
+function CalculateViews() {
+    const postTrs = document.querySelectorAll('.postTr');
+    posts.forEach(async (el, index) => {
+        await API.post('/viewcheck', {
+            data: el.id
+        }).then((e) => {
+            const viewTd = document.createElement('td');
+            viewTd.innerHTML = e.data.length;
+
+            postTrs[index].append(viewTd);
+        })
+    })
 }

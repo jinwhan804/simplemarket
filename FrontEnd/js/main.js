@@ -1,12 +1,16 @@
 // 로그인 유저 확인용 변수
 let users;
 
+// cookie 값 설정
+let _cookie = document.cookie;
+_cookie = _cookie.replace("login=","");
+
 // 마이페이지 버튼 로그인 됐을때만 보이게
 const mypageBtn = document.getElementById('mypage-btn');
 
 async function mypageHide() {
-    const { data } = await API.get('/login/view', {
-        withCredentials: true
+    const { data } = await API.post('/login/view', {
+        cookie :_cookie
     })
     if (!data.name) {
         mypageBtn.style.display = "none";
@@ -31,8 +35,8 @@ popupLoginBtn.addEventListener('click', () => {
 const loginBtn = document.getElementById('loginBtn');
 
 async function loginBtnHide() {
-    const { data } = await API.get('/login/view', {
-        withCredentials: true
+    const { data } = await API.post('/login/view', {
+        cookie :_cookie
     })
     if (data.name) {
         popupLoginBtn.style.display = "none";
@@ -65,8 +69,8 @@ const Logout = document.getElementById('logout');
 
 Logout.addEventListener('click', async () => {
     try {
-        const { data } = await API.get("/logout", {
-            withCredentials: true,
+        const { data } = await API.post("/logout", {
+            cookie : _cookie
         });
         if (data == "메인 페이지") {
             delCookie('login');
@@ -80,8 +84,8 @@ Logout.addEventListener('click', async () => {
 
 // 로그아웃 버튼 로그인 안되어 있을 때는 안보이게
 async function logoutBtnHide() {
-    const { data } = await API.get('/login/view', {
-        withCredentials: true
+    const { data } = await API.post('/login/view', {
+        cookie :_cookie
     })
     if (!data.name) {
         Logout.style.display = "none";
@@ -91,8 +95,8 @@ async function logoutBtnHide() {
 
 async function getAPI_popup() {
     try {
-        const { data } = await API.get("/login/view", {
-            withCredentials: true,
+        const { data } = await API.post('/login/view', {
+            cookie :_cookie
         });
 
         if (data.name) {
@@ -126,8 +130,8 @@ const back = document.querySelector('.back');
 // 채팅 목록과 채팅 팝업창 함수
 async function popup() {
     try {
-        const { data } = await API.get("/login/view", {
-            withCredentials: true
+        const { data } = await API.post("/login/view", {
+            cookie :_cookie
         });
 
         document.body.classList.toggle('active');
@@ -150,8 +154,8 @@ chatBoxClose.forEach(btn => {
 });
 
 window.onload = async () => {
-    const { data } = await API.get('/login/view', {
-        withCredentials: true
+    const { data } = await API.post('/login/view', {
+        cookie :_cookie
     });
 
     const socket = io.connect(serverUrl);
@@ -167,8 +171,8 @@ window.onload = async () => {
         })
     }
 
-    const users = await API.get('/login/viewAll', {
-        withCredentials: true
+    const users = await API.post('/login/viewAll', {
+        cookie : _cookie
     });
     const userData = users.data;
     const admin = userData[0];
@@ -276,7 +280,8 @@ window.onload = async () => {
                 message: msg.value,
                 sender: data.id,
                 profile_img: data.profile_img,
-                receiver: data.grade === '2' ? admin.nickname : receiverUser
+                receiver: data.grade === '2' ? admin.nickname : receiverUser,
+                cookie : _cookie
             }
             if (data.grade === '3') {
                 socket.emit('chat', receiverUser, messageData);
@@ -446,7 +451,9 @@ async function GetAPI(currentPage) {
 
         btns.innerHTML = '';
 
-        const { data } = await API.get('/post');
+        const { data } = await API.post('/post',{
+            cookie : _cookie
+        });
 
         posts = data;
         console.log(posts);
@@ -528,8 +535,9 @@ async function GetAPI(currentPage) {
                     // 조회수 추가
                     await API.post('/viewcheck/add',form);
 
-                    await API.post('/post/detail', {
-                        data: el.id
+                    await API.post('/post/detailIn', {
+                        data: el.id,
+                        cookie : _cookie
                     }).then((e) => {
                         location.href = e.data;
                     }).catch((err) => {

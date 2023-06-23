@@ -1,8 +1,12 @@
+// cookie 값 설정
+let _cookie = document.cookie;
+_cookie = _cookie.replace("login=","");
+
 // 관리자 게시판 기능 (유저만 안보이게)
 async function checkAdmin() {
     const adminHide = document.getElementById('admin-hide');
-    const {data} = await API.get("./login/view", {
-    withCredentials : true
+    const {data} = await API.post("/login/view", {
+        cookie : _cookie
     });
     if(data && data.grade == "3"){
         adminHide.style.display = "block";
@@ -34,10 +38,10 @@ const delCookie = (cname) => {
 
 Logout.addEventListener('click', async () => {
     try {
-        const { data } = await API.get("/logout", {
-            withCredentials: true,
+        const { data } = await API.post("/logout", {
+            cookie : _cookie
         });
-        if (data.msg == "메인 페이지") {
+        if (data == "메인 페이지") {
             delCookie('login');
             window.location.href = `./${mainUrl}`;
             alert("로그아웃 되었습니다.");
@@ -48,8 +52,8 @@ Logout.addEventListener('click', async () => {
 })
 // 로그아웃 버튼 로그인 안되어 있을 때는 안보이게
 async function logoutBtnHide() {
-    const { data } = await API.get('/login/view', {
-        withCredentials: true
+    const { data } = await API.post('/login/view', {
+        cookie : _cookie
     })
     if (!data.name) {
         Logout.style.display = "none";
@@ -99,7 +103,8 @@ document.getElementById("nickname-update-button").addEventListener("click", asyn
     if (newNickname) {
         try {
             const response = await API.post("/mypage", {
-                nickname: newNickname
+                nickname: newNickname,
+                cookie : _cookie
             }, {
                 withCredentials: true
             });
@@ -112,8 +117,8 @@ document.getElementById("nickname-update-button").addEventListener("click", asyn
 
     async function getAPI() {
         try {
-            const {data} = await API.get("/login/view",{
-                withCredentials : true,
+            const {data} = await API.post("/login/view",{
+                cookie : _cookie
             });
             // console.log(data);
             user_name.innerHTML = data.name;
@@ -144,11 +149,11 @@ document.getElementById("nickname-update-button").addEventListener("click", asyn
 
 async function getUserPost(){
     try {
-        const { data: posts } = await API.get("/post",{
-            withCredentials : true,
+        const { data: posts } = await API.post("/post",{
+            cookie : _cookie
         });
-        const { data: userInfo } = await API.get("/login/view",{
-            withCredentials : true,
+        const { data: userInfo } = await API.post("/login/view",{
+            cookie : _cookie
         });
         
         const myPostList = document.getElementById('my-post-list');
@@ -162,8 +167,9 @@ async function getUserPost(){
         }
         listItem.style.cursor = "pointer";
         listItem.addEventListener('click', async () => {
-            const { data } = await API.post(`/mypage/detail`,{
-                data : post.id
+            const { data } = await API.post(`/mypage/detailIn`,{
+                data : post.id,
+                cookie : _cookie
             },{withCredentials : true,})
             window.location.href = data;
         })

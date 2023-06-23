@@ -2,10 +2,9 @@ const jwt = require("jsonwebtoken");
 
 exports.isLogin = (req, res, next) => {
     let access_token;
-    let cookies = req.cookies;
+    let cookies = req.body.cookie;
 
-    console.log(cookies.login);
-    access_token = cookies.login;
+    access_token = cookies;
     
     jwt.verify(access_token, process.env.ACCESS_TOKEN_KEY, (err, acc_decoded) => {
         if (err) {
