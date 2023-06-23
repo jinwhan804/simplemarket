@@ -214,7 +214,7 @@ window.onload = async () => {
         });
         const chats = response.data;
         console.log(chats);
-        chatUserInfo = chats;
+        chatUserInfo = chats.User;
 
         chats.forEach(chat => {
             console.log(chat);
