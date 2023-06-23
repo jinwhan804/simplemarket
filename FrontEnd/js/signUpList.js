@@ -84,7 +84,7 @@ Logout.addEventListener('click', async () => {
         const { data } = await API.post("/logout", {
             cookie : _cookie
         });
-        if (data.msg == "메인 페이지") {
+        if (data == "메인 페이지") {
             delCookie('login');
             window.location.href = `./${mainUrl}`;
             alert("로그아웃 되었습니다.");
