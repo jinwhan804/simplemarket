@@ -30,21 +30,36 @@ exports.ViewAllChats = async (req, res) => {
 }
 
 exports.viewOneChat = async (req, res) => {
-    console.log(req.body);
     try {
-        if (!req.params.nickname) {
-            return res.status(400).json({ error: 'Missing user nickname.' });
-        }
+        const {access_decoded} = req;
+        const user = req.body;
 
-        const userWithChats = await User.findOne({
-            where: { nickname: req.params.nickname },
+        const comeChat = await Chat.findAll({
+            where: { sender : user.id, receiver : access_decoded.nickname },
             include: [{
-                model: Chat,
-                required: false,
-            }]
+                model: User
+            }],
+            order : ['createdAt','DESC']
         });
-        console.log(userWithChats);
-        res.send(userWithChats);
+
+        const goChat = await Chat.findAll({
+            where: { receiver : user.nickname, sender : access_decoded.id },
+            include: [{
+                model: User
+            }],
+            order : ['createdAt','DESC']
+        });
+
+        let chatData;
+
+        if(comeChat[0].id > goChat[0].id){
+            chatData = comeChat[0];
+        }else{
+            chatData = goChat[0];
+        }
+        
+
+        res.send(chatData);
     } catch (error) {
         console.error(error);
     }

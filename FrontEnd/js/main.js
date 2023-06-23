@@ -205,6 +205,7 @@ window.onload = async () => {
         localStorage.setItem('joined', 'true');
     })
 
+    let chatUserInfo;
 
     // 유저들의 채팅 목록을 나타내는 이벤트(관리자만 보임)
     try {
@@ -213,10 +214,11 @@ window.onload = async () => {
         });
         const chats = response.data;
         console.log(chats);
+        chatUserInfo = chats;
 
         chats.forEach(chat => {
             console.log(chat);
-            chatUser = chat.User;
+            let chatUser = chat.User;
             console.log(chatUser);
 
             if (chatUser.grade === '3') {
@@ -262,17 +264,44 @@ window.onload = async () => {
 
     let receiverUser = null;
     userChatList.querySelectorAll('.chat_message').forEach(item => {
-        item.addEventListener('dblclick', () => {
+        item.addEventListener('dblclick', async() => {
             const nickname = item.getAttribute('data_nickname');
             chatBox.classList.add('active');
             chatList.classList.remove('active');
             console.log(`${nickname}방 입장`);
-            receiverUser = nickname;
+            receiverUser = chatUserInfo.filter((i)=>{
+                return i.nickname == nickname;
+            });
 
+            
 
             if (data.grade === '3') {
                 // room = nickname;
                 socket.emit('joinRoom', nickname, { id: data.id, nickname: data.nickname });
+
+                const beforeChat = await API.post('/chat/chatStory',{
+                    user : receiverUser,
+                    cookie : _cookie
+                })
+                const chat = beforeChat.data;
+
+                const now = new Date(chat.createdAt);
+                const hours = now.getHours();
+                const minutes = now.getMinutes();
+                const timeString = `${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
+
+                let beforMessage = `
+                    <div class="content other-message">
+                        <img src="${data.profile_img}">
+                        <div class="message-display">
+                            <p class="nickname">${data.nickname}</p>
+                            <p class="message ballon">${chat.message}</p>
+                            <p class="date">${timeString}</p>
+                        </div>
+                    </div>
+                `;
+
+                chatContent.innerHTML += beforMessage;                
             }
         });
     });
