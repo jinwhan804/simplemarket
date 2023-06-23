@@ -41,8 +41,10 @@ exports.PostViewAll = async (req, res) => {
             for (const key in req.sessionStore.sessions) {
                 const json = JSON.parse(`${req.sessionStore.sessions[key]}`);
     
-                if(!json.pageInfo?.user){
-                    id = json.pageInfo.pageId;
+                if(json?.pageInfo){
+                    if(!json.pageInfo?.user){
+                        id = json.pageInfo.pageId;
+                    }                    
                 }
             }
 
