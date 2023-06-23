@@ -5,7 +5,7 @@ async function checkAdmin() {
     withCredentials : true
     });
     if(data && data.grade == "3"){
-        adminHide.style.display = "block";
+        adminHide.style.display = "";
     }else{
         adminHide.style.display = "none"
     }

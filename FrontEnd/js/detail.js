@@ -281,7 +281,12 @@ async function GetAPI(){
         title.value = data.posts.title;
         nickname.value = data.posts.User.nickname;
         contentArea.innerHTML = data.posts.content;
-        document.getElementById('userImg').src = data.posts.User.profile_img; // 이미지 추가
+        let profileImg = data.posts.User.profile_img;
+        if(!profileImg){
+            profileImg = "https://simplemarket2.s3.ap-northeast-2.amazonaws.com/defaultprofile.png"; // 디폴트 이미지 URL로 대체
+            
+        };
+        document.getElementById('userImg').src = profileImg; // 이미지 추가
         
         if(data.posts.postLikes != null && data.posts.postLikes != 'null'){
             likeNum = data.posts.postLikes.split(',');
@@ -756,6 +761,17 @@ async function GetAPI(){
                                 
                                 
                             });
+                            // 자기 아이디 아니면 버튼 안보이게
+
+                            console.log("아이디 식별?", data);
+                            // 수정 버튼
+                            if(!(data.users.id == data.posts.userId)){
+                                document.getElementById('toUpdate').style.display = "none";
+                            };
+                            // 삭제 버튼
+                            if(!(data.users.id == data.posts.userId)){
+                                document.getElementById('toDelete').style.display = 'none';
+                            }
                         }
                     }).catch((err)=>{
                         console.log(err);

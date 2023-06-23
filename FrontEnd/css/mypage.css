@@ -96,6 +96,9 @@ img {
     position: absolute;
     left: 1250px;
 }
+/* #admin-hide {
+    display: block;
+} */
 .profile-info {
     display: flex;
     flex-direction: row;
