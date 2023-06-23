@@ -6,9 +6,8 @@ const mypageBtn = document.getElementById('mypage-btn');
 
 async function mypageHide() {    
     let _cookie = document.cookie;
-    const { data } = await API.get('/login/view', {
+    const { data } = await API.post('/login/view',{cookie : _cookie}, {
         withCredentials: true,
-        cookie : _cookie
     })
     if (!data.name) {
         mypageBtn.style.display = "none";

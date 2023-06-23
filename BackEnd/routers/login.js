@@ -4,7 +4,7 @@ const { isLogin } = require("../middleware/loginmiddleware");
 
 router.post("/", Login);
 
-router.get("/view", isLogin, viewUser);
+router.post("/view", isLogin, viewUser);
 
 router.get('/viewAll', isLogin, viewAll);
 

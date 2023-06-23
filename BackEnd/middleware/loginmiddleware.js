@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 exports.isLogin = (req, res, next) => {
     let access_token;
     let cookies = req.cookie;
-    console.log(res);
+    console.log(req);
 
     console.log('login확인 : ',cookies);
     access_token = cookies;
