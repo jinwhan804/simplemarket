@@ -59,14 +59,38 @@
                 </div>
             </div>
         </div>
-            <div class="right-side">
-                <div class="text-container">
-                    <h1>나의 장터</h1>
-                    <ul id="my-post-list">
+        <div class="right-side">
+            <div class="text-container">
+                <h1>나의 장터</h1>
+                <ul id="my-post-list">
 
-                    </ul>
-                </div>
+                </ul>
             </div>
+        </div>
+    </div>
+    <!-- --------------------------------------실시간 채팅----------------------------------------------------- -->
+    <img class="chatImg" onclick="popup()" src="http://localhost:8080/img/bunny-1299162_1280.png">
+    <div class="chatList">
+        <div class="chat_list_title">
+            <p class="title">심플마켓 상담채팅</p>
+            <button class="close_chatBox">X</button>
+        </div>
+        <div class="line"></div>
+        <div class="listBox">
+            <div class="user_chat_list"></div>
+        </div>
+    </div>
+    <div class="chatBox">
+        <div class="chat_box_title">
+            <div class="back"></div>
+            <p class="title">심플마켓 상담채팅</p>
+            <button class="close_chatBox">X</button>
+        </div>
+        <div class="line"></div>
+        <div class="chat_content"></div>
+        <div class="message_box">
+            <input type="text" id="msg">
+            <button id="btn">전송</button>
         </div>
     </div>
 </body>
