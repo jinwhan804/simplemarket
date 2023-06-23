@@ -291,7 +291,7 @@ async function GetAPI(currentPage){
 
         btns.innerHTML = '';
         
-        const {data} = await API.get('/localpost',{
+        const {data} = await API.post('/localpost',{
             headers : {
                 'Content-Type' : "application/json"
             },
@@ -351,6 +351,7 @@ async function GetAPI(currentPage){
                 let _td4 = document.createElement('td');
                 let _td5 = document.createElement('td');
                 let _td6 = document.createElement('td');
+                _tr.className = 'postTr';
                 _td1.innerHTML = index + 1;
                 _td2.innerHTML = el.title;
                 _td3.innerHTML = el.User.nickname;
@@ -393,6 +394,8 @@ async function GetAPI(currentPage){
                 _tr.append(_td1,_td2,_td3,_td4,_td5,_td6);
                 post_list.append(_tr);
             });
+
+            CalculateViews();
         }
     } catch (error) {
         console.log(error);
@@ -558,6 +561,7 @@ async function SelectLocal (currentPage){
                 let _td4 = document.createElement('td');
                 let _td5 = document.createElement('td');
                 let _td6 = document.createElement('td');
+                _tr.className = 'postTr';
                 _td1.innerHTML = index + 1;
                 _td2.innerHTML = el.title;
                 _td3.innerHTML = el.User.nickname;
@@ -593,6 +597,8 @@ async function SelectLocal (currentPage){
                 _tr.append(_td1,_td2,_td3,_td4,_td5,_td6);
                 post_list.append(_tr);
             });
+
+            CalculateViews();
         }
     } catch (error) {
         console.log(error);
@@ -602,4 +608,19 @@ async function SelectLocal (currentPage){
 thirdSelect.onchange = async(e)=>{
     addressValue = `${firstSelect.value} ${secondSelect.value} ${e.target.value}`;
     SelectLocal(0);
+}
+
+// 조회수 계산 함수
+function CalculateViews() {
+    const postTrs = document.querySelectorAll('.postTr');
+    posts.forEach(async (el, index) => {
+        await API.post('/viewcheck', {
+            data: el.id
+        }).then((e) => {
+            const viewTd = document.createElement('td');
+            viewTd.innerHTML = e.data.length;
+
+            postTrs[index].append(viewTd);
+        })
+    })
 }
