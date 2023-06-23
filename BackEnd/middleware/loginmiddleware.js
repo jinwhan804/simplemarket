@@ -4,7 +4,6 @@ exports.isLogin = (req, res, next) => {
     let access_token;
     let cookies = req.body.cookie;
 
-    console.log('login확인 : ',cookies);
     access_token = cookies;
     
     jwt.verify(access_token, process.env.ACCESS_TOKEN_KEY, (err, acc_decoded) => {

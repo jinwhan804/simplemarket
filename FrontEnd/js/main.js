@@ -534,8 +534,9 @@ async function GetAPI(currentPage) {
                     // 조회수 추가
                     await API.post('/viewcheck/add',form);
 
-                    await API.post('/post/detail', {
-                        data: el.id
+                    await API.post('/post/detailIn', {
+                        data: el.id,
+                        cookie : _cookie
                     }).then((e) => {
                         location.href = e.data;
                     }).catch((err) => {

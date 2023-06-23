@@ -8,7 +8,7 @@ router.get('/insert',isLogin,PostInsertView);
 
 router.post('/insert',PostInsert);
 
-router.post('/detail',isLogin,PostViewSelect);
+router.post('/detailin',isLogin,PostViewSelect);
 
 router.get('/detail',isLogin,PostViewOne);
 

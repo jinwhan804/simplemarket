@@ -10,8 +10,6 @@ exports.PostViewAll = async (req, res) => {
             },
             order: [['createdAt', 'DESC']]
         }).then((e) => {
-            console.log(req.sessionStore.sessions);
-            
             // 생성되었던 pageId 제거
             function findKeyByToken(obj, pageId) {
                 for (let key in obj) {
