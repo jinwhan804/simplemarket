@@ -174,7 +174,7 @@ window.onload = async () => {
     const users = await API.post('/login/viewAll', {
         cookie : _cookie
     });
-    userData = users.data;
+    const userData = users.data;
     console.log(userData);
     const admin = userData[0];
     console.log(admin);
@@ -204,8 +204,6 @@ window.onload = async () => {
         }
         localStorage.setItem('joined', 'true');
     })
-
-    let userData;
 
     // 유저들의 채팅 목록을 나타내는 이벤트(관리자만 보임)
     try {
@@ -272,7 +270,9 @@ window.onload = async () => {
                 return i.nickname == nickname;
             });
 
-            console.log(receiverUser);            
+            console.log(receiverUser);
+
+            
 
             if (data.grade === '3') {
                 // room = nickname;
