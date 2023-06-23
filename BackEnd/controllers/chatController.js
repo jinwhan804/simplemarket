@@ -40,7 +40,7 @@ exports.viewOneChat = async (req, res) => {
             include: [{
                 model: User
             }],
-            order : ['createdAt','DESC']
+            order : [['createdAt','DESC']]
         });
 
         const goChat = await Chat.findAll({
@@ -48,7 +48,7 @@ exports.viewOneChat = async (req, res) => {
             include: [{
                 model: User
             }],
-            order : ['createdAt','DESC']
+            order : [['createdAt','DESC']]
         });
 
         let chatData;
