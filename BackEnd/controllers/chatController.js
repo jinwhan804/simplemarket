@@ -32,35 +32,19 @@ exports.ViewAllChats = async (req, res) => {
 exports.viewOneChat = async (req, res) => {
     try {
         const {access_decoded} = req;
-        const user = req.body;
-        console.log('이거 뭐니',user)
+        const {user} = req.body;
 
         const comeChat = await Chat.findAll({
             where: { sender : user[0].id, receiver : access_decoded.nickname },
             include: [{
                 model: User
             }],
-            order : ['createdAt','DESC']
+            order : [['createdAt','DESC']]
         });
 
-        const goChat = await Chat.findAll({
-            where: { receiver : user[0].nickname, sender : access_decoded.id },
-            include: [{
-                model: User
-            }],
-            order : ['createdAt','DESC']
-        });
+        console.log(comeChat[0])
 
-        let chatData;
-
-        if(comeChat[0].id > goChat[0].id){
-            chatData = comeChat[0];
-        }else{
-            chatData = goChat[0];
-        }
-        
-
-        res.send(chatData);
+        res.send(comeChat[0]);
     } catch (error) {
         console.error(error);
     }

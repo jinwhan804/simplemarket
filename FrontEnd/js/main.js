@@ -289,11 +289,18 @@ window.onload = async () => {
                 const minutes = now.getMinutes();
                 const timeString = `${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
 
+                let profileImg;
+                if(chat.User.profile_img == null){
+                    profileImg = "https://simplemarket2.s3.ap-northeast-2.amazonaws.com/defaultprofile.png"; // 디폴트 이미지 URL로 대체
+                }else{
+                    profileImg = chatUser.profile_img;
+                }
+
                 let beforMessage = `
                     <div class="content other-message">
-                        <img src="${data.profile_img}">
+                        <img src="${profileImg}">
                         <div class="message-display">
-                            <p class="nickname">${data.nickname}</p>
+                            <p class="nickname">${chat.User.nickname}</p>
                             <p class="message ballon">${chat.message}</p>
                             <p class="date">${timeString}</p>
                         </div>
@@ -362,15 +369,15 @@ window.onload = async () => {
                 message: msg.value,
                 sender: data.id,
                 profile_img: data.profile_img,
-                receiver: data.grade === '2' ? admin.nickname : receiverUser,
+                receiver: data.grade === '2' ? admin.nickname : receiverUser[0].nickname,
                 cookie : _cookie
             }
             if (data.grade === '3') {
-                socket.emit('chat', receiverUser, messageData);
+                socket.emit('chat', receiverUser[0].nickname, messageData);
             } else
                 socket.emit('chat', nickname, messageData);
-            msg.value = '';
-            await API.post('/chat/chat_insert', messageData, {
+                msg.value = '';
+                await API.post('/chat/chat_insert', messageData, {
                 withCredentials: true
             })
         } catch (error) {
@@ -397,11 +404,18 @@ window.onload = async () => {
 
     socket.on('chat', (data) => {
         console.log(data);
+        console.log(nickname)
 
         const now = new Date();
         const hours = now.getHours();
         const minutes = now.getMinutes();
         const timeString = `${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
+        let profileImg;
+        if(data.profile_img == null){
+            profileImg = "https://simplemarket2.s3.ap-northeast-2.amazonaws.com/defaultprofile.png"; // 디폴트 이미지 URL로 대체
+        }else{
+            profileImg = data.profile_img;
+        }
 
         let el;
         if (data.nickname === nickname) {
@@ -414,7 +428,7 @@ window.onload = async () => {
         } else {
             el = `
             <div class="content other-message">
-                <img src="${data.profile_img}">
+                <img src="${profileImg}">
                 <div class="message-display">
                     <p class="nickname">${data.nickname}</p>
                     <p class="message ballon">${data.message}</p>
