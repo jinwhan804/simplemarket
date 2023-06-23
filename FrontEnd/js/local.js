@@ -269,6 +269,7 @@ mypageBtn.addEventListener('click', () => {
 })
 
 ////////////////////////////// 메인 게시판 영역 ////////////////////////////////////
+let posts;
 
 async function GetAPI(currentPage){
     try {
@@ -297,6 +298,8 @@ async function GetAPI(currentPage){
             },
             cookie : _cookie
         });
+
+        posts = data;
 
         let pageOffset = 10;
         let pageGroup = currentPage * pageOffset;
