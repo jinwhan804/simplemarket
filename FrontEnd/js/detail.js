@@ -1007,7 +1007,7 @@ async function HeartImg() {
 
         await API.post('/likecheck/post/btnImg', form).then((e) => {
             console.log(e.data)
-            if(e.data != null){
+            if(e.data != ''){
                 likeBtn.src = 'https://simplemarket2.s3.ap-northeast-2.amazonaws.com/redHeart.png';
             }else{
                 likeBtn.src="https://simplemarket2.s3.ap-northeast-2.amazonaws.com/Like_Heart.png"
