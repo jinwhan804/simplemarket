@@ -992,7 +992,7 @@ toDelete.onclick = async () => {
     }
 }
 
-let likeBtn = document.getElementById('likeBtn')
+const likeBtn = document.getElementById('likeBtn')
 
 // 좋아요 버튼 이미지
 likeBtn.onload = async() => {
