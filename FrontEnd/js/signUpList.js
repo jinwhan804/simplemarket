@@ -1,3 +1,7 @@
+// cookie 값 설정
+let _cookie = document.cookie;
+_cookie = _cookie.replace("login=", "");
+
 async function getUserInfo() {
     try {
         let userInfo = document.querySelector('.list_user');
