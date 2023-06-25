@@ -76,7 +76,6 @@ img {
     border-radius: 5%;
     box-shadow: 0px 3px 15px rgba(0,0,0,0.1);
     object-fit: contain;
-    border-radius: 50%;
 }
 
 a{
@@ -157,6 +156,7 @@ a{
     cursor: pointer;
     position: fixed;
     background-color: white;
+    border-radius: 50%;
 }
 
 /* 유저 채팅 리스트 */
@@ -548,4 +548,30 @@ img{
 }
 .unaccess{
     display: none;
+}
+
+.button {
+    display: flex;
+    justify-content: center;
+    
+}
+
+#toImageBtn, #updateBtn, #cencelBtn {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007BFF;
+    color: #fff;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#toImageBtn:hover,
+#updateBtn:hover,
+#cencelBtn:hover{
+    background-color: #0056b3;
+}
+
+#updateBtn {
+    margin: 0 0.521vw;
 }

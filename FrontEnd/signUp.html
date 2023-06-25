@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script src="/js/index.js"></script>
+    <script src="./js/index.js"></script>
 </head>
 <style>
   body {
@@ -88,7 +88,7 @@
         <label for="">패스워드</label>
         <input type="password" name="user_pw" id="user_pw" placeholder="비밀번호는 8자 이상이며, 대문자, 소문자, 숫자, 그리고 특수문자(!@#$%^&*)를 포함해야 합니다." required>
         <span id="passwordError" style="color: red;"></span>
-        <label for="">별명</label>
+        <label for="">닉네임</label>
         <input type="text" name="nickname" placeholder="ex-gildong" required>
       <div>
         <label for="gender">성별 : </label>
@@ -113,28 +113,28 @@
 <script>
 
   // // 비밀번호 정규식 추가
-  // var passwordInput = document.getElementById('user_pw');
-  // var passwordError = document.getElementById('passwordError');
-  // var passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z])(?=.*[!@#$%^&*]).{8,}$/;
+  var passwordInput = document.getElementById('user_pw');
+  var passwordError = document.getElementById('passwordError');
+  var passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z])(?=.*[!@#$%^&*]).{8,}$/;
   
   // // 에러 메세지 초기화
   //   passwordError.textContent = '';
 
-  //   passwordInput.addEventListener('input', function(){
-  //     if(!passwordRegex.test(passwordInput.value)) {
-  //       passwordError.textContent = "비밀번호는 8자 이상이며, 대문자, 소문자, 숫자, 그리고 특수문자(!@#$%^&*)를 포함해야 합니다.";
-  //     }else{
-  //       passwordError.textContent = '';
-  //     }
-  //   })
+    passwordInput.addEventListener('input', function(){
+      if(!passwordRegex.test(passwordInput.value)) {
+        passwordError.textContent = "비밀번호는 8자 이상이며, 대문자, 소문자, 숫자, 그리고 특수문자(!@#$%^&*)를 포함해야 합니다.";
+      }else{
+        passwordError.textContent = '';
+      }
+    })
 
-  //    document.getElementById('signUpForm').addEventListener('submit', function(event) {
+     document.getElementById('signUpForm').addEventListener('submit', function(event) {
 
 
-  //       if (!passwordRegex.test(passwordInput.value)) {
-  //         event.preventDefault();
-  //       }
-  //    });
+        if (!passwordRegex.test(passwordInput.value)) {
+          event.preventDefault();
+        }
+     });
 
   signUpForm.action = `${serverUrl}/signUp`;
 
