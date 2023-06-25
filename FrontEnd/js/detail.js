@@ -1005,6 +1005,8 @@ likeBtn.onload = async() => {
         await API.post('/likecheck/post/btnImg', form).then((e) => {
             if(e.data != null){
                 likeBtn.src = 'https://simplemarket2.s3.ap-northeast-2.amazonaws.com/redHeart.png';
+            }else{
+                likeBtn.src="https://simplemarket2.s3.ap-northeast-2.amazonaws.com/Like_Heart.png"
             }
         }).catch((err)=>{
             console.log(err);
