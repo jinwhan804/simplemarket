@@ -375,7 +375,7 @@ window.onload = async () => {
     // chatBox 창의 뒤로가기 버튼(관리자만 보임)
     try {
         if (data.grade === '3') {
-            back.style.backgroundImage = "url('../../BackEnd/uploads/back-removebg-preview.png')";
+            back.style.backgroundImage = "url(https://simplemarket2.s3.ap-northeast-2.amazonaws.com/my-removebg-preview.png)";
             back.style.cursor = 'pointer';
         } else {
             back.style.backgroundImage = 'none';
@@ -1006,7 +1006,7 @@ likeBtn.onclick = async function () {
             console.log(err);
         })
 
-        this.src = '../BackEnd/uploads/redHeart.png';
+        this.src = 'https://simplemarket2.s3.ap-northeast-2.amazonaws.com/redHeart.png';
 
     } catch (error) {
         console.log(error);
