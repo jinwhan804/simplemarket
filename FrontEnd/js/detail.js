@@ -992,12 +992,10 @@ toDelete.onclick = async () => {
     }
 }
 
-let likeBtn = document.getElementById('likeBtn')
-
-
+let likeBtn = document.getElementById('likeBtn');
 
 // 좋아요 버튼 이미지
-likeBtn.onload = async() => {
+async function HeartImg() {
     try {
         const form = new FormData();
 
@@ -1018,6 +1016,8 @@ likeBtn.onload = async() => {
         console.log(error);
     }
 }
+
+HeartImg();
 
 // 좋아요 버튼 기능
 likeBtn.onclick = async function () {
