@@ -36,3 +36,16 @@ exports.PostLikeUpdate = async(req,res)=>{
         console.log(error);
     }
 }
+
+exports.PostLikeCheck = async(req,res)=>{
+    try {
+        const {postId,userId} = req.body;
+
+        const stat = await Stat.findOne({where : {stat_type,postId,userId}});
+
+        res.send(stat);
+    } catch (error) {
+        console.log('라이크 컨트롤러에서 본문 좋아요 업데이트하다 오류남');
+        console.log(error);
+    }
+}

@@ -992,6 +992,28 @@ toDelete.onclick = async () => {
     }
 }
 
+const likeBtn = document.getElementById('likeBtn')
+
+// 좋아요 버튼 이미지
+likeBtn.onload = async() => {
+    try {
+        const form = new FormData();
+
+        form.append('postId', posts.id);
+        form.append('userId', users.id);
+
+        await API.post('/likecheck/post/btnImg', form).then((e) => {
+            if(e.data != null){
+                likeBtn.src = 'https://simplemarket2.s3.ap-northeast-2.amazonaws.com/redHeart.png';
+            }
+        }).catch((err)=>{
+            console.log(err);
+        })        
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 // 좋아요 버튼 기능
 likeBtn.onclick = async function () {
     try {
@@ -1005,9 +1027,6 @@ likeBtn.onclick = async function () {
         }).catch((err) => {
             console.log(err);
         })
-
-        this.src = 'https://simplemarket2.s3.ap-northeast-2.amazonaws.com/redHeart.png';
-
     } catch (error) {
         console.log(error);
     }
