@@ -1,3 +1,6 @@
+// 유저 정보용 변수
+let users;
+
 // cookie 값 설정
 let _cookie = document.cookie;
 _cookie = _cookie.replace("login=", "");
@@ -35,6 +38,7 @@ async function loginBtnHide() {
         cookie: _cookie
     })
     if (data.name) {
+        users = data;
         popupLoginBtn.style.display = "none";
     }
 }
@@ -772,6 +776,13 @@ async function SelectLocal(currentPage) {
                 }
 
                 _tr.onclick = async () => {
+                    const form = new FormData();
+
+                    form.append('postId', el.id);
+                    form.append('userId', users.id);
+                    // 조회수 추가
+                    await API.post('/viewcheck/add', form);
+
                     await API.post('/post/detailIn', {
                         headers: {
                             'Content-Type': "application/json"
