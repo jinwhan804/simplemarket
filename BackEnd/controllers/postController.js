@@ -169,7 +169,11 @@ exports.PostInsert = async (req, res) => {
 exports.PostUpdateSelect = (req,res)=>{
     try {
         const id = req.body.data;
-        req.session.pageId = id;
+        const {access_decoded} = req;
+        const userMoveInfo = {user : access_decoded, pageId : id};
+
+        req.session.pageInfo = userMoveInfo;
+        
         res.send(`${process.env.FRONT}/update${process.env.END}`);
     } catch (error) {
         console.log('포스트 컨트롤러에서 수정 탭에서 글 하나 보여주다 에러남 1');
