@@ -76,7 +76,7 @@ img {
     border-radius: 5%;
     box-shadow: 0px 3px 15px rgba(0,0,0,0.1);
     object-fit: contain;
-    border-radius: 50%;
+    /* border-radius: 50%; */
 }
 
 a{
@@ -157,6 +157,7 @@ a{
     cursor: pointer;
     position: fixed;
     background-color: white;
+    border-radius: 50%;
 }
 
 /* 유저 채팅 리스트 */
@@ -610,7 +611,13 @@ box-shadow: inset 0px 0px 0.26vw white;
 }
 
 #likeBtn {
+    background: url('../../BackEnd/uploads/Like_Heart.png') no-repeat center center;
+    background-attachment : fixed; 
     margin-left: 0.521vw;
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
+    z-index: 1000;
 }
 
 #title, #nickname, #postLikes{
@@ -635,13 +642,17 @@ box-shadow: inset 0px 0px 0.26vw white;
     border: 1px solid;
     height: 1.563vw;
     border-radius: 0.26vw;
-    background-color: #f3f3f3;
+    background-color: #fffdfd;
     line-height: 2;
     margin-bottom: 10px;
 }
 
 #write_area {
     position: relative;
+}
+
+#write_area h3 {
+    font-size: 25px;
 }
 
 #reply_list {
@@ -674,19 +685,27 @@ box-shadow: inset 0px 0px 0.26vw white;
 } 
 .reply4 {
     width: 10%;
-    white-space: nowrap;
+    /* white-space: nowrap;
     overflow: auto;
-    text-overflow: clip;
+    text-overflow: clip; */
+    font-size: 12px;
 }
 .replyLi {
     margin: 10px;
-    /* border-top: 1px solid; */
-    background-color: beige;
 }
 
 .replyLi button {
-    display: flex;
-    left: 50px;
+    outline: 0;
+    border: 1px solid #007bff;
+    color: #007bff;
+    background-color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.replyLi button:hover {
+    background-color: #007bff;
+    color: #fff;
 }
 
 .rereply_area {
@@ -708,8 +727,9 @@ box-shadow: inset 0px 0px 0.26vw white;
     position : absolute;
     cursor: pointer;
     top : 0;
-    right : 0;
+    right : 3%;
     display: flex;
+    flex-direction: column;
 }
 .btnsDiv .dot {
     background-color: #007bff;
@@ -722,7 +742,6 @@ box-shadow: inset 0px 0px 0.26vw white;
     margin: 10px;
     /* border-top: 1px solid; */
     width: 100%;
-    background-color: bisque;
 }
 
 .rebtnsDiv {
@@ -733,8 +752,10 @@ box-shadow: inset 0px 0px 0.26vw white;
     position : absolute;
     cursor: pointer;
     top : 0;
-    right : 0;
+    right : 3%;
     display: flex;
+    flex-direction: column;
+
 }
 
 .rebtnsDiv .dot {
@@ -747,9 +768,6 @@ box-shadow: inset 0px 0px 0.26vw white;
     width: 100%;
     justify-content: center;
 }
-
-
-
 
 #reply_on {
     display: inline-block;

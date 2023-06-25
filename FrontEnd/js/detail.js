@@ -538,7 +538,7 @@ async function GetAPI() {
                     _div5.innerHTML = index + 1;
                     _div6.innerHTML = el.content;
                     _div7.innerHTML = el.User.nickname;
-                    btn1.innerHTML = "댓글";
+                    btn1.innerHTML = "답글";
 
                     if (nowdate > updateDate) {
                         _div8.innerHTML = el.updatedAt.slice(0, 10);
@@ -751,7 +751,7 @@ async function GetAPI() {
                                 // _rediv1.innerHTML = index + 1;
                                 _rediv2.innerHTML = el.content;
                                 _rediv3.innerHTML = el.User.nickname;
-                                rebtn1.innerHTML = "댓글";
+                                rebtn1.innerHTML = "답글";
 
                                 if (nowdate > updateDate) {
                                     _rediv4.innerHTML = el.updatedAt.slice(0, 10);

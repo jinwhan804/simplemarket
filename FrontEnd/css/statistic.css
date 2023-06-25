@@ -336,14 +336,14 @@ box-shadow: inset 0px 0px 0.26vw white;
 .message_box input {
     background-color: white;
     width: 12.667vw;
-    height: 2.083vw;
+    height: 2.5vw;
     border: none;
     border-radius: 0.521vw;
     position: absolute;
     padding-left: 0.521vw;
     padding-right: 3.646vw;
     font-family: 'Dovemayo_gothic';
-
+    margin-bottom: 15px;
 }
 
 .message_box button {
