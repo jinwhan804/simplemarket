@@ -1005,6 +1005,7 @@ likeBtn.addEventListener('load',async() => {
         form.append('userId', users.id);
 
         await API.post('/likecheck/post/btnImg', form).then((e) => {
+            console.log(e.data)
             if(e.data != null){
                 likeBtn.src = 'https://simplemarket2.s3.ap-northeast-2.amazonaws.com/redHeart.png';
             }else{
