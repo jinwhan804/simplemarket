@@ -993,7 +993,7 @@ toDelete.onclick = async () => {
 }
 
 // 좋아요 버튼 기능
-likeBtn.onclick = async () => {
+likeBtn.onclick = async function () {
     try {
         const form = new FormData();
 
@@ -1005,6 +1005,8 @@ likeBtn.onclick = async () => {
         }).catch((err) => {
             console.log(err);
         })
+
+        this.src = '../BackEnd/uploads/redHeart.png';
 
     } catch (error) {
         console.log(error);
@@ -1025,6 +1027,7 @@ reply_on.onclick = async () => {
         }).catch((err) => {
             console.log(err);
         });
+
     } catch (error) {
         console.log(error);
     }

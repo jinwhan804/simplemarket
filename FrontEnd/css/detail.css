@@ -608,16 +608,15 @@ box-shadow: inset 0px 0px 0.26vw white;
 
 .like-group {
     display: flex;
+    align-items: center;
 }
 
 #likeBtn {
-    background: url('../../BackEnd/uploads/Like_Heart.png') no-repeat center center;
-    background-attachment : fixed; 
-    margin-left: 0.521vw;
+    margin: 0 0 0 0.521vw;
     width: 30px;
     height: 30px;
     object-fit: contain;
-    z-index: 1000;
+    cursor: pointer;
 }
 
 #title, #nickname, #postLikes{
