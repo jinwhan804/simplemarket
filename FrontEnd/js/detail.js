@@ -946,7 +946,7 @@ async function GetAPI() {
             console.log(err);
         })
 
-
+        HeartImg();
     } catch (error) {
         console.log(error);
     }
@@ -1019,8 +1019,6 @@ async function HeartImg() {
         console.log(error);
     }
 }
-
-HeartImg();
 
 // 좋아요 버튼 기능
 likeBtn.onclick = async function () {
