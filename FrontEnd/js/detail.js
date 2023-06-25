@@ -994,8 +994,10 @@ toDelete.onclick = async () => {
 
 let likeBtn = document.getElementById('likeBtn')
 
+
+
 // 좋아요 버튼 이미지
-likeBtn.onload = async() => {
+likeBtn.addEventListener('load',async() => {
     try {
         const form = new FormData();
 
@@ -1014,10 +1016,10 @@ likeBtn.onload = async() => {
     } catch (error) {
         console.log(error);
     }
-}
+})
 
 // 좋아요 버튼 기능
-likeBtn.onclick = async function () {
+likeBtn.addEventListener('click',async function () {
     try {
         const form = new FormData();
 
@@ -1032,7 +1034,7 @@ likeBtn.onclick = async function () {
     } catch (error) {
         console.log(error);
     }
-}
+})
 
 // 댓글 달기
 reply_on.onclick = async () => {
