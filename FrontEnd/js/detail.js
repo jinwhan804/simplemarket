@@ -997,7 +997,7 @@ let likeBtn = document.getElementById('likeBtn')
 
 
 // 좋아요 버튼 이미지
-likeBtn.addEventListener('load',async() => {
+likeBtn.onload = async() => {
     try {
         const form = new FormData();
 
@@ -1017,10 +1017,10 @@ likeBtn.addEventListener('load',async() => {
     } catch (error) {
         console.log(error);
     }
-})
+}
 
 // 좋아요 버튼 기능
-likeBtn.addEventListener('click',async function () {
+likeBtn.onclick = async function () {
     try {
         const form = new FormData();
 
@@ -1035,7 +1035,7 @@ likeBtn.addEventListener('click',async function () {
     } catch (error) {
         console.log(error);
     }
-})
+}
 
 // 댓글 달기
 reply_on.onclick = async () => {
