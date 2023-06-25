@@ -1002,6 +1002,9 @@ async function HeartImg() {
         form.append('postId', posts.id);
         form.append('userId', users.id);
 
+        console.log(posts)
+        console.log(users)
+
         await API.post('/likecheck/post/btnImg', form).then((e) => {
             console.log(e.data)
             if(e.data != null){
