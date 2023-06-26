@@ -204,7 +204,7 @@ async function ChattingOnload () {
                     </div>
                 </div>
                 `
-                chatContent.innerHTML += welcomeMessage;
+                chatContent.innerHTML = welcomeMessage;
             }
         }
         localStorage.setItem('joined', 'true');
