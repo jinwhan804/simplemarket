@@ -670,6 +670,8 @@ async function SelectLocal(currentPage) {
             }
         });
 
+        posts = data;
+
         let pageOffset = 10;
         let pageGroup = currentPage * pageOffset;
         let pageNum = 0;
