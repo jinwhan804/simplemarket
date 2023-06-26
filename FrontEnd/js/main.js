@@ -215,9 +215,9 @@ async function ChattingOnload () {
         console.log(chats);
 
         chats.forEach(chat => {
-            console.log(chat);
+            // console.log(chat);
             let chatUser = chat.User;
-            console.log(chatUser);
+            // console.log(chatUser);
 
             if (chatUser.grade === '3') {
                 return;
@@ -228,7 +228,7 @@ async function ChattingOnload () {
             let minutes = createdAt.getMinutes();
 
             const userInList = userChatList.querySelector(`.chat_message[data_nickname="${chatUser.nickname}"]`);
-            console.log(userInList);
+            // console.log(userInList);
             let profileImg;
             if (chatUser.profile_img == null) {
                 profileImg = "https://simplemarket2.s3.ap-northeast-2.amazonaws.com/defaultprofile.png"; // 디폴트 이미지 URL로 대체
