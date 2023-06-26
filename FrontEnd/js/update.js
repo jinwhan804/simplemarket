@@ -127,7 +127,7 @@ chatBoxClose.forEach(btn => {
     });
 });
 
-window.onload = async () => {
+async function ChattingOnload () {
     const { data } = await API.post('/login/view', {
         cookie: _cookie
     });
@@ -142,6 +142,7 @@ window.onload = async () => {
             // if (sessionStorage.getItem(`${data.nickname}_joined`) === null) {
             //     sessionStorage.setItem(`${data.nickname}_joined`, 'false');
             // }
+            ChattingOnload();
         })
     }
 
@@ -149,9 +150,9 @@ window.onload = async () => {
         cookie: _cookie
     });
     const userData = users.data;
-    console.log(userData);
+    // console.log(userData);
     const admin = userData[0];
-    console.log(admin);
+    // console.log(admin);
 
     localStorage.setItem('joined', 'false');
 
@@ -185,12 +186,12 @@ window.onload = async () => {
             withCredentials: true
         });
         const chats = response.data;
-        console.log(chats);
+        // console.log(chats);
 
         chats.forEach(chat => {
-            console.log(chat);
+            // console.log(chat);
             let chatUser = chat.User;
-            console.log(chatUser);
+            // console.log(chatUser);
 
             if (chatUser.grade === '3') {
                 return;
@@ -201,7 +202,7 @@ window.onload = async () => {
             let minutes = createdAt.getMinutes();
 
             const userInList = userChatList.querySelector(`.chat_message[data_nickname="${chatUser.nickname}"]`);
-            console.log(userInList);
+            // console.log(userInList);
             let profileImg;
             if (chatUser.profile_img == null) {
                 profileImg = "https://simplemarket2.s3.ap-northeast-2.amazonaws.com/defaultprofile.png"; // 디폴트 이미지 URL로 대체
@@ -239,12 +240,12 @@ window.onload = async () => {
             const nickname = item.getAttribute('data_nickname');
             chatBox.classList.add('active');
             chatList.classList.remove('active');
-            console.log(`${nickname}방 입장`);
+            // console.log(`${nickname}방 입장`);
             receiverUser = userData.filter((i) => {
                 return i.nickname == nickname;
             });
 
-            console.log(receiverUser);
+            // console.log(receiverUser);
 
 
 
@@ -252,36 +253,40 @@ window.onload = async () => {
                 // room = nickname;
                 socket.emit('joinRoom', nickname, { id: data.id, nickname: data.nickname });
 
-                const beforeChat = await API.post('/chat/chatStory', {
+                await API.post('/chat/chatStory', {
                     user: receiverUser,
                     cookie: _cookie
-                })
-                const chat = beforeChat.data;
+                }).then((e)=>{
+                    const chat = e.data;
 
-                const now = new Date(chat.createdAt);
-                const hours = now.getHours();
-                const minutes = now.getMinutes();
-                const timeString = `${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
+                    const now = new Date(chat.createdAt);
+                    const hours = now.getHours();
+                    const minutes = now.getMinutes();
+                    const timeString = `${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
 
-                let profileImg;
-                if (chat.User.profile_img == null) {
-                    profileImg = "https://simplemarket2.s3.ap-northeast-2.amazonaws.com/defaultprofile.png"; // 디폴트 이미지 URL로 대체
-                } else {
-                    profileImg = chatUser.profile_img;
-                }
+                    let profileImg;
+                    if (chat.User.profile_img == null) {
+                        profileImg = "https://simplemarket2.s3.ap-northeast-2.amazonaws.com/defaultprofile.png"; // 디폴트 이미지 URL로 대체
+                    } else {
+                        profileImg = chat.User.profile_img;
+                    }
 
-                let beforMessage = `
-                    <div class="content other-message">
-                        <img src="${profileImg}">
-                        <div class="message-display">
-                            <p class="nickname">${chat.User.nickname}</p>
-                            <p class="message ballon">${chat.message}</p>
-                            <p class="date">${timeString}</p>
+                    let beforMessage = `
+                        <div class="content other-message">
+                            <img src="${profileImg}">
+                            <div class="message-display">
+                                <p class="nickname">${chat.User.nickname}</p>
+                                <p class="message ballon">${chat.message}</p>
+                                <p class="date">${timeString}</p>
+                            </div>
                         </div>
-                    </div>
-                `;
+                    `;
 
-                chatContent.innerHTML = beforMessage;
+                    chatContent.innerHTML = beforMessage;
+                }).catch((err)=>{
+                    console.log(err);
+                })
+                
             }
         });
     });
@@ -307,7 +312,7 @@ window.onload = async () => {
                 socket.emit('chat', receiverUser[0].nickname, messageData);
             } else
                 socket.emit('chat', nickname, messageData);
-            msg.value = '';
+                msg.value = '';
             await API.post('/chat/chat_insert', messageData, {
                 withCredentials: true
             })
@@ -334,8 +339,8 @@ window.onload = async () => {
 
 
     socket.on('chat', (data) => {
-        console.log(data);
-        console.log(nickname)
+        // console.log(data);
+        // console.log(nickname)
 
         const now = new Date();
         const hours = now.getHours();
@@ -394,14 +399,16 @@ window.onload = async () => {
         });
 
         socket.on('leaveRoom', (room, user) => {
-            console.log(user);
-            console.log(`${user.nickname} left room ${room}`);
+            // console.log(user);
+            // console.log(`${user.nickname} left room ${room}`);
         })
     } catch (error) {
         console.log(error);
     }
 
 }
+
+ChattingOnload();
 
 // 회원가입 클릭, 로고 클릭, 마이페이지 버튼 클릭
 

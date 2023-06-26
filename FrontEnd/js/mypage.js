@@ -244,7 +244,7 @@ chatBoxClose.forEach(btn => {
     });
 });
 
-window.onload = async () => {
+async function ChattingOnload () {
     const { data } = await API.post('/login/view', {
         cookie: _cookie
     });
@@ -259,16 +259,17 @@ window.onload = async () => {
             // if (sessionStorage.getItem(`${data.nickname}_joined`) === null) {
             //     sessionStorage.setItem(`${data.nickname}_joined`, 'false');
             // }
+            ChattingOnload();
         })
     }
 
     const users = await API.post('/login/viewAll', {
-        cookie : _cookie
+        cookie: _cookie
     });
     const userData = users.data;
-    console.log(userData);
+    // console.log(userData);
     const admin = userData[0];
-    console.log(admin);
+    // console.log(admin);
 
     localStorage.setItem('joined', 'false');
 
@@ -296,19 +297,18 @@ window.onload = async () => {
         localStorage.setItem('joined', 'true');
     })
 
-
     // 유저들의 채팅 목록을 나타내는 이벤트(관리자만 보임)
     try {
-        const response = await API.post('/chat/all_chats', {
-            cookie : _cookie
+        const response = await API.get('/chat/all_chats', {
+            withCredentials: true
         });
         const chats = response.data;
-        console.log(chats);
+        // console.log(chats);
 
         chats.forEach(chat => {
-            console.log(chat);
-            chatUser = chat.User;
-            console.log(chatUser);
+            // console.log(chat);
+            let chatUser = chat.User;
+            // console.log(chatUser);
 
             if (chatUser.grade === '3') {
                 return;
@@ -319,11 +319,11 @@ window.onload = async () => {
             let minutes = createdAt.getMinutes();
 
             const userInList = userChatList.querySelector(`.chat_message[data_nickname="${chatUser.nickname}"]`);
-            console.log(userInList);
+            // console.log(userInList);
             let profileImg;
-            if(chatUser.profile_img == null){
+            if (chatUser.profile_img == null) {
                 profileImg = "https://simplemarket2.s3.ap-northeast-2.amazonaws.com/defaultprofile.png"; // 디폴트 이미지 URL로 대체
-            }else{
+            } else {
                 profileImg = chatUser.profile_img;
             }
 
@@ -353,16 +353,16 @@ window.onload = async () => {
 
     let receiverUser = null;
     userChatList.querySelectorAll('.chat_message').forEach(item => {
-        item.addEventListener('dblclick', async() => {
+        item.addEventListener('dblclick', async () => {
             const nickname = item.getAttribute('data_nickname');
             chatBox.classList.add('active');
             chatList.classList.remove('active');
-            console.log(`${nickname}방 입장`);
+            // console.log(`${nickname}방 입장`);
             receiverUser = userData.filter((i) => {
                 return i.nickname == nickname;
             });
 
-            console.log(receiverUser);
+            // console.log(receiverUser);
 
 
 
@@ -370,82 +370,43 @@ window.onload = async () => {
                 // room = nickname;
                 socket.emit('joinRoom', nickname, { id: data.id, nickname: data.nickname });
 
-                const beforeChat = await API.post('/chat/chatStory', {
+                await API.post('/chat/chatStory', {
                     user: receiverUser,
                     cookie: _cookie
-                })
-                const chat = beforeChat.data;
+                }).then((e)=>{
+                    const chat = e.data;
 
-                const now = new Date(chat.createdAt);
-                const hours = now.getHours();
-                const minutes = now.getMinutes();
-                const timeString = `${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
+                    const now = new Date(chat.createdAt);
+                    const hours = now.getHours();
+                    const minutes = now.getMinutes();
+                    const timeString = `${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
 
-                let profileImg;
-                if (chat.User.profile_img == null) {
-                    profileImg = "https://simplemarket2.s3.ap-northeast-2.amazonaws.com/defaultprofile.png"; // 디폴트 이미지 URL로 대체
-                } else {
-                    profileImg = chatUser.profile_img;
-                }
+                    let profileImg;
+                    if (chat.User.profile_img == null) {
+                        profileImg = "https://simplemarket2.s3.ap-northeast-2.amazonaws.com/defaultprofile.png"; // 디폴트 이미지 URL로 대체
+                    } else {
+                        profileImg = chat.User.profile_img;
+                    }
 
-                let beforMessage = `
-                    <div class="content other-message">
-                        <img src="${profileImg}">
-                        <div class="message-display">
-                            <p class="nickname">${chat.User.nickname}</p>
-                            <p class="message ballon">${chat.message}</p>
-                            <p class="date">${timeString}</p>
+                    let beforMessage = `
+                        <div class="content other-message">
+                            <img src="${profileImg}">
+                            <div class="message-display">
+                                <p class="nickname">${chat.User.nickname}</p>
+                                <p class="message ballon">${chat.message}</p>
+                                <p class="date">${timeString}</p>
+                            </div>
                         </div>
-                    </div>
-                `;
+                    `;
 
-                chatContent.innerHTML = beforMessage;
+                    chatContent.innerHTML = beforMessage;
+                }).catch((err)=>{
+                    console.log(err);
+                })
+                
             }
         });
     });
-
-
-    // try {
-    //     const response = await axios.get('http://127.0.0.1:8080/chat/all_chats', {
-    //         withCredentials: true
-    //     });
-    //     const chatHistory = response.data;
-    //     console.log(chatHistory);
-
-    //     chatContent.innerHTML = '';
-
-    //     chatHistory.forEach(e => {
-    //         console.log(e);
-    //         const now = new Date(data.createdAt);
-    //         const hours = now.getHours();
-    //         const minutes = now.getMinutes();
-    //         const timeString = `${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
-
-    //         let el;
-    //         if (e.sender === data.id) {
-    //             el = `
-    //             <div class="content my-message">
-    //                 <p class="message ballon">${e.message}</p>
-    //                 <p class="date">${timeString}</p>
-    //             </div>
-    //             `;
-    //         } else {
-    //             el = `
-    //             <div class="content other-message">
-    //                 <img src="${e.User.profile_img}">
-    //                 <div class="message-display">
-    //                     <p class="nickname">${e.User.nickname}</p>
-    //                     <p class="message ballon">${e.message}</p>
-    //                     <p class="date">${timeString}</p>
-    //                 </div>
-    //             </div>
-    //             `;
-    //         }
-    //         chatContent.innerHTML += el;
-    //     })
-    // } catch (error) {
-    //     console.error(error);
-    // }
 
 
     // 메시지 보내는 이벤트
@@ -461,15 +422,15 @@ window.onload = async () => {
                 message: msg.value,
                 sender: data.id,
                 profile_img: data.profile_img,
-                receiver: data.grade === '2' ? admin.nickname : receiverUser,
-                cookie : _cookie
+                receiver: data.grade === '2' ? admin.nickname : receiverUser[0].nickname,
+                cookie: _cookie
             }
             if (data.grade === '3') {
-                socket.emit('chat', receiverUser, messageData);
+                socket.emit('chat', receiverUser[0].nickname, messageData);
             } else
                 socket.emit('chat', nickname, messageData);
-            msg.value = '';
-            await axios.post('/chat/chat_insert', messageData, {
+                msg.value = '';
+            await API.post('/chat/chat_insert', messageData, {
                 withCredentials: true
             })
         } catch (error) {
@@ -495,12 +456,19 @@ window.onload = async () => {
 
 
     socket.on('chat', (data) => {
-        console.log(data);
+        // console.log(data);
+        // console.log(nickname)
 
         const now = new Date();
         const hours = now.getHours();
         const minutes = now.getMinutes();
         const timeString = `${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
+        let profileImg;
+        if (data.profile_img == null) {
+            profileImg = "https://simplemarket2.s3.ap-northeast-2.amazonaws.com/defaultprofile.png"; // 디폴트 이미지 URL로 대체
+        } else {
+            profileImg = data.profile_img;
+        }
 
         let el;
         if (data.nickname === nickname) {
@@ -513,7 +481,7 @@ window.onload = async () => {
         } else {
             el = `
             <div class="content other-message">
-                <img src="${data.profile_img}">
+                <img src="${profileImg}">
                 <div class="message-display">
                     <p class="nickname">${data.nickname}</p>
                     <p class="message ballon">${data.message}</p>
@@ -548,11 +516,13 @@ window.onload = async () => {
         });
 
         socket.on('leaveRoom', (room, user) => {
-            console.log(user);
-            console.log(`${user.nickname} left room ${room}`);
+            // console.log(user);
+            // console.log(`${user.nickname} left room ${room}`);
         })
     } catch (error) {
         console.log(error);
     }
 
 }
+
+ChattingOnload();

@@ -267,12 +267,12 @@ async function ChattingOnload () {
             const nickname = item.getAttribute('data_nickname');
             chatBox.classList.add('active');
             chatList.classList.remove('active');
-            console.log(`${nickname}방 입장`);
+            // console.log(`${nickname}방 입장`);
             receiverUser = userData.filter((i) => {
                 return i.nickname == nickname;
             });
 
-            console.log(receiverUser);
+            // console.log(receiverUser);
 
 
 
@@ -339,7 +339,7 @@ async function ChattingOnload () {
                 socket.emit('chat', receiverUser[0].nickname, messageData);
             } else
                 socket.emit('chat', nickname, messageData);
-            msg.value = '';
+                msg.value = '';
             await API.post('/chat/chat_insert', messageData, {
                 withCredentials: true
             })
@@ -366,8 +366,8 @@ async function ChattingOnload () {
 
 
     socket.on('chat', (data) => {
-        console.log(data);
-        console.log(nickname)
+        // console.log(data);
+        // console.log(nickname)
 
         const now = new Date();
         const hours = now.getHours();
@@ -426,8 +426,8 @@ async function ChattingOnload () {
         });
 
         socket.on('leaveRoom', (room, user) => {
-            console.log(user);
-            console.log(`${user.nickname} left room ${room}`);
+            // console.log(user);
+            // console.log(`${user.nickname} left room ${room}`);
         })
     } catch (error) {
         console.log(error);
