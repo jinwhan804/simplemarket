@@ -166,7 +166,7 @@ async function ChattingOnload () {
 
         if (localStorage.getItem('joined') === 'false') {
             if (user.id !== admin.id) {
-                if(chatContent.innerHTML == null){
+                if(chatContent.innerHTML == ''){
                     const welcomeMessage = `
                     <div class="content other-message">
                         <img src="${admin.profile_img}">
