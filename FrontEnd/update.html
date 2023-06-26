@@ -5,10 +5,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <script src="http://3.35.211.37/socket.io/socket.io.js"></script>
+    <script src="http://localhost:3030/socket.io/socket.io.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script src="/js/index.js"></script>
-    <link rel="stylesheet" href="/css/update.css">
+    <script src="./js/index.js"></script>
+    <link rel="stylesheet" href="./css/update.css">
 </head>
 <body>
     <!-- 헤더 영역 -->
@@ -38,9 +38,12 @@
         <label for="">본문</label>
         <div id="contentArea" contenteditable="true"></div>
         <input type="text" id="imgs" placeholder="선택한 파일이 삽입됩니다." style="display: none;">
-        <input type="file" id="file">
-        <button id="toImageBtn">사진추가</button>
-        <button id="updateBtn">확인</button><button id="cencelBtn">취소</button>
+        <input type="file" id="file"><br>
+        <div class="button">
+            <button id="toImageBtn">사진추가</button>
+            <button id="updateBtn">확인</button>
+            <button id="cencelBtn">취소</button>
+        </div>
     </div>
     <!-- --------------------------------------실시간 채팅----------------------------------------------------- -->
     <img class="chatImg" onclick="popup()" src="https://simplemarket2.s3.ap-northeast-2.amazonaws.com/bunny-1299162_1280.png">
@@ -66,5 +69,5 @@
         </div>
     </div>
 </body>
-<script src="/js/update.js"></script>
+<script src="./js/update.js"></script>
 </html>
