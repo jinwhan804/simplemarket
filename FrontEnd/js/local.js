@@ -102,7 +102,7 @@ const userChatList = document.querySelector('.user_chat_list');
 const chatBoxClose = document.querySelectorAll('.close_chatBox');
 const chatContent = document.querySelector('.chat_content');
 const back = document.querySelector('.back');
-
+const chatImg = document.querySelector('.chatImg');
 
 
 // 채팅 목록과 채팅 팝업창 함수
@@ -118,6 +118,8 @@ async function popup() {
         } else {
             chatBox.classList.add('active');
         }
+
+        chatImg.style.display = 'none';
     } catch (error) {
         console.error(error);
     }
@@ -128,6 +130,7 @@ chatBoxClose.forEach(btn => {
     btn.addEventListener('click', () => {
         chatBox.classList.remove('active');
         chatList.classList.remove('active');
+        chatImg.style.display = 'block';
     });
 });
 
@@ -140,7 +143,6 @@ async function ChattingOnload () {
     const nickname = data.nickname;
 
     if (data.grade === '2') {
-        const chatImg = document.querySelector('.chatImg');
         chatImg.addEventListener('click', () => {
             socket.emit('joinRoom', nickname, { id: data.id, nickname: data.nickname });
             // if (sessionStorage.getItem(`${data.nickname}_joined`) === null) {
@@ -168,17 +170,19 @@ async function ChattingOnload () {
 
         if (localStorage.getItem('joined') === 'false') {
             if (user.id !== admin.id) {
-                const welcomeMessage = `
-                <div class="content other-message">
-                    <img src="${admin.profile_img}">
-                    <div class="message-display">
-                        <p class="nickname">${admin.nickname}</p>
-                        <p class="message ballon">안녕하세요! 심플마켓입니다. 문의를 남겨주시면 신속하게 답변 드리겠습니다😊</p>
-                        <p class="date">${timeString}</p>
+                if(chatContent.innerHTML == null){
+                    const welcomeMessage = `
+                    <div class="content other-message">
+                        <img src="${admin.profile_img}">
+                        <div class="message-display">
+                            <p class="nickname">${admin.nickname}</p>
+                            <p class="message ballon">안녕하세요! 심플마켓입니다. 문의를 남겨주시면 신속하게 답변 드리겠습니다😊</p>
+                            <p class="date">${timeString}</p>
+                        </div>
                     </div>
-                </div>
-                `
-                chatContent.innerHTML += welcomeMessage;
+                    `
+                    chatContent.innerHTML += welcomeMessage;                    
+                }
             }
         }
         localStorage.setItem('joined', 'true');
