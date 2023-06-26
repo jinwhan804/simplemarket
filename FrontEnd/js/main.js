@@ -285,7 +285,7 @@ async function ChattingOnload () {
                 })
                 const chat = beforeChat.data;
 
-                console.log(chat)
+                console.log('채팅 불러오나',chat);
 
                 const now = new Date(chat.createdAt);
                 const hours = now.getHours();
