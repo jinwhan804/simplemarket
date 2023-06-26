@@ -353,17 +353,53 @@ window.onload = async () => {
 
     let receiverUser = null;
     userChatList.querySelectorAll('.chat_message').forEach(item => {
-        item.addEventListener('dblclick', () => {
+        item.addEventListener('dblclick', async() => {
             const nickname = item.getAttribute('data_nickname');
             chatBox.classList.add('active');
             chatList.classList.remove('active');
             console.log(`${nickname}방 입장`);
-            receiverUser = nickname;
+            receiverUser = userData.filter((i) => {
+                return i.nickname == nickname;
+            });
+
+            console.log(receiverUser);
+
 
 
             if (data.grade === '3') {
                 // room = nickname;
                 socket.emit('joinRoom', nickname, { id: data.id, nickname: data.nickname });
+
+                const beforeChat = await API.post('/chat/chatStory', {
+                    user: receiverUser,
+                    cookie: _cookie
+                })
+                const chat = beforeChat.data;
+
+                const now = new Date(chat.createdAt);
+                const hours = now.getHours();
+                const minutes = now.getMinutes();
+                const timeString = `${hours}:${minutes < 10 ? '0' : ''}${minutes}`;
+
+                let profileImg;
+                if (chat.User.profile_img == null) {
+                    profileImg = "https://simplemarket2.s3.ap-northeast-2.amazonaws.com/defaultprofile.png"; // 디폴트 이미지 URL로 대체
+                } else {
+                    profileImg = chatUser.profile_img;
+                }
+
+                let beforMessage = `
+                    <div class="content other-message">
+                        <img src="${profileImg}">
+                        <div class="message-display">
+                            <p class="nickname">${chat.User.nickname}</p>
+                            <p class="message ballon">${chat.message}</p>
+                            <p class="date">${timeString}</p>
+                        </div>
+                    </div>
+                `;
+
+                chatContent.innerHTML = beforMessage;
             }
         });
     });

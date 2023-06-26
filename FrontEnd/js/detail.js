@@ -281,7 +281,7 @@ window.onload = async () => {
                     </div>
                 `;
 
-                chatContent.innerHTML += beforMessage;
+                chatContent.innerHTML = beforMessage;
             }
         });
     });
@@ -445,15 +445,14 @@ async function GetAPI() {
         };
         document.getElementById('userImg').src = profileImg; // 이미지 추가
 
-        if (data.posts.postLikes != null && data.posts.postLikes != 'null') {
-            likeNum = data.posts.postLikes.split(',');
-            postLikes.value = likeNum.length;
-        } else {
-            postLikes.value = 0;
-        }
-
         posts = data.posts;
         users = data.users;
+
+        const functionBtn = document.querySelector('.func-btn');
+
+        if(posts.userId != users.id){
+            functionBtn.style.display = 'none';
+        }
 
         // if(data.users.id != data.posts.userId){
         //     updateBtn.classList.add('unable');
