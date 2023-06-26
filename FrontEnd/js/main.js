@@ -153,7 +153,7 @@ chatBoxClose.forEach(btn => {
     });
 });
 
-window.onload = async () => {
+async function ChattingOnload () {
     const { data } = await API.post('/login/view', {
         cookie: _cookie
     });
@@ -168,6 +168,7 @@ window.onload = async () => {
             // if (sessionStorage.getItem(`${data.nickname}_joined`) === null) {
             //     sessionStorage.setItem(`${data.nickname}_joined`, 'false');
             // }
+            ChattingOnload();
         })
     }
 
@@ -429,7 +430,7 @@ window.onload = async () => {
 
 }
 
-
+ChattingOnload();
 
 
 
