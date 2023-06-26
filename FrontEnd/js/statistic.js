@@ -757,7 +757,6 @@ async function PostStatData(id) {
 // 선택 상자 변경 시 차트 변경
 selectBtn.onchange = async (e) => {
     const select = e.target.value;
-    console.log()
 
     if (views != null) {
         await API.post('/statistic', {
@@ -887,7 +886,7 @@ selectBtn.onchange = async (e) => {
                     }
 
                 }
-                console.log(dateArr)
+                // console.log(dateArr)
 
                 config2.data.labels = [
                     labeldata[6],

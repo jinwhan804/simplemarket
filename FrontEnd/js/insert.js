@@ -455,7 +455,7 @@ insertBtn.onclick = async () => {
                 "Content-Type": "application/json"
             }
         }).then((e) => {
-            console.log(e.data);
+            // console.log(e.data);
             location.href = e.data;
         }).catch((err) => {
             console.log('프론트 글 추가하다 에러남');

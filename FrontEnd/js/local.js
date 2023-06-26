@@ -556,9 +556,9 @@ async function GetAPI(currentPage) {
                 _tr.append(_td1, _td2, _td3, _td4, _td5);
                 post_list.append(_tr);
             });
-
-            CalculateViews();
         }
+        
+        CalculateViews();
     } catch (error) {
         console.log(error);
     }
@@ -627,10 +627,10 @@ secondSelect.onchange = (e) => {
     const citySelect = firstSelect.value;
     const guSelect = e.target.value;
     const dongSelect = regionData[citySelect] && regionData[citySelect][guSelect];
-    console.log(dongSelect)
+    // console.log(dongSelect)
     for (const dong of dongSelect) {
         const opt = document.createElement('option');
-        console.log(dong)
+        // console.log(dong)
         opt.text = dong;
         opt.value = dong;
         thirdSelect.add(opt);
@@ -763,9 +763,9 @@ async function SelectLocal(currentPage) {
                 _tr.append(_td1, _td2, _td3, _td4, _td5);
                 post_list.append(_tr);
             });
-
-            CalculateViews();
         }
+
+        CalculateViews();
     } catch (error) {
         console.log(error);
     }
@@ -786,7 +786,9 @@ function CalculateViews() {
             const viewTd = document.createElement('td');
             viewTd.innerHTML = e.data.length;
 
-            postTrs[index].append(viewTd);
+            if(postTrs[index] != null){
+                postTrs[index].append(viewTd);
+            }
         })
     })
 }

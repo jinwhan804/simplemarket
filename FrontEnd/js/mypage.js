@@ -81,8 +81,8 @@ document.getElementById('uploadBtn').addEventListener('click', async () => {
     }
     try {
         const form = new FormData();
-        console.log('사진이름',imgs.value)
-        console.log('파일 내용',file.files[0])
+        // console.log('사진이름',imgs.value)
+        // console.log('파일 내용',file.files[0])
         form.append("imgs", imgs.value);
         form.append("upload", file.files[0]);
         form.append("userId", "user_id");

@@ -933,7 +933,7 @@ async function GetAPI() {
                             });
                             // 자기 아이디 아니면 버튼 안보이게
 
-                            console.log("아이디 식별?", data);
+                            // console.log("아이디 식별?", data);
                             // 수정 버튼
                             if (!(data.users.id == data.posts.userId)) {
                                 document.getElementById('toUpdate').style.display = "none";
@@ -1008,11 +1008,11 @@ async function HeartImg() {
         form.append('postId', posts.id);
         form.append('userId', users.id);
 
-        console.log(posts)
-        console.log(users)
+        // console.log(posts)
+        // console.log(users)
 
         await API.post('/likecheck/post/btnImg', form).then((e) => {
-            console.log(e.data)
+            // console.log(e.data)
             if(e.data != ''){
                 likeBtn.src = 'https://simplemarket2.s3.ap-northeast-2.amazonaws.com/redHeart.png';
             }else{

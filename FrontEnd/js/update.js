@@ -443,8 +443,6 @@ async function GetAPI(){
 
         posts = data.posts;
 
-        console.log(posts);
-
     } catch (error) {
         console.log(error);
     }
