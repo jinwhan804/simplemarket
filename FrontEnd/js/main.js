@@ -629,7 +629,9 @@ function CalculateViews() {
             const viewTd = document.createElement('td');
             viewTd.innerHTML = e.data.length;
 
-            postTrs[index].append(viewTd);
+            if(postTrs[index] != null){
+                postTrs[index].append(viewTd);
+            }
         })
     })
 }
