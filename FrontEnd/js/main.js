@@ -125,7 +125,7 @@ const userChatList = document.querySelector('.user_chat_list');
 const chatBoxClose = document.querySelectorAll('.close_chatBox');
 const chatContent = document.querySelector('.chat_content');
 const back = document.querySelector('.back');
-
+const chatImg = document.querySelector('.chatImg');
 
 
 // 채팅 목록과 채팅 팝업창 함수
@@ -135,12 +135,15 @@ async function popup() {
             cookie: _cookie
         });
 
-        document.body.classList.toggle('active');
+        document.body.classList.toggle('active');        
+        
         if (data.grade === '3') {
-            chatList.classList.add('active');
+            chatList.classList.add('active');            
         } else {
             chatBox.classList.add('active');
         }
+
+        chatImg.style.display = 'none';
     } catch (error) {
         console.error(error);
     }
@@ -151,6 +154,7 @@ chatBoxClose.forEach(btn => {
     btn.addEventListener('click', () => {
         chatBox.classList.remove('active');
         chatList.classList.remove('active');
+        chatImg.style.display = 'block';
     });
 });
 
@@ -163,7 +167,6 @@ async function ChattingOnload () {
     const nickname = data.nickname;
 
     if (data.grade === '2') {
-        const chatImg = document.querySelector('.chatImg');
         chatImg.addEventListener('click', () => {
             socket.emit('joinRoom', nickname, { id: data.id, nickname: data.nickname });
             // if (sessionStorage.getItem(`${data.nickname}_joined`) === null) {
