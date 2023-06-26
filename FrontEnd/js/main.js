@@ -285,6 +285,8 @@ async function ChattingOnload () {
                 })
                 const chat = beforeChat.data;
 
+                console.log(chat)
+
                 const now = new Date(chat.createdAt);
                 const hours = now.getHours();
                 const minutes = now.getMinutes();
