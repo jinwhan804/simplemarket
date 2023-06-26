@@ -103,6 +103,7 @@ async function getAPI_popup() {
             users = data;
             loginPopup.style.display = "none";
             postArea.style.display = 'block';
+            GetAPI(0);
         } else {
             loginPopup.style.display = "flex";
             postArea.style.display = 'none';
@@ -615,8 +616,6 @@ async function GetAPI(currentPage) {
         console.log(error);
     }
 }
-
-GetAPI(0);
 
 // 조회수 계산 함수
 function CalculateViews() {
