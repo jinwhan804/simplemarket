@@ -464,6 +464,8 @@ async function GetAPI() {
 
         if(posts.userId != users.id){
             functionBtn.style.display = 'none';
+        }else{
+            functionBtn.style.display = 'flex';
         }
 
         // if(data.users.id != data.posts.userId){
