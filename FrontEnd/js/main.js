@@ -307,7 +307,7 @@ window.onload = async () => {
                     </div>
                 `;
 
-                chatContent.innerHTML += beforMessage;
+                chatContent.innerHTML = beforMessage;
             }
         });
     });
