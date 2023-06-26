@@ -294,7 +294,7 @@ async function ChattingOnload () {
                     if (chat.User.profile_img == null) {
                         profileImg = "https://simplemarket2.s3.ap-northeast-2.amazonaws.com/defaultprofile.png"; // 디폴트 이미지 URL로 대체
                     } else {
-                        profileImg = chatUser.profile_img;
+                        profileImg = chat.User.profile_img;
                     }
 
                     let beforMessage = `
