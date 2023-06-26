@@ -177,9 +177,9 @@ async function ChattingOnload () {
         cookie: _cookie
     });
     const userData = users.data;
-    console.log(userData);
+    // console.log(userData);
     const admin = userData[0];
-    console.log(admin);
+    // console.log(admin);
 
     localStorage.setItem('joined', 'false');
 
@@ -213,7 +213,7 @@ async function ChattingOnload () {
             withCredentials: true
         });
         const chats = response.data;
-        console.log(chats);
+        // console.log(chats);
 
         chats.forEach(chat => {
             // console.log(chat);
@@ -516,7 +516,7 @@ async function GetAPI(currentPage) {
         });
 
         posts = data;
-        console.log(posts);
+        // console.log(posts);
 
         let pageOffset = 10;
         let pageGroup = currentPage * pageOffset;
@@ -609,9 +609,11 @@ async function GetAPI(currentPage) {
                 post_list.append(_tr);
             });
 
-            // 조회수 계산
-            CalculateViews();
+            
         }
+
+        // 조회수 계산
+        CalculateViews();
     } catch (error) {
         console.log(error);
     }
