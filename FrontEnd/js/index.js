@@ -4,7 +4,7 @@
 // const mainUrl = 'main.html';
 
 // 인스턴스 탄력적 IP
-const serverUrl = 'http://3.35.211.37';
+const serverUrl = 'http://52.79.204.19';
 const urlEnd = '';
 const mainUrl = '';
 
